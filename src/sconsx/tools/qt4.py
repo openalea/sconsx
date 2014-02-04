@@ -48,10 +48,10 @@ class QT:
             qt_lib = '/usr/lib'
         elif not qt_dir:
             try: 
-              if isinstance(platform, Win32) or isinstance(platform, Darwin):
-                  # Try to use openalea egg
-                  from openalea.deploy import get_base_dir
-                  qt_dir = get_base_dir("qt4-dev")
+                if isinstance(platform, Win32) or isinstance(platform, Darwin):
+                    # Try to use openalea egg
+                    from openalea.deploy import get_base_dir
+                    qt_dir = get_base_dir("qt4-dev")
             except:
                 if isinstance(platform, Win32):
                     try:                 
@@ -91,23 +91,23 @@ class QT:
 
 
     def update(self, env):
-      """ Update the environment with specific flags """
+        """ Update the environment with specific flags """
 
-      t = Tool('qt4', toolpath=[getLocalPath()])
-      t(env)
-      env.Replace(QT4_UICDECLPREFIX='')
-      
-      libpath=str(env.subst(env['QT4_LIBPATH']))
+        t = Tool('qt4', toolpath=[getLocalPath()])
+        t(env)
+        env.Replace(QT4_UICDECLPREFIX='')
+        
+        libpath=str(env.subst(env['QT4_LIBPATH']))
 
-      if isinstance(platform, Win32):
-         env.AppendUnique(CPPDEFINES=['QT_DLL'])
+        if isinstance(platform, Win32):
+            env.AppendUnique(CPPDEFINES=['QT_DLL'])
 
     def configure(self, config):
         pass
 
 def create(config):
-   " Create qt tool "
-   qt = QT(config)
+    " Create qt tool "
+    qt = QT(config)
 
-   return qt
+    return qt
 

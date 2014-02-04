@@ -41,12 +41,12 @@ class Python:
           if not os.path.exists(lib_dir):
               # case with virtual env...
               lib_dir = pj(os.path.dirname(get_config_var('LIBDEST')),'libs')
-          self._default['lib'] = lib_dir
+          self._default['libpath'] = lib_dir
       elif isinstance(platform, Darwin):
          lib_dir = get_config_var('LIBPL')
-         self._default['lib'] = lib_dir
+         self._default['libpath'] = lib_dir
       else:
-         self._default['lib'] = '/usr/lib'
+         self._default['libpath'] = '/usr/lib'
 
 
    def option( self, opts):
@@ -57,8 +57,8 @@ class Python:
          PathVariable('python_includes', 'Python include files', 
           self._default['include']),
 
-         PathVariable('python_lib', 'Python library path', 
-         self._default['lib'])
+         PathVariable('python_libpath', 'Python library path', 
+         self._default['libpath'])
         )
 
 
@@ -66,15 +66,19 @@ class Python:
       """ Update the environment with specific flags """
 
       env.AppendUnique(CPPPATH=[env['python_includes']])
-      env.AppendUnique(LIBPATH=[env['python_lib']])
-
-      if isinstance(platform, Win32):
-         version = "%d%d"%sys.version_info[0:2]
-         pylib = 'python' + version
+      
+      
+      if isinstance(platform, Darwin):
+          # hack to not use python system
+          version = "%d.%d" % (sys.version_info.major,sys.version_info.minor)
+          pylib = 'python' + version
+          pylib = os.path.join(env['python_libpath'],'lib'+pylib+'.dylib')
+          env.AppendUnique(LINKFLAGS=[pylib])
       else:
-         pylib = 'python' + get_config_var('VERSION')
-
-      env.AppendUnique(LIBS=[pylib])
+          version = "%d%d" % (sys.version_info.major,sys.version_info.minor)
+          pylib = 'python' + version          
+          env.AppendUnique(LIBS=[pylib])
+          env.AppendUnique(LIBPATH=[env['python_libpath']])
 
 
    def configure(self, config):

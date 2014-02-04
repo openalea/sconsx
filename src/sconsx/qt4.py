@@ -468,11 +468,11 @@ def enable_modules(self, modules, debug=False, suffix = '') :
                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                 self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
             else:
-             if module in pclessModules :
-                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
-                 self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
-             else :
-                 self.Append(LINKFLAGS=['-framework', module])
+                if module in pclessModules :
+                    self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
+                    self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
+                else :
+                    self.Append(LINKFLAGS=['-framework', module])
         if 'QtOpenGL' in modules:
             self.AppendUnique(LINKFLAGS="-F/System/Library/Frameworks")
             self.Append(LINKFLAGS=['-framework', 'AGL']) #TODO ughly kludge to avoid quotes
