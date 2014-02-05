@@ -67,16 +67,20 @@ class Python:
 
       env.AppendUnique(CPPPATH=[env['python_includes']])
       
+      if isinstance(platform, Win32):
+          version = "%d%d" % (sys.version_info.major,sys.version_info.minor)
+          pylib = 'python' + version          
+          env.AppendUnique(LIBS=[pylib])
+          env.AppendUnique(LIBPATH=[env['python_libpath']])
       
-      if isinstance(platform, Darwin):
+      elif isinstance(platform, Darwin):
           # hack to not use python system
           version = "%d.%d" % (sys.version_info.major,sys.version_info.minor)
           pylib = 'python' + version
           pylib = os.path.join(env['python_libpath'],'lib'+pylib+'.dylib')
           env.AppendUnique(LINKFLAGS=[pylib])
       else:
-          version = "%d%d" % (sys.version_info.major,sys.version_info.minor)
-          pylib = 'python' + version          
+          pylib = 'python' + get_config_var('VERSION')
           env.AppendUnique(LIBS=[pylib])
           env.AppendUnique(LIBPATH=[env['python_libpath']])
 
