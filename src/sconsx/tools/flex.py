@@ -46,7 +46,8 @@ class Flex:
               
       elif isinstance(platform, Posix):
          self._default['bin'] = '/usr/bin'
-         self._default['lib'] = '/usr/lib'
+         self._default['libpath'] = '/usr/lib'
+         self._default['lib'] = ['m','fl']
          self._default['include'] = '/usr/include'
 
 
@@ -57,7 +58,10 @@ class Flex:
       opts.Add('flex_bin', 'Flex binary path', 
                 self._default['bin'])
       if not isinstance(platform, Win32):
-          opts.Add('flex_lib', 'Flex lib path', 
+          opts.Add('flex_libpath', 'Flex lib path', 
+                    self._default['libpath'])
+      if not isinstance(platform, Win32):
+          opts.Add('flex_lib', 'Flex libs', 
                     self._default['lib'])
       opts.Add('flex_include', 'Flex include path',
                 self._default['include'])
@@ -67,8 +71,8 @@ class Flex:
       """ Update the environment with specific flags """
 
       if not isinstance(platform, Win32):
-         env.AppendUnique(LIBS=['m', 'fl'])
-         env.AppendUnique(LIBPATH=[env['flex_lib']])
+         env.AppendUnique(LIBS=env['flex_lib'])
+         env.AppendUnique(LIBPATH=[env['flex_libpath']])
       env.AppendUnique(CPPPATH=[env['flex_include']])
 
       t = Tool('lex', toolpath=[getLocalPath()])
