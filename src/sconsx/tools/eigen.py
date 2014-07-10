@@ -40,8 +40,14 @@ class Eigen:
               inc_path = "/usr/include/eigen2/"
            else:
               inc_path = "/usr/include/"
-       else:
-         warnings.warn("Currently unhandled system : " + name + ". Implement me please.")
+       elif isinstance(platform, Win32):
+            try:
+                import openalea.config as conf
+                inc_path = conf.include_dir
+            except ImportError, e:
+                inc_path = 'C:' + os.sep
+       elif isinstance(platform, Darwin):
+            inc_path  = '/opt/local/include/eigen3'
 
        self._default['include'] = inc_path
 
@@ -50,11 +56,25 @@ class Eigen:
       opts.AddVariables(
          PathVariable('eigen_includes', 'eigen include files',
                      self._default['include']),
+         BoolVariable('WITH_EIGEN', 
+           'Specify whether you want to compile your project with EIGEN', True)
      )
 
    def update(self, env):
       """ Update the environment with specific flags """
-      env.AppendUnique(CPPPATH=[env['eigen_includes']])
+      if env['WITH_EIGEN'] :
+        eigen_includes = env['eigen_includes']
+        if type(eigen_includes) == str:
+          eigen_includes = eigen_includes.split()
+        eigen_includes = eigen_includes[0]
+        if not os.path.exists(os.path.join(eigen_includes,'Eigen')) :
+          import warnings
+          warnings.warn("Error: EIGEN lib not found. EIGEN disabled ...")
+          env['WITH_EIGEN'] = False 
+      if env['WITH_EIGEN']:
+        env.AppendUnique(CPPPATH=[env['eigen_includes']])
+        env.Append(CPPDEFINES='WITH_EIGEN')
+
 
    def configure(self, config):
       if not config.conf.CheckCHeader('Eigen/Core'):
