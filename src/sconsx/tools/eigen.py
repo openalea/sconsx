@@ -47,14 +47,14 @@ class Eigen:
             except ImportError, e:
                 inc_path = 'C:' + os.sep
        elif isinstance(platform, Darwin):
-            inc_path  = '/opt/local/include/eigen3'
+            inc_path = '/opt/local/include/eigen3'
 
        self._default['include'] = inc_path
 
    def option( self, opts):
       self.default()
       opts.AddVariables(
-         PathVariable('eigen_includes', 'eigen include files',
+         ('eigen_includes', 'eigen include files',
                      self._default['include']),
          BoolVariable('WITH_EIGEN', 
            'Specify whether you want to compile your project with EIGEN', True)
