@@ -22,7 +22,8 @@
 __license__ = "Cecill-C"
 __revision__ = "$Id$"
 
-import os, sys
+import os
+import sys
 #import string
 from os.path import exists
 pj = os.path.join
@@ -51,9 +52,9 @@ from SCons.Node.FS import Dir, File
 class ToolNotFound(UserWarning): 
     pass
 
+
 class CircularDependency(Exception):
     pass
-
 
 
 # Utilitaries
@@ -146,38 +147,51 @@ def BisonFlex(env, bison, flex, prefix):
     return targets
 
 
-
 #----------------------------------
 # Platform class
 
 class Platform(object):
+
     def __init__(self):
         self.name = ""
 
+
 class Posix(Platform):
+
     def __init__(self):
         self.name = "posix"
 
+
 class Linux(Posix):
+
     def __init__(self):
         self.name = "linux"
+
     def distribution(self):
         import platform
         return platform.linux_distribution()[0].lower()
 
+
 class Irix(Posix):
+
     def __init__(self):
         self.name = "irix"
 
+
 class Cygwin(Posix):
+
     def __init__(self):
         self.name = "cygwin"
 
+
 class Darwin(Posix):
+
     def __init__(self):
         self.name = "darwin"
 
+
 class Win32(Platform):
+
     def __init__(self):
         self.name = "win32"
 
@@ -214,6 +228,7 @@ platform = GetPlatform()
 # User Configuration class
 
 default_tools = ['compiler', 'builddir', 'multicpu']
+
 
 class Config(object):
 
@@ -268,7 +283,6 @@ class Config(object):
     def __str__(self):
         return str([t.name for t in self.tools])
 
-
     def Options(self, *args, **kwds):
         """
         Add each tool options
@@ -278,11 +292,9 @@ class Config(object):
 
         return opts
 
-
     def UpdateOptions(self, opts):
         for tool in self.tools:
             tool.option(opts)
-
 
     def Configure(self, env):
         """
@@ -300,7 +312,6 @@ class Config(object):
         env = self.conf.Finish()
         return env
 
-
     def Update(self, env):
         """
         Update the environment for each tools.
@@ -315,6 +326,7 @@ class Config(object):
 # Specific OpenAlea facilities.
 
 class ALEAConfig(Config):
+
     def __init__(self, package_name, *args, **kwds):
         Config.__init__(self, *args, **kwds)
         self.package_name = package_name
@@ -332,9 +344,12 @@ def ALEAEnvironment(conf, *args, **kwds):
         opts = conf.Options(*args, **kwds)
     env = Environment(options=opts)
     conf.Update(env)
+
     env.Prepend(CPPPATH='$build_includedir')
     env.Prepend(LIBPATH='$build_libdir')
+
     return env
+
 
 def ALEASolution(options, tools=[], dir=[]):
     SConsignFile()
@@ -353,6 +368,12 @@ def ALEASolution(options, tools=[], dir=[]):
     env.Prepend(CPPPATH='$build_includedir')
     env.Prepend(LIBPATH='$build_libdir')
 
+    # If scons is run in a conda environment, append paths
+    if "CONDA_ENV_PATH" in os.environ:
+        CONDA_ENV_PATH = os.environ['CONDA_ENV_PATH']
+    env.Prepend(CPPPATH=pj(CONDA_ENV_PATH, 'include'))
+    env.Prepend(LIBPATH=pj(CONDA_ENV_PATH, 'lib'))
+
     return env
 
 
@@ -370,4 +391,3 @@ def find_executable_path_from_env(exe, strip_bin=True):
         return okPath[:-4]              
     else:
         return okPath
-    
