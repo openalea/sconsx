@@ -371,8 +371,9 @@ def ALEASolution(options, tools=[], dir=[]):
     # If scons is run in a conda environment, append paths
     if "CONDA_ENV_PATH" in os.environ:
         CONDA_ENV_PATH = os.environ['CONDA_ENV_PATH']
-    env.Prepend(CPPPATH=pj(CONDA_ENV_PATH, 'include'))
-    env.Prepend(LIBPATH=pj(CONDA_ENV_PATH, 'lib'))
+        if os.path.exists(CONDA_ENV_PATH):
+            env.Prepend(CPPPATH=pj(CONDA_ENV_PATH, 'include'))
+            env.Prepend(LIBPATH=pj(CONDA_ENV_PATH, 'lib'))
 
     return env
 
