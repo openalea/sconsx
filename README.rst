@@ -1,11 +1,13 @@
-=====SConsX=====
+SConsX
+======
 
 You can read an update version of this file on the OpenAlea Website
 (see http://openalea.gforge.inria.fr/dokuwiki/doku.php?id=packages:compilation_installation:sconsx:sconsx).
 
 SConsX is a package of the OpenAlea project.
 
-===== About =====
+About
+-----
 
 **SConsX** is an extension package of the famous [[http://www.scons.org|SCons]] build tool.
 SConsX aims to simplify the build of complex multi-platform packages (i.e. using C++, Boost.Python and Python).
@@ -22,7 +24,9 @@ For each tools, **SConsX** add also configuration capabilities that mimic autoco
 
 **SConsX** is under development. Lot of work have to be done for a better support of new compiler (e.g. Visual C++, mingw), new tools and new functionalities.
 
-=== Description ===
+Description
+-----------
+
 SconsX provides a set of tools with default options, configurations  and dependencies.
 
 Each tool provides:
@@ -38,53 +42,60 @@ Available tools are limited but can be easily extended :
   * Other tools: **OpenGL**, **QT**, **bison**, **flex**, **Boost.Python**, ...
 
 
-===== Quick Example =====
+Quick Example
+*************
+
 This is a SConstruct file. 
 See the [[http://www.scons.org|SCons]] documentation for more information.
 
-<code python>
-import sconsx
-from sconsx import config
+::
 
-# Creation of a SCons object
-# Set an option file as well as command line args.
-option= Options("options.py", ARGUMENTS)
+    import sconsx
+    from sconsx import config
+    
+    # Creation of a SCons object
+    # Set an option file as well as command line args.
+    option= Options("options.py", ARGUMENTS)
+    
+    # Creation of a SConsX object 
+    conf = config.Config([ 'install', 'boost.python', 'qt'])
+    
+    # Update the SCons option with the default settings of each tools
+    conf.UpdateOptions( options )
+    
+    # Creation of the Scons Environment
+    env= Environment( options= option )
+    
+    # Update the environment with specific flags defined by SConsX and the user.
+    conf.Update( env )
+    
+    SConscript(...)
 
-# Creation of a SConsX object 
-conf = config.Config([ 'install', 'boost.python', 'qt'])
 
-# Update the SCons option with the default settings of each tools
-conf.UpdateOptions( options )
+Installation
+------------
 
-# Creation of the Scons Environment
-env= Environment( options= option )
+Download
+********
 
-# Update the environment with specific flags defined by SConsX and the user.
-conf.Update( env )
+SConsX is available on the [[http://gforge.inria.fr/projects/openalea/|GForge repositery]], but also on github.
 
-SConscript(...)
-</code>
-
-===== Installation =====
-
-=== Download ===
-
-SConsX is available on the [[http://gforge.inria.fr/projects/openalea/|GForge repositery]].
-
-=== Requirements ===
+Requirements
+************
 
 There are two requirements:
   * SCons (http://www.scons.org) version >= 0.96.93
-  * OpenAlea.DistX 
+  * OpenAlea.Deploy 
 
-=== Installation ===
+Installation
+************
 
 Extract the tarball, jump into the created directory and run :
-
+::
 	python setup.py install
 
 For installation options, see :
-
+::
 	python setup.py install --help
 
 
