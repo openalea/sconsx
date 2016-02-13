@@ -1,16 +1,15 @@
 SConsX
 ======
 
-You can read an update version of this file on the OpenAlea Website
-(see http://openalea.gforge.inria.fr/dokuwiki/doku.php?id=packages:compilation_installation:sconsx:sconsx).
-
 SConsX is a package of the OpenAlea project.
 
 About
 -----
 
-**SConsX** is an extension package of the famous [[http://www.scons.org|SCons]] build tool.
+**SConsX** is an extension package of the famous SCons_ build tool.
 SConsX aims to simplify the build of complex multi-platform packages (i.e. using C++, Boost.Python and Python).
+
+.. _Scons: http://www.scons.org
 
 Like **Boost.Jam** or **qmake**, it knows about different types of compiler, and the different steps involved in compiling for Windows and Linux.
 This knowledge allows the user to describe what needs to be built in high-level terms, without concern for low-level details such as the compiler's specific flags, the way that the operating system handles dynamic libraries. 
@@ -46,7 +45,7 @@ Quick Example
 *************
 
 This is a SConstruct file. 
-See the [[http://www.scons.org|SCons]] documentation for more information.
+See the Scons_ documentation for more information.
 
 ::
 
@@ -78,7 +77,7 @@ Installation
 Download
 ********
 
-SConsX is available on the [[http://gforge.inria.fr/projects/openalea/|GForge repositery]], but also on github.
+SConsX is available on github.
 
 Requirements
 ************
