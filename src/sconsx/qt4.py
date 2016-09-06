@@ -472,9 +472,9 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         for module in modules :
             self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH",module)])
 
-            if not QT4_FRAMEWORK:
+            if not QT_FRAMEWORK:
                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
-                self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
+                #self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
             else:
                 if module in pclessModules :
                     self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
