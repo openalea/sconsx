@@ -454,11 +454,14 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
         return
 
-    if sys.platform=="darwin" :
+    if sys.platform == "darwin" :
         if not suffix:
             suffix = '.4'
 
         QT_FRAMEWORK = self['QT4_FRAMEWORK']
+        if QT_FRAMEWORK:
+            print("QT FRAMEWORK is activated")
+
         # TODO: Test debug version on Mac
         self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
         if QT_FRAMEWORK:
