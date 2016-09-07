@@ -459,10 +459,6 @@ def enable_modules(self, modules, debug=False, suffix = '') :
             suffix = '.4'
 
         QT_FRAMEWORK = self['QT4_FRAMEWORK']
-        if QT_FRAMEWORK:
-            print("QT FRAMEWORK is activated")
-        else:
-            print("QT FRAMEWORK is NOT activated")
 
         # TODO: Test debug version on Mac
         self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
