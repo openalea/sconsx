@@ -225,16 +225,16 @@ def generate(env):
 
     def locateQt4Command(env, command, qtdir) :
         fullpath1 = os.path.join(qtdir, 'bin', command +'-qt4')
-        if os.access(fullpath1, os.X_OK) or \
-            os.access(fullpath1+".exe", os.X_OK):
+        if (os.access(fullpath1, os.X_OK) or
+            os.access(fullpath1+".exe", os.X_OK)):
             return fullpath1
         fullpath3 = os.path.join(qtdir, 'bin', command +'4')
-        if os.access(fullpath3, os.X_OK) or \
-            os.access(fullpath3+".exe", os.X_OK):
+        if (os.access(fullpath3, os.X_OK) or
+            os.access(fullpath3+".exe", os.X_OK)):
             return fullpath3
         fullpath2 = os.path.join(qtdir, 'bin', command)
-        if os.access(fullpath2, os.X_OK) or \
-            os.access(fullpath2+".exe", os.X_OK):
+        if (os.access(fullpath2, os.X_OK) or
+            os.access(fullpath2+".exe", os.X_OK)):
             return fullpath2
         fullpath = env.Detect([command+'-qt4', command+'4', command])
         if not (fullpath is None):
@@ -422,13 +422,15 @@ def enable_modules(self, modules, debug=False, suffix = '') :
 
         self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
         qt4_inc = self.subst('$QT4_CPPPATH')
-        if os.path.exists(os.path.join(qt4_inc,"qt4")):
-            self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH","qt4")])
-            for module in modules :
-                if module not in pclessModules:
-                    continue
-                self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
-                self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH","qt4",module)])
+        for qt_ext in ("qt4", "qt"):
+            if os.path.exists(os.path.join(qt4_inc, qt_ext)):
+                self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH", qt_ext)])
+                for module in modules :
+                    if module not in pclessModules:
+                        continue
+                    self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
+                    self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH", qt_ext, module)])
+                    break
         else:
             #self.AppendUnique(CPPPATH=["$QT4_CPPPATH"])
             for module in modules :
@@ -440,6 +442,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         pcmodules = [module+debugSuffix for module in modules if module not in pclessModules ]
         self.ParseConfig('pkg-config %s --libs --cflags'% ' '.join(pcmodules))
         return
+
     if sys.platform == "win32" :
         if debug : debugSuffix = 'd'
         self.AppendUnique(LIBS=[lib+'4'+debugSuffix for lib in modules if lib not in staticModules])
@@ -450,25 +453,29 @@ def enable_modules(self, modules, debug=False, suffix = '') :
             for module in modules])
         self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
         return
-    if sys.platform=="darwin" :
+
+    if sys.platform == "darwin" :
         if not suffix:
             suffix = '.4'
 
-        NO_FRAMEWORK = self['QT4_FRAMEWORK']
+        QT_FRAMEWORK = self['QT4_FRAMEWORK']
+
         # TODO: Test debug version on Mac
-        self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
-        self.AppendUnique(CXXFLAGS="-F$QTDIR/lib")
-        self.AppendUnique(LINKFLAGS="-F$QTDIR/lib")
-        self.AppendUnique(LINKFLAGS="-L$QTDIR/lib") #TODO clean!
+        self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
+        if QT_FRAMEWORK:
+            self.AppendUnique(CXXFLAGS="-F$QTDIR/lib")
+            self.AppendUnique(LINKFLAGS="-F$QTDIR/lib")
+            self.AppendUnique(LINKFLAGS="-L$QTDIR/lib") #TODO clean!
         if debug : debugSuffix = 'd'
         if suffix : debugSuffix = '.4'
-        for module in modules :
-            self.AppendUnique(CPPPATH=[os.path.join("$QTDIR","include")])
-            self.AppendUnique(CPPPATH=[os.path.join("$QTDIR","include",module)])
 
-            if NO_FRAMEWORK:
+        self.AppendUnique(CPPPATH=["$QT4_CPPPATH"])
+        for module in modules :
+            self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH",module)])
+
+            if not QT_FRAMEWORK:
                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
-                self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
+                #self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
             else:
                 if module in pclessModules :
                     self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix

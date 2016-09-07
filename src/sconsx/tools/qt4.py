@@ -93,7 +93,7 @@ class QT:
                     self._default['QT4_CPPPATH']))
         opts.Add(('QT4_LIBPATH', 'QT4 lib path.',
                     self._default['QT4_LIBPATH']))
-        opts.Add(('QT4_FRAMEWORK', 'Use QT4 framework.',
+        opts.Add(BoolVariable('QT4_FRAMEWORK', 'Use QT4 framework.',
                     self._default['QT4_FRAMEWORK']))
 
 
