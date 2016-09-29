@@ -424,7 +424,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         PKG_CONFIG_PATH = os.environ.get('PKG_CONFIG_PATH')
         if PKG_CONFIG_PATH:
             print ('PKG_CONFIG_PATH: ', PKG_CONFIG_PATH)
-            self.AppendUnique(PKG_CONFIG_PATH=PKG_CONFIG_PATH)
+            self['ENV']['PKG_CONFIG_PATH'] = PKG_CONFIG_PATH
         self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
         qt4_inc = self.subst('$QT4_CPPPATH')
         for qt_ext in ("qt4", "qt"):
