@@ -33,6 +33,7 @@ selection method.
 
 __revision__ = "/home/scons/scons/branch.0/branch.96/baseline/src/engine/SCons/Tool/qt.py 0.96.92.D001 2006/04/10 23:13:27 knight"
 
+import os
 import os.path
 import re
 
@@ -420,6 +421,9 @@ def enable_modules(self, modules, debug=False, suffix = '') :
     if sys.platform == "linux2" :
         if debug : debugSuffix = '_debug'
 
+        PKG_CONFIG_PATH = os.environ.get('PKG_CONFIG_PATH')
+        if PKG_CONFIG_PATH:
+            self.AppendUnique(PKG_CONFIG_PATH=PKG_CONFIG_PATH)
         self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
         qt4_inc = self.subst('$QT4_CPPPATH')
         for qt_ext in ("qt4", "qt"):
@@ -438,9 +442,11 @@ def enable_modules(self, modules, debug=False, suffix = '') :
                     continue
                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                 self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH",module)])
-                print self.subst("$QT4_CPPPATH")
-        pcmodules = [module+debugSuffix for module in modules if module not in pclessModules ]
-        self.ParseConfig('pkg-config %s --libs --cflags'% ' '.join(pcmodules))
+        pcmodules = [module+debugSuffix for module in modules if module not in pclessModules]
+        try:
+            self.ParseConfig('pkg-config %s --libs --cflags'% ' '.join(pcmodules))
+        except:
+            pass
         return
 
     if sys.platform == "win32" :
