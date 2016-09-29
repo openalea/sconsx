@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2016 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -35,25 +35,32 @@ class Termcap:
       if isinstance(platform, Posix):
          self._default['include'] = pj('/usr','include')
          self._default['lib'] = pj('/usr', 'lib')
+         sefl._default['ncurses'] = False
 
 
    def option( self, opts):
       if isinstance(platform, Posix):
          self.default()
-         
+
          opts.AddVariables(
-            PathVariable('termcap_includes', 'termcap include files', 
+            PathVariable('termcap_includes', 'termcap include files',
                         self._default['include']),
-            PathVariable('termcap_lib', 'termcap libraries path', 
-                        self._default['lib']) 
+            PathVariable('termcap_lib', 'termcap libraries path',
+                        self._default['lib'])
+
            )
+         opts.Add(BoolVariable('WITH_NCURSES', 'Use ncurses instead of termcap',
+                 self._default['ncurses']))
 
 
    def update(self, env):
       if isinstance(platform, Posix):
          env.AppendUnique(CPPPATH=[env['termcap_includes']])
          env.AppendUnique(LIBPATH=[env['termcap_lib']])
-         env.AppendUnique(LIBS=['termcap'])
+         termcap_lib = 'termcap'
+         if env['WITH_NCURSES']:
+            termcap_lib = 'ncurses'
+         env.AppendUnique(LIBS=[termcap_lib])
 
 
    def configure(self, config):
