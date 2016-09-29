@@ -35,7 +35,7 @@ class Termcap:
       if isinstance(platform, Posix):
          self._default['include'] = pj('/usr','include')
          self._default['lib'] = pj('/usr', 'lib')
-         sefl._default['ncurses'] = False
+         self._default['ncurses'] = False
 
 
    def option( self, opts):
