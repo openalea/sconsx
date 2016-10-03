@@ -471,6 +471,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         if QT_FRAMEWORK:
             self.AppendUnique(CXXFLAGS="-F$QTDIR/lib")
             self.AppendUnique(LINKFLAGS="-F$QTDIR/lib")
+            self.AppendUnique(LINKFLAGS="-F$QTDIR/Library/Frameworks") # To check by @CP
             self.AppendUnique(LINKFLAGS="-L$QTDIR/lib") #TODO clean!
         if debug : debugSuffix = 'd'
         if suffix : debugSuffix = '.4'
