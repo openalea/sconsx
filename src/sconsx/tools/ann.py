@@ -53,8 +53,15 @@ class ANN:
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
             except ImportError, e:
-               self._default['include'] = 'C:' + os.sep
-               self._default['libpath'] = 'C:' + os.sep
+               try:
+                  import pkg_resources as pkg
+                  egg_env = pkg.Environment()
+                  ann_base = egg_env["ann"][0].location
+                  self._default['include'] = pj(ann_base, "include")
+                  self._default['libpath'] = pj(ann_base, "lib")
+               except Exception, e:
+                  self._default['include'] = 'C:' + os.sep
+                  self._default['libpath'] = 'C:' + os.sep
                
             self._default['libs'] = 'ANN'
 
