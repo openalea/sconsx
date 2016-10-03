@@ -26,9 +26,9 @@ from openalea.sconsx.config import *
 
 exists = os.path.exists
 
-class OpenGL:
+class GLUT:
    def __init__(self, config):
-      self.name = 'opengl'
+      self.name = 'glut'
       self.config = config
       self._default = {}
 
@@ -48,8 +48,7 @@ class OpenGL:
            self._default['include'] = self._default['msvc_include']
            self._default['lib'] = self._default['msvc_lib']
        elif isinstance(platform, Posix):
-           if exists ('/usr/include/GL/gl.h'):
-               
+           if exists ('/usr/include/GL/glut.h'):
                self._default['include'] = '/usr/include'
                self._default['lib'] = '/usr/lib'
            else: 
@@ -62,57 +61,51 @@ class OpenGL:
 
        if isinstance(platform, Darwin):
            opts.AddVariables(
-                           ('gl_includes', 'GL include files', 
-                            self._default['include']),
-                           ('gl_framework_path', 'GL framework path',
-                            '/System/Library/Frameworks'),
-                           ('gl_frameworks', 'OpenGL frameworks',
-                            ['AGL', 'OpenGL'])
+                           ('glut_includes', 'GLUT include files',  self._default['include']),
+                           ('glut_framework_path', 'GLUT framework path', '/System/Library/Frameworks'),
+                           ('glut_frameworks', 'GLUT frameworks', ['GLUT'])
                            )
        else:
            opts.AddVariables(
-                           ('gl_includes', 'GL include files', 
-                            self._default['include']),
-
-                            ('gl_lib', 'GL library path', 
-                             self._default['lib'])
+                            ('glut_includes', 'GLUT include files',  self._default['include']),
+                            ('glut_lib', 'GLUT library path', self._default['lib'])
                             )
 
 
    def update(self, env):
       """ Update the environment with specific flags """
       if isinstance(platform, Darwin):
-          env.AppendUnique(CPPPATH=[env['gl_includes']])
-          env.AppendUnique(LINKFLAGS="-F%s"%str(env['gl_framework_path']))
-          for fmk in env['gl_frameworks']:
+          env.AppendUnique(CPPPATH=[env['glut_includes']])
+          env.AppendUnique(LINKFLAGS="-F%s"%str(env['glut_framework_path']))
+          for fmk in env['glut_frameworks']:
               env.Append(LINKFLAGS=['-framework',str(fmk)])
           return
       if env.get('compiler', 'mingw') == 'mingw':
-          if env['gl_includes'] == self._default['msvc_include']:
-              env['gl_includes'] = self._default['mgw_include']
-          if env['gl_lib'] == self._default['msvc_lib']:
-              env['gl_lib'] = self._default['mgw_lib']
+          if env['glut_includes'] == self._default['msvc_include']:
+              env['glut_includes'] = self._default['mgw_include']
+          if env['glut_lib'] == self._default['msvc_lib']:
+              env['glut_lib'] = self._default['mgw_lib']
 
-      env.AppendUnique(CPPPATH=[env['gl_includes']])
-      env.AppendUnique(LIBPATH=[env['gl_lib']])
+      env.AppendUnique(CPPPATH=[env['glut_includes']])
+      env.AppendUnique(LIBPATH=[env['glut_lib']])
 
       if isinstance(platform, Cygwin):
-          env.AppendUnique(LIBS=['opengl32','glu32'])
+          env.AppendUnique(LIBS=['glut32'])
       elif isinstance(platform, Posix):
-          env.AppendUnique(LIBS=['GLU'])
+          env.AppendUnique(LIBS=['glut'])
       elif isinstance(platform, Win32):
-          env.AppendUnique(LIBS=['opengl32'])
+          env.AppendUnique(LIBS=['glut32'])
 
 
    def configure(self, config):
-      if not config.conf.CheckLibWithHeader('GL',['GL/gl.h', 'GL/glu.h'], 'c++', autoadd = 0):
-         print "Error: gl.h not found, probably failure in automatic opengl detection"
+      if not config.conf.CheckLibWithHeader('GL',['GL/glut.h'], 'c++', autoadd = 0):
+         print "Error: glut.h not found, probably failure in automatic opengl detection"
          sys.exit(-1)
 
 
 def create(config):
-   " Create opengl tool "
-   opengl = OpenGL(config)
+   " Create glut tool "
+   glut = GLUT(config)
 
-   return opengl
+   return glut
 
