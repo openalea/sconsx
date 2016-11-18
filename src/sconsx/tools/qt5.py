@@ -15,7 +15,7 @@
 #   OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #-------------------------------------------------------------------------------
-""" QT4 configure environment. """
+""" QT5 configure environment. """
 
 __license__ = "Cecill-C"
 __revision__ = "$Id$"
