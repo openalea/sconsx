@@ -15,7 +15,7 @@
 #   OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #-------------------------------------------------------------------------------
-""" QT4 configure environment. """
+""" QT5 configure environment. """
 
 __license__ = "Cecill-C"
 __revision__ = "$Id$"
@@ -26,9 +26,9 @@ from os.path import join as pj
 
 exists = os.path.exists
 
-class QT:
+class QT5:
     def __init__(self, config):
-        self.name = 'qt'
+        self.name = 'qt5'
         self.config = config
         self._default = {}
 
@@ -45,45 +45,45 @@ class QT:
             # Use LSB spec
             qt_dir = '/usr'
             qt_bin = '/usr/bin'
-            qt_inc = '/usr/include/qt4'
+            qt_inc = '/usr/include/qt5'
             qt_lib = '/usr/lib'
-        elif isinstance(platform, Darwin) and exists('/opt/local/libexec/qt4'):
-            qt_dir = '/opt/local/libexec/qt4'
-            qt_bin = '/opt/local/libexec/qt4/bin'
-            qt_inc = '/opt/local/libexec/qt4/include'
-            qt_lib = '/opt/local/libexec/qt4/lib'            
+        elif isinstance(platform, Darwin) and exists('/opt/local/libexec/qt5'):
+            qt_dir = '/opt/local/libexec/qt5'
+            qt_bin = '/opt/local/libexec/qt5/bin'
+            qt_inc = '/opt/local/libexec/qt5/include'
+            qt_lib = '/opt/local/libexec/qt5/lib'            
         elif not qt_dir:
             try:
                 if isinstance(platform, Win32) or isinstance(platform, Darwin):
                     # Try to use openalea egg
                     from openalea.deploy import get_base_dir
-                    qt_dir = get_base_dir("qt4-dev")
+                    qt_dir = get_base_dir("qt5-dev")
             except:
                 if isinstance(platform, Win32):
                     try:
                         from openalea.deploy import get_base_dir
-                        qt_dir = get_base_dir("qt4")
+                        qt_dir = get_base_dir("qt5")
                     except:
                         # Try to locate bin/moc in PATH
                         qt_dir = find_executable_path_from_env("moc.exe", strip_bin=True)
 
                 elif isinstance(platform, Posix):
-                    qt_dir = pj('/usr', 'lib', 'qt4')
+                    qt_dir = pj('/usr', 'lib', 'qt5')
                     if not exists(pj(qt_dir, 'bin')):
                         # Use LSB spec
                         qt_dir = '/usr'
                         qt_bin = '/usr/bin'
-                        qt_inc = '/usr/include/qt4'
+                        qt_inc = '/usr/include/qt5'
                         qt_lib = '/usr/lib'
 
         if isinstance(platform, Darwin):
             qt_fmk = True
 
         self._default["QTDIR"] = qt_dir
-        self._default["QT4_BINPATH"] = qt_bin
-        self._default["QT4_CPPPATH"] = qt_inc
-        self._default["QT4_LIBPATH"] = qt_lib
-        self._default["QT4_FRAMEWORK"] = qt_fmk
+        self._default["QT5_BINPATH"] = qt_bin
+        self._default["QT5_CPPPATH"] = qt_inc
+        self._default["QT5_LIBPATH"] = qt_lib
+        self._default["QT5_FRAMEWORK"] = qt_fmk
 
 
     def option( self, opts):
@@ -92,24 +92,24 @@ class QT:
 
         opts.Add(('QTDIR', 'QT directory',
                     self._default['QTDIR']))
-        opts.Add(('QT4_BINPATH', 'QT binaries path.',
-                    self._default['QT4_BINPATH']))
-        opts.Add(('QT4_CPPPATH', 'QT4 includes path.',
-                    self._default['QT4_CPPPATH']))
-        opts.Add(('QT4_LIBPATH', 'QT4 lib path.',
-                    self._default['QT4_LIBPATH']))
-        opts.Add(BoolVariable('QT4_FRAMEWORK', 'Use QT4 framework.',
-                    self._default['QT4_FRAMEWORK']))
+        opts.Add(('QT5_BINPATH', 'QT binaries path.',
+                    self._default['QT5_BINPATH']))
+        opts.Add(('QT5_CPPPATH', 'QT5 includes path.',
+                    self._default['QT5_CPPPATH']))
+        opts.Add(('QT5_LIBPATH', 'QT5 lib path.',
+                    self._default['QT5_LIBPATH']))
+        opts.Add(BoolVariable('QT5_FRAMEWORK', 'Use QT5 framework.',
+                    self._default['QT5_FRAMEWORK']))
 
 
     def update(self, env):
         """ Update the environment with specific flags """
 
-        t = Tool('qt4', toolpath=[getLocalPath()])
+        t = Tool('qt5', toolpath=[getLocalPath()])
         t(env)
-        env.Replace(QT4_UICDECLPREFIX='')
+        env.Replace(QT5_UICDECLPREFIX='')
 
-        libpath=str(env.subst(env['QT4_LIBPATH']))
+        libpath=str(env.subst(env['QT5_LIBPATH']))
 
         if isinstance(platform, Win32):
             env.AppendUnique(CPPDEFINES=['QT_DLL'])
@@ -119,7 +119,7 @@ class QT:
 
 def create(config):
     " Create qt tool "
-    qt = QT(config)
+    qt = QT5(config)
 
     return qt
 
