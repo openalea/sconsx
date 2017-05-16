@@ -405,7 +405,7 @@ def conda_prefix():
         if 'CONDA_BUILD' in os.environ:
             return os.environ['PREFIX']
         else:
-            return sys.prefix
+            return os.environ['CONDA_PREFIX']
 
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
