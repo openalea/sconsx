@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -21,7 +21,8 @@ __license__ = "Cecill-C"
 __revision__ = "$Id$"
 
 
-import os, sys
+import os
+import sys
 from openalea.sconsx.config import *
 
 exists = os.path.exists
@@ -34,24 +35,25 @@ class GLUT:
 
 
    def default(self):
+
        if isinstance(platform, Win32):
            #MVSdir = r'C:\Program Files\Microsoft Visual Studio\VC98'
            MVSdir = r'C:\Program Files\Microsoft Platform SDK'
            self._default['msvc_include'] = pj(MVSdir, 'Include')
            self._default['msvc_lib'] = pj(MVSdir, 'Lib')
-        
-           mgw_dir = find_executable_path_from_env("mingw32-make.exe", strip_bin=True)           
+
+           mgw_dir = find_executable_path_from_env("mingw32-make.exe", strip_bin=True)
            mgw_dir = mgw_dir or r'C:\MinGW'
            self._default['mgw_include'] = pj(mgw_dir, 'include', 'GL')
            self._default['mgw_lib'] = pj(mgw_dir, 'lib')
-        
+
            self._default['include'] = self._default['msvc_include']
            self._default['lib'] = self._default['msvc_lib']
        elif isinstance(platform, Posix):
            if exists ('/usr/include/GL/glut.h'):
                self._default['include'] = '/usr/include'
                self._default['lib'] = '/usr/lib'
-           else: 
+           else:
                self._default['include'] = '/usr/X11R6/include'
                self._default['lib'] = '/usr/X11R6/lib'
 

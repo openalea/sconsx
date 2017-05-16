@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -36,17 +36,22 @@ class GMP:
 
 
    def default(self):
+      self._default['flags'] = ''
+      self._default['defines'] = ''
 
-      if isinstance(platform, Win32):
-      
-         self._default['flags'] = ''
-         self._default['defines'] = ''
+      if CONDA_ENV:
+         prefix = CONDA_PREFIX
+         self._default['include'] = pj(prefix, 'include')
+         self._default['libpath'] = pj(prefix, 'lib')
+         self._default['libs'] = 'gmp'
+
+      elif isinstance(platform, Win32):
 
          try:
             cgalroot = os.environ['CGALROOT']
             self._default['include'] = pj(cgalroot,'auxiliary','gmp','include')
             self._default['libpath'] = pj(cgalroot,'auxiliary','gmp','lib')
-            self._default['libs'] = 'libgmp-10'            
+            self._default['libs'] = 'libgmp-10'
          except:
             try:
                import openalea.config as conf
@@ -62,42 +67,40 @@ class GMP:
                except Exception, e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
-               
+
             self._default['libs'] = 'gmp'
 
       elif isinstance(platform, Posix):
          self._default['include'] = '/usr/include'
          self._default['libpath'] = '/usr/lib'
          self._default['libs'] = 'gmp'
-         self._default['flags'] = ''
-         self._default['defines'] = ''
 
 
    def option( self, opts):
 
       self.default()
 
-      opts.AddVariables(PathVariable('gmp_includes', 
-                     'GMP include files', 
+      opts.AddVariables(PathVariable('gmp_includes',
+                     'GMP include files',
                      self._default['include']),
 
-         PathVariable('gmp_libpath', 
-                     'GMP libraries path', 
+         PathVariable('gmp_libpath',
+                     'GMP libraries path',
                      self._default['libpath']),
 
-         ('gmp_libs', 
-           'GMP libraries', 
+         ('gmp_libs',
+           'GMP libraries',
            self._default['libs']),
-           
-         ('gmp_flags', 
-           'GMP compiler flags', 
+
+         ('gmp_flags',
+           'GMP compiler flags',
            self._default['flags']),
 
-         ('gmp_defines', 
-           'GMP defines', 
+         ('gmp_defines',
+           'GMP defines',
            self._default['defines']),
 
-         BoolVariable('WITH_GMP', 
+         BoolVariable('WITH_GMP',
            'Specify whether you want to compile your project with GMP', True)
      )
 
@@ -112,7 +115,7 @@ class GMP:
         if not os.path.exists(os.path.join(gmp_inc,'gmp.h')):
           import warnings
           warnings.warn("Error: GMP headers not found. GMP disabled ...")
-          env['WITH_GMP'] = False      
+          env['WITH_GMP'] = False
       if env['WITH_GMP']:
         env.AppendUnique(CPPPATH=[env['gmp_includes']])
         env.AppendUnique(LIBPATH=[env['gmp_libpath']])
@@ -127,8 +130,8 @@ class GMP:
       if not config.conf.CheckCXXHeader('gmp.h'):
         print "Error: GMP headers not found."
         exit()
-        
-         
+
+
 
 
 def create(config):

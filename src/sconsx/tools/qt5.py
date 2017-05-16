@@ -35,6 +35,15 @@ class QT5:
 
     def default(self):
 
+        if CONDA_ENV:
+            qt_dir = CONDA_PREFIX
+            self._default["QTDIR"] = qt_dir
+            self._default["QT4_BINPATH"] = pj(qt_dir, 'bin')
+            self._default["QT4_CPPPATH"] = pj(qt_dir, 'include')
+            self._default["QT4_LIBPATH"] = pj(qt_dir, 'lib')
+            self._default["QT4_FRAMEWORK"] = False
+            return
+
         qt_dir = os.getenv("QTDIR")
         qt_lib = '$QTDIR/lib'
         qt_bin = '$QTDIR/bin'
@@ -51,7 +60,7 @@ class QT5:
             qt_dir = '/opt/local/libexec/qt5'
             qt_bin = '/opt/local/libexec/qt5/bin'
             qt_inc = '/opt/local/libexec/qt5/include'
-            qt_lib = '/opt/local/libexec/qt5/lib'            
+            qt_lib = '/opt/local/libexec/qt5/lib'
         elif not qt_dir:
             try:
                 if isinstance(platform, Win32) or isinstance(platform, Darwin):

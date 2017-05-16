@@ -35,7 +35,9 @@ class Eigen:
 
     def default(self):
         name = str(platform)
-        if isinstance(platform, Linux):
+        if CONDA_ENV:
+            inc_path = CONDA_PREFIX
+        elif isinstance(platform, Linux):
             dist = platform.distribution()
             name += " " + dist
             if dist == "ubuntu":

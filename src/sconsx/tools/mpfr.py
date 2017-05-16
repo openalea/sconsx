@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Frederic Boudon
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ __revision__ = "$Id: mpfr.py 12233 2012-06-19 04:54:14Z pradal $"
 
 import os, sys
 from openalea.sconsx.config import *
-from os.path import join as pj
+
 
 class MPFR:
    def __init__(self, config):
@@ -37,16 +37,22 @@ class MPFR:
 
    def default(self):
 
-      if isinstance(platform, Win32):
-      
-         self._default['flags'] = ''
-         self._default['defines'] = ''
+      self._default['flags'] = ''
+      self._default['defines'] = ''
+
+      if CONDA_ENV:
+          self._default['include'] = pj(CONDA_PREFIX, 'include')
+          self._default['libpath'] = pj(CONDA_PREFIX, 'lib')
+          self._default['libs'] = 'mpfr'
+
+      elif isinstance(platform, Win32):
+
 
          try:
             cgalroot = os.environ['CGALROOT']
             self._default['include'] = pj(cgalroot,'auxiliary','gmp','include')
             self._default['libpath'] = pj(cgalroot,'auxiliary','gmp','lib')
-            self._default['libs'] = 'libmpfr-4'            
+            self._default['libs'] = 'libmpfr-4'
          except:
             try:
                import openalea.config as conf
@@ -62,7 +68,7 @@ class MPFR:
                except Exception, e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
-               
+
             self._default['libs'] = 'mpfr'
 
       elif isinstance(platform, Posix):
@@ -77,27 +83,27 @@ class MPFR:
 
       self.default()
 
-      opts.AddVariables(PathVariable('mpfr_includes', 
-                     'MPFR include files', 
+      opts.AddVariables(PathVariable('mpfr_includes',
+                     'MPFR include files',
                      self._default['include']),
 
-         PathVariable('mpfr_libpath', 
-                     'MPFR libraries path', 
+         PathVariable('mpfr_libpath',
+                     'MPFR libraries path',
                      self._default['libpath']),
 
-         ('mpfr_libs', 
-           'MPFR libraries', 
+         ('mpfr_libs',
+           'MPFR libraries',
            self._default['libs']),
-           
-         ('mpfr_flags', 
-           'MPFR compiler flags', 
+
+         ('mpfr_flags',
+           'MPFR compiler flags',
            self._default['flags']),
 
-         ('mpfr_defines', 
-           'MPFR defines', 
+         ('mpfr_defines',
+           'MPFR defines',
            self._default['defines']),
 
-         BoolVariable('WITH_MPFR', 
+         BoolVariable('WITH_MPFR',
            'Specify whether you want to compile your project with MPFR', True)
      )
 
@@ -112,7 +118,7 @@ class MPFR:
         if not os.path.exists(os.path.join(mpfr_inc,'mpfr.h')):
           import warnings
           warnings.warn("Error: MPFR headers not found. MPFR disabled ...")
-          env['WITH_MPFR'] = False      
+          env['WITH_MPFR'] = False
       if env['WITH_MPFR']:
         env.AppendUnique(CPPPATH=[env['mpfr_includes']])
         env.AppendUnique(LIBPATH=[env['mpfr_libpath']])
@@ -127,20 +133,20 @@ class MPFR:
       if not config.conf.CheckCXXHeader('mpfr.h'):
         print "Error: MPFR headers not found."
         exit()
-        
-         
+
+
 
 
 def create(config):
    " Create mpfr tool "
-   
+
    try:
         tool = MPFR(config)
-        
+
         deps= tool.depends()
         for lib in deps:
                 config.add_tool(lib)
-        
+
         return tool
    except:
        print "Error creating MPFR Tool"

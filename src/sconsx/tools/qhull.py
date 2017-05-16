@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -35,14 +35,19 @@ class Qhull:
 
       self._default['libs_suffix'] = '$compiler_libs_suffix'
 
-      if isinstance(platform, Win32):
+      if CONDA_ENV:
+            base_dir = CONDA_PREFIX
+            self._default['include'] = pj(base_dir, 'include')
+            self._default['lib'] = pj(base_dir, 'lib')
+
+      elif isinstance(platform, Win32):
          try:
             # Try to use openalea egg
             from openalea.deploy import get_base_dir
             base_dir = get_base_dir("qhull")
-            self._default['include'] = os.path.join(base_dir, 'include')
-            self._default['lib'] = os.path.join(base_dir, 'lib')
-            
+            self._default['include'] = pj(base_dir, 'include')
+            self._default['lib'] = pj(base_dir, 'lib')
+
          except:
             try:
                 import openalea.config as conf
@@ -63,16 +68,16 @@ class Qhull:
       self.default()
 
       opts.AddVariables(
-         ('qhull_includes', 
-           'Qhull include files', 
+         ('qhull_includes',
+           'Qhull include files',
            self._default['include']),
 
-         ('qhull_lib', 
-           'Qhull library path', 
+         ('qhull_lib',
+           'Qhull library path',
            self._default['lib']),
 
-         ('qhull_libs_suffix', 
-           'Qhull library suffix name like -vc80 or -mgw', 
+         ('qhull_libs_suffix',
+           'Qhull library suffix name like -vc80 or -mgw',
            self._default['libs_suffix'])
      )
 

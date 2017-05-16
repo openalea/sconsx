@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -34,8 +34,12 @@ class Readline:
        return ["termcap"]
 
    def default(self):
-      if isinstance(platform, Posix):
-         
+      if CONDA_ENV:
+         self._default['include'] = pj(CONDA_PREFIX, 'include')
+         self._default['lib'] = pj(CONDA_PREFIX, 'lib')
+
+      elif isinstance(platform, Posix):
+
          self._default['include'] = '/usr/include'
          self._default['lib'] = '/usr/lib'
          if isinstance(platform, Cygwin):
@@ -48,13 +52,13 @@ class Readline:
 
       if isinstance(platform, Posix):
          opts.AddVariables(
-            PathVariable('readline_includes', 
-                        'readline include files', 
+            PathVariable('readline_includes',
+                        'readline include files',
                         self._default['include']),
 
-            PathVariable('readline_lib', 
-                        'readline libraries path', 
-                        self._default['lib']) 
+            PathVariable('readline_lib',
+                        'readline libraries path',
+                        self._default['lib'])
            )
 
 
@@ -67,8 +71,8 @@ class Readline:
 
    def configure(self, config):
       if isinstance(platform, Posix):
-         if not config.conf.CheckCHeader(['stdio.h', 
-                                            'string.h', 
+         if not config.conf.CheckCHeader(['stdio.h',
+                                            'string.h',
                                             'readline/readline.h']):
             print """Error: readline.h not found !!!
             Please install readline and start again."""
