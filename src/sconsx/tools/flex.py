@@ -39,7 +39,7 @@ class Flex:
           self._default['include'] = pj(base_dir, 'include')
           if not isinstance(platform, Win32):
               self._default['libs'] = ['m','fl']
-              self._default['libpath'] = pj(base_dir, lib)
+              self._default['libpath'] = pj(base_dir, 'lib')
       if isinstance(platform, Win32):
          try:
               # Try to use openalea egg

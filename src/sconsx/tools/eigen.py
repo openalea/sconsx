@@ -36,7 +36,7 @@ class Eigen:
     def default(self):
         name = str(platform)
         if CONDA_ENV:
-            inc_path = CONDA_PREFIX
+            inc_path = pj(CONDA_PREFIX, 'include', 'eigen3')
         elif isinstance(platform, Linux):
             dist = platform.distribution()
             name += " " + dist
