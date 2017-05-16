@@ -88,6 +88,10 @@ class Qhull:
       env.AppendUnique(CPPPATH=[env['qhull_includes']])
       env.AppendUnique(LIBPATH=[env['qhull_lib']])
 
+      qhull_inc = pj(env['qhull_includes'], 'libqhull')
+      if os.path.exists(qhull_inc):
+          env.AppendUnique( CPPDEFINES = ['WITH_QHULL_2011'] )
+
       qhull_name = 'qhull'+env['qhull_libs_suffix']
       env.AppendUnique(LIBS=[qhull_name])
 
