@@ -40,7 +40,7 @@ class Flex:
           if not isinstance(platform, Win32):
               self._default['libs'] = ['m','fl']
               self._default['libpath'] = pj(base_dir, 'lib')
-      if isinstance(platform, Win32):
+      elif isinstance(platform, Win32):
          try:
               # Try to use openalea egg
               from openalea.deploy import get_base_dir
