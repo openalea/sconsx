@@ -499,7 +499,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
             if os.path.exists(os.path.join(qt4_inc, qt_ext)):
                 self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH", qt_ext)])
                 for module in modules :
-                    if module not in pclessModules:
+                    if module in pclessModules:
                         continue
                     self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                     self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH", qt_ext, module)])
@@ -507,7 +507,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         else:
             #self.AppendUnique(CPPPATH=["$QT4_CPPPATH"])
             for module in modules :
-                if module not in pclessModules:
+                if module in pclessModules:
                     continue
                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                 self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH",module)])

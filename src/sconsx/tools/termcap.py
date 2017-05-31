@@ -32,7 +32,11 @@ class Termcap:
 
 
    def default(self):
-      if isinstance(platform, Posix):
+      self._default['ncurses'] = False
+      if CONDA_ENV:
+         self._default['include'] = pj(CONDA_PREFIX, 'include')
+         self._default['lib'] = pj(CONDA_PREFIX, 'lib')
+      elif isinstance(platform, Posix):
          self._default['include'] = pj('/usr','include')
          self._default['lib'] = pj('/usr', 'lib')
          self._default['ncurses'] = False

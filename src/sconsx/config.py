@@ -4,7 +4,7 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006 INRIA - CIRAD - INRA  
+#       Copyright 2006 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #                       Pierre Barbier de Reuille <pierre.barbier@sophia.inria.fr>
@@ -13,18 +13,15 @@
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #------------------------------------------------------------------------------
 """ See OpenAlea WebSite / Packages / SConsX """
 
-__license__ = "Cecill-C"
-__revision__ = "$Id$"
-
 import os
 import sys
-#import string
+
 from os.path import exists
 pj = os.path.join
 
@@ -35,9 +32,9 @@ except ImportError:
     from SCons.Script import BuildDir as VariantDir
 from SCons.Options import  Options
 from SCons.Options import  PathOption, BoolOption, EnumOption
-from SCons.Variables import PathVariable 
-from SCons.Variables import BoolVariable 
-from SCons.Variables import EnumVariable 
+from SCons.Variables import PathVariable
+from SCons.Variables import BoolVariable
+from SCons.Variables import EnumVariable
 from SCons.Variables import Variables
 from SCons.Util import Split, WhereIs
 from SCons.Tool import Tool
@@ -47,9 +44,12 @@ from SCons.Builder import Builder
 from SCons.Node.FS import Dir, File
 
 
+__license__ = "Cecill-C"
+__revision__ = "$Id$"
+
 # Errors
 
-class ToolNotFound(UserWarning): 
+class ToolNotFound(UserWarning):
     pass
 
 
@@ -64,14 +64,14 @@ def import_tool(name, import_dir):
     Import a module based on its name from a list of directories.
     """
     old_syspath = list(sys.path)
-    
-    #if tool_path not in sys.path: 
+
+    #if tool_path not in sys.path:
     #    sys.path.insert(0, tool_path)
-    
+
     sys.path = import_dir + sys.path
     sconsx_tools = os.path.dirname(__file__)
     sys.path.insert(0, sconsx_tools)
-        
+
     try:
         mod = __import__('sconsx_ext.'+name)
         print "import local definition of tool '"+name+"'", "at", mod.__path__
@@ -83,12 +83,12 @@ def import_tool(name, import_dir):
         except ImportError:
             sys.path = old_syspath
             raise ToolNotFound(name)
-    
+
     sys.path = old_syspath
     return mod
 
-   
-    
+
+
 
 def exist(s, path):
     """ Test if the file s exist in the path """
@@ -219,7 +219,7 @@ def GetPlatform():
     else:
         raise ValueError("Unknown Platform (%s,%s)" % (osname, pfname))
 
-# Create a static instance ... 
+# Create a static instance ...
 # (very pythonic way, isn't it?)
 
 platform = GetPlatform()
@@ -267,11 +267,11 @@ class Config(object):
             print "trying egglib import", e
             mod = import_tool("egglib", self.dir)
             t = mod.create(tool, self)
-                        
-                        
+
+
         self._walk.pop()
         self.tools.append(t)
-    
+
     def find_tool(self, toolname):
         """
         Search for a specific tool
@@ -369,16 +369,15 @@ def ALEASolution(options, tools=[], dir=[]):
     env.Prepend(LIBPATH='$build_libdir')
 
     # If scons is run in a conda environment, append paths
-    if "CONDA_ENV_PATH" in os.environ:
-        CONDA_ENV_PATH = os.environ['CONDA_ENV_PATH']
-        if os.path.exists(CONDA_ENV_PATH):
-            env.Prepend(CPPPATH=pj(CONDA_ENV_PATH, 'include'))
-            env.Prepend(LIBPATH=pj(CONDA_ENV_PATH, 'lib'))
+    if CONDA_ENV:
+        PREFIX = CONDA_PREFIX
+        env.Prepend(CPPPATH=pj(PREFIX, 'include'))
+        env.Prepend(LIBPATH=pj(PREFIX, 'lib'))
 
     return env
 
 
-# -- locate executables in the path, use with caution --    
+# -- locate executables in the path, use with caution --
 def find_executable_path_from_env(exe, strip_bin=True):
     paths = os.environ["PATH"].split(os.pathsep)
     okPath = None
@@ -389,6 +388,24 @@ def find_executable_path_from_env(exe, strip_bin=True):
 
     bin = okPath[-4:]
     if strip_bin and okPath and "bin" in bin and os.sep in bin:
-        return okPath[:-4]              
+        return okPath[:-4]
     else:
         return okPath
+
+#------------------------------------------------------------------------------
+# Conda detection
+
+def is_conda():
+    """ Check if sconsx is run in a conda environment. """
+    return ("CONDA_PREFIX" in os.environ)
+
+def conda_prefix():
+    """ Returns the PREFIX where lib, include are installed. """
+    if is_conda():
+        if 'CONDA_BUILD' in os.environ:
+            return os.environ['PREFIX']
+        else:
+            return os.environ['CONDA_PREFIX']
+
+CONDA_ENV = is_conda()
+CONDA_PREFIX = conda_prefix()

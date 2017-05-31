@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -33,8 +33,9 @@ class Gnuplot:
 
 
    def default(self):
-
-      if isinstance(platform, Posix):
+      if CONDA_ENV:
+         self._default['bin'] = pj(CONDA_PREFIX,'bin')
+      elif isinstance(platform, Posix):
          self._default['bin'] = pj('/usr','bin')
       elif isinstance(platform, Win32):
          self._default['bin'] = 'C:\\'
@@ -44,8 +45,8 @@ class Gnuplot:
 
       self.default()
 
-      opts.Add(PathVariable('gnuplot_bin', 
-                            'Gnuplot binary path', 
+      opts.Add(PathVariable('gnuplot_bin',
+                            'Gnuplot binary path',
                             self._default['bin']))
 
 

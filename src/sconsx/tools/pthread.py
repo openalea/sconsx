@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -24,6 +24,7 @@ __revision__ = "$Id$"
 import os, sys
 from openalea.sconsx.config import *
 
+pj = os.path.join
 
 class Pthread:
    def __init__(self, config):
@@ -33,9 +34,13 @@ class Pthread:
 
 
    def default(self):
+      if CONDA_ENV:
+         prefix = CONDA_PREFIX
+      else:
+         prefix = '/usr'
 
-      self._default['include'] = '/usr/include'
-      self._default['lib'] = '/usr/lib'
+      self._default['include'] = pj(prefix, 'include')
+      self._default['lib'] = pj(prefix, 'lib')
 
 
 
@@ -44,10 +49,10 @@ class Pthread:
       self.default()
 
       opts.AddVariables(
-         PathVariable('pthread_includes', 'pthread include files', 
+         PathVariable('pthread_includes', 'pthread include files',
                      self._default['include']),
-         PathVariable('pthread_lib', 'pthread libraries path', 
-                     self._default['lib']) 
+         PathVariable('pthread_lib', 'pthread libraries path',
+                     self._default['lib'])
      )
 
 
