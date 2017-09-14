@@ -227,7 +227,7 @@ platform = GetPlatform()
 #------------------------------------------------------------------------------
 # User Configuration class
 
-default_tools = ['compiler', 'builddir', 'multicpu']
+default_tools = ['compiler', 'builddir', 'multicpu', 'install']
 
 
 class Config(object):
@@ -403,7 +403,7 @@ def conda_prefix():
     """ Returns the PREFIX where lib, include are installed. """
     if is_conda():
         if 'CONDA_BUILD' in os.environ:
-            return os.environ['PREFIX']
+            return os.environ.get('PREFIX', os.environ.get('CONDA_PREFIX'))
         else:
             return os.environ['CONDA_PREFIX']
 
