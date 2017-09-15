@@ -4,9 +4,9 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2005-2007 INRIA - CIRAD - INRA  
+#       Copyright 2005-2007 INRIA - CIRAD - INRA
 #
-#       File author(s): 
+#       File author(s):
 #               Christophe Pradal <christophe.prada@cirad.fr>
 #               Pierre Barbier de Reuille <pierre.barbier@sophia.inria.fr>
 #               Samuel Dufour-Kowalski <samuel.dufour@sophia.inria.fr>
@@ -14,7 +14,7 @@
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -50,15 +50,18 @@ def ALEALibrary(env, target, source, *args, **kwds):
         lib = env.StaticLibrary(_target, source, *args, **kwds)
     else:
         if (env['compiler'] == 'msvc') and ('8.0' in env['MSVS_VERSION']):
-            kwds['SHLINKCOM'] = [env['SHLINKCOM'], 
+            kwds['SHLINKCOM'] = [env['SHLINKCOM'],
             'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
         lib = env.SharedLibrary(_target, source, *args, **kwds)
     # Bug on mingw with .exp
     #if env["compiler"] == "mingw":
     #  lib = [l for l in lib if not str(l).endswith('.exp')]
+
+    Alias("build_lib", lib)
     Alias("build", lib)
-    
+
     inst_lib = env.Install("$libdir", lib)
+    Alias("install_lib", inst_lib)
     Alias("install", inst_lib)
     return (lib, inst_lib)
 
@@ -68,8 +71,10 @@ def ALEAIncludes(env, target, includes, *args, **kwds):
     Define 'build' and 'install' target.
     """
     inc = env.Install("$build_includedir/%s" % (target,), includes, *args, **kwds)
+    env.Alias("build_lib", inc)
     env.Alias("build", inc)
     inst_inc = env.Install("$includedir/%s" % (target,), includes, *args, **kwds)
+    Alias("install_lib", inst_inc)
     Alias("install", inst_inc)
     return (inc, inst_inc)
 
@@ -80,7 +85,7 @@ def ALEAIncludes(env, target, includes, *args, **kwds):
 #   """
 #   # check recursive includes for installation
 #   bn = os.path.basename
-#   dn = os.path.dirname 
+#   dn = os.path.dirname
 #   pj = os.path.join
 #   inc, inst_inc= [], []
 #   for include in includes:
@@ -99,7 +104,9 @@ def ALEAProgram(env, target, source, *args, **kwds):
     """
     bin = env.Program("$build_bindir/%s" % (target,), source, *args, **kwds)
     Alias("build", bin)
+    Alias("build_lib", bin)
     inst_bin = env.Install("$bindir", bin)
+    Alias("install_lib", inst_bin)
     Alias("install", inst_bin)
     return (bin, inst_bin)
 
@@ -111,30 +118,30 @@ def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
 
     if os.name == 'nt':
         kwds['SHLIBSUFFIX'] = '.pyd'
-    else: 
+    else:
         kwds['SHLIBSUFFIX'] = '.so'
 
     if (env['compiler'] == 'msvc') and ('8.0' in env['MSVS_VERSION']):
-        kwds['SHLINKCOM'] = [env['SHLINKCOM'], 
+        kwds['SHLINKCOM'] = [env['SHLINKCOM'],
         'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
 
     if os.name == 'nt':
     # Fix bug with Scons 0.97, Solved in newer versions.
-        wrap = env.SharedLibrary(real_target, source, 
+        wrap = env.SharedLibrary(real_target, source,
                            SHLIBPREFIX='',
                            *args, **kwds)
     elif sys.platform == 'darwin':
-        wrap = env.LoadableModule(real_target, source, 
-                           SHLIBPREFIX='', 
+        wrap = env.LoadableModule(real_target, source,
+                           SHLIBPREFIX='',
                            LDMODULESUFFIX='.so',
                            FRAMEWORKSFLAGS = \
                             '-flat_namespace -undefined suppress',
                            *args, **kwds)
     else:
-        wrap = env.LoadableModule(real_target, source, 
+        wrap = env.LoadableModule(real_target, source,
                            SHLIBPREFIX='',
                            *args, **kwds)
-
+    Alias("build_wrapper", wrap)
     Alias("build", wrap)
     return wrap
 
@@ -164,11 +171,11 @@ def ALEAGlob(env, pattern, dir = '.'):
         d = os.path.join(here, dir)
         dirs = filter(os.path.isdir, glob.glob(d))
         is_multidirs = True
-    else: 
+    else:
         here = env.Dir(dir).srcnode().abspath
         dirs = [here]
 
-    for d in dirs: 
+    for d in dirs:
         for ufile in os.listdir(d):
             if fnmatch.fnmatch(ufile, pattern) :
                 if is_multidirs:
