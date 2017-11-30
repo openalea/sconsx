@@ -318,8 +318,15 @@ class Config(object):
         """
 
         # Create Configure
+        import traceback, sys
+        import warnings
         for tool in self.tools:
-            tool.update(env)
+            try:
+                tool.update(env)
+            except:
+                traceback.print_exception(*sys.exc_info())
+                warnings.warn("Cannot update correctly tool "+repr(tool.name))
+
 
 
 #------------------------------------------------------------------------------
