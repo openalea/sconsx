@@ -251,10 +251,13 @@ def generate(env):
     env['QTDIR']  = _detect(env)
     # TODO: 'Replace' should be 'SetDefault'
 #    env.SetDefault(
+    qtinclude = os.path.join('$QTDIR', 'include')
+    if os.path.exists(os.path.join(env['QTDIR'],'include','qt')) and os.path.exists(os.path.join(env['QTDIR'],'include','qt', 'QtCore')):
+        qtinclude = os.path.join(qtinclude,'qt')
     env.Replace(
         QTDIR  = _detect(env),
         QT4_BINPATH = os.path.join('$QTDIR', 'bin'),
-        QT4_CPPPATH = os.path.join('$QTDIR', 'include'),
+        QT4_CPPPATH = qtinclude,
         QT4_LIBPATH = os.path.join('$QTDIR', 'lib'),
         # TODO: This is not reliable to QTDIR value changes but needed in order to support '-qt4' variants
         QT4_MOC = locateQt4Command(env,'moc', env['QTDIR']),
@@ -524,9 +527,9 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         self.AppendUnique(LIBS=[lib+debugSuffix for lib in modules if lib in staticModules])
         if 'QtOpenGL' in modules:
             self.AppendUnique(LIBS=['opengl32'])
-        self.AppendUnique(CPPPATH=[ '$QTDIR/include/'+module
+        self.AppendUnique(CPPPATH=[ '$QT4_CPPPATH/'+module
             for module in modules])
-        self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
+        self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
         return
 
     if sys.platform == "darwin" :
