@@ -78,22 +78,36 @@ class Qhull:
 
          ('qhull_libs_suffix',
            'Qhull library suffix name like -vc80 or -mgw',
-           self._default['libs_suffix'])
+           self._default['libs_suffix']),
+
+         BoolVariable('WITH_QHULL',
+           'Specify whether you want to compile your project with QHULL', True)
      )
 
 
    def update(self, env):
       """ Update the environment with specific flags """
 
-      env.AppendUnique(CPPPATH=[env['qhull_includes']])
-      env.AppendUnique(LIBPATH=[env['qhull_lib']])
+      if env['WITH_QHULL'] :
+        def_qhull_inc = env['qhull_includes']
+        qhull_inc = pj(def_qhull_inc, 'libqhull')
+        if not os.path.exists(os.path.join(def_qhull_inc, "qhull_a.h")) and not os.path.exists(os.path.join(qhull_inc, "qhull_a.h")) :
+          import warnings
+          warnings.warn("Error: QHull headers not found. QHull disabled ...")
+          env['WITH_QHULL'] = False
 
-      qhull_inc = pj(env['qhull_includes'], 'libqhull')
-      if os.path.exists(qhull_inc):
+      if env['WITH_QHULL'] :
+        env.AppendUnique(CPPPATH=[env['qhull_includes']])
+        env.AppendUnique(LIBPATH=[env['qhull_lib']])
+
+        qhull_inc = pj(env['qhull_includes'], 'libqhull')
+        if os.path.exists(qhull_inc):
           env.AppendUnique( CPPDEFINES = ['WITH_QHULL_2011'] )
 
-      qhull_name = 'qhull'+env['qhull_libs_suffix']
-      env.AppendUnique(LIBS=[qhull_name])
+        env.AppendUnique( CPPDEFINES = ['WITH_QHULL'] )
+
+        qhull_name = 'qhull'+env['qhull_libs_suffix']
+        env.AppendUnique(LIBS=[qhull_name])
 
 
    def configure(self, config):
@@ -107,4 +121,3 @@ def create(config):
    qhull = Qhull(config)
 
    return qhull
-
