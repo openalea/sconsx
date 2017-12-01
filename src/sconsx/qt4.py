@@ -252,8 +252,13 @@ def generate(env):
     # TODO: 'Replace' should be 'SetDefault'
 #    env.SetDefault(
     qtinclude = os.path.join('$QTDIR', 'include')
-    if os.path.exists(os.path.join(env['QTDIR'],'include','qt')) and os.path.exists(os.path.join(env['QTDIR'],'include','qt', 'QtCore')):
-        qtinclude = os.path.join(qtinclude,'qt')
+    subdirqt = os.path.join(env['QTDIR'], 'include','qt')
+    subdirqtQtCore = os.path.join(subdirqt,'QtCore')
+
+    print subdirqt, os.path.exists(subdirqt)
+    print subdirqtQtCore, os.path.exists(subdirqtQtCore), os.path.isdir(subdirqtQtCore)
+    if os.path.exists(subdirqt) and os.path.exists(subdirqtQtCore) and os.path.isdir(subdirqtQtCore):
+        qtinclude = subdirqt
     env.Replace(
         QTDIR  = _detect(env),
         QT4_BINPATH = os.path.join('$QTDIR', 'bin'),

@@ -393,6 +393,7 @@ def find_executable_path_from_env(exe, strip_bin=True):
             okPath = p
             break
 
+    if okPath is None : return None
     bin = okPath[-4:]
     if strip_bin and okPath and "bin" in bin and os.sep in bin:
         return okPath[:-4]
