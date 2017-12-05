@@ -38,7 +38,10 @@ class Python:
 
       self._default['include'] = get_python_inc(plat_specific=1)
       if CONDA_ENV:
-        self._default['libpath'] = pj(CONDA_PREFIX, 'lib')
+          if os.name == 'posix':
+              self._default['libpath'] = pj(CONDA_PREFIX, 'lib')
+          else:
+              self._default['libpath'] = pj(CONDA_PREFIX, 'libs')            
       elif isinstance(platform, Win32):
           lib_dir = pj(PREFIX,"libs")
           if not os.path.exists(lib_dir):

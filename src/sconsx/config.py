@@ -415,5 +415,16 @@ def conda_prefix():
         else:
             return os.environ['CONDA_PREFIX']
 
+def conda_library_prefix():
+    if os.name == 'posix' : 
+        return conda_prefix()
+    elif is_conda():
+    	library_prefix= pj(os.environ.get('CONDA_PREFIX'),'Library')
+        if 'CONDA_BUILD' in os.environ:
+            return os.environ.get('LIBRARY_PREFIX', library_prefix)
+        else:
+            return library_prefix
+
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
+CONDA_LIBRARYPREFIX = conda_library_prefix()

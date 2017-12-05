@@ -28,6 +28,19 @@ from os.path import join as pj
 reg  = r".*boost.*([0-9]\.[0-9][0-9]\.?[0-9]?).*"
 regc = re.compile(reg)
 
+
+def get_default_boost_libs_suffix(path):
+    import glob
+    boost_libs_suffix=None
+    libname = 'boost_python'
+    bp = glob.glob(os.path.join(path,'*'+libname+'*.*'))
+    if not bp is None:
+        bp = os.path.splitext(os.path.basename(bp[0]))[0]
+        boost_libs_suffix = bp[bp.index(libname)+len(libname):]
+    return boost_libs_suffix
+
+
+
 class Boost:
     def __init__(self, config):
         self.name = self.__class__.__name__.lower()
@@ -56,8 +69,11 @@ class Boost:
 
         # -- lets now look for decent include dirs --
         if CONDA_ENV:
-            self._default['include'] = pj(CONDA_PREFIX, 'include')
-            self._default['lib'] = pj(CONDA_PREFIX, 'lib')
+            self._default['include'] = pj(CONDA_LIBRARYPREFIX, 'include')
+            self._default['lib'] = pj(CONDA_LIBRARYPREFIX, 'lib')
+            detectedsuffix = get_default_boost_libs_suffix(self._default['lib']) 
+            if detectedsuffix:
+                self._default['libs_suffix'] = detectedsuffix 
             self.__usingEgg = False
         else:
             try:

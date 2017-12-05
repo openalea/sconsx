@@ -40,7 +40,7 @@ class GMP:
       self._default['defines'] = ''
 
       if CONDA_ENV:
-         prefix = CONDA_PREFIX
+         prefix = CONDA_LIBRARYPREFIX
          self._default['include'] = pj(prefix, 'include')
          self._default['libpath'] = pj(prefix, 'lib')
          self._default['libs'] = 'gmp'

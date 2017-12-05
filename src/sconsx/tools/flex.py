@@ -34,7 +34,11 @@ class Flex:
    def default(self):
 
       if CONDA_ENV:
-          base_dir = CONDA_PREFIX
+          if os.name == 'posix':
+            base_dir = CONDA_LIBRARYPREFIX
+          else:
+            # On windows, the conda package providing flex (m2-flex) is located in Library/usr
+            base_dir = os.path.join(CONDA_LIBRARYPREFIX, 'usr')
           self._default['bin'] = pj(base_dir, 'bin')
           self._default['include'] = pj(base_dir, 'include')
           if not isinstance(platform, Win32):

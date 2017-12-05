@@ -34,7 +34,11 @@ class Bison:
    def default(self):
 
       if CONDA_ENV:
-          self._default['bin'] = os.path.join(CONDA_PREFIX, 'bin')
+          if os.name == 'posix':
+            self._default['bin'] = os.path.join(CONDA_LIBRARYPREFIX, 'bin')
+          else:
+            # On windows, the conda package providing bison (m2-bison) is located in Library/usr
+            self._default['bin'] = os.path.join(CONDA_LIBRARYPREFIX, 'usr', 'bin')            
       elif isinstance(platform, Win32):
          try:
             # Try to use openalea egg

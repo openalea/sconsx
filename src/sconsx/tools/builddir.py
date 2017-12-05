@@ -35,12 +35,16 @@ class BuildDir:
     def default(self):
         """Set the default directory values for build_prefix."""
         # self._default['build_prefix']= pj(self.config.dir[0], "build-" + platform.name)
-        if 'CONDA_BUILD' in os.environ:
-            self._conda_build = True
-            prefix = self._default['build_prefix'] = CONDA_PREFIX
-        else:
-            self._conda_build = False
-            prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
+        #if 'CONDA_BUILD' in os.environ:
+        #    self._conda_build = True
+        #    prefix = self._default['build_prefix'] = CONDA_LIBRARYPREFIX
+        #else:
+        #    self._conda_build = False
+        #    prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
+
+        prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
+        self._conda_build = ('CONDA_BUILD' in os.environ)
+
 
         self._default['build_bindir'] = pj(prefix,"bin")
         self._default['build_libdir'] = pj(prefix,"lib")
@@ -65,7 +69,7 @@ class BuildDir:
 
     def update(self, env):
         """Update the environment with specific flags."""
-        if env['with_build_dir'] or _conda_build:
+        if env['with_build_dir'] or self._conda_build:
             prefix = env['build_prefix']
             bin_prefix = env['build_bindir']
             lib_prefix = env['build_libdir']

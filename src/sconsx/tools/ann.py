@@ -40,8 +40,8 @@ class ANN:
    def default(self):
 
       if CONDA_ENV:
-         self._default['include'] = pj(CONDA_PREFIX,'include')
-         self._default['libpath'] = pj(CONDA_PREFIX,'lib')
+         self._default['include'] = pj(CONDA_LIBRARYPREFIX,'include')
+         self._default['libpath'] = pj(CONDA_LIBRARYPREFIX,'lib')
          self._default['libs'] = 'ann'
          self._default['flags'] = ''
          self._default['defines'] = ''
