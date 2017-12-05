@@ -255,8 +255,6 @@ def generate(env):
     subdirqt = os.path.join(env['QTDIR'], 'include','qt')
     subdirqtQtCore = os.path.join(subdirqt,'QtCore')
 
-    print subdirqt, os.path.exists(subdirqt)
-    print subdirqtQtCore, os.path.exists(subdirqtQtCore), os.path.isdir(subdirqtQtCore)
     if os.path.exists(subdirqt) and os.path.exists(subdirqtQtCore) and os.path.isdir(subdirqtQtCore):
         qtinclude = subdirqt
     env.Replace(
