@@ -59,38 +59,43 @@ class Bison:
       opts.Add('bison_bin', 'Bison binary path',
                 self._default['bin'])
 
+      opts.Add(BoolVariable('WITH_BISON',
+           'Specify whether you want to compile your project with bison', True))
+
 
    def update(self, env):
       """ Update the environment with specific flags """
-      t = Tool('yacc', toolpath=[getLocalPath()])
-      t(env)
+      if env['WITH_BISON']:
+        bison = env.WhereIs('bison', env['bison_bin'])
 
-      env.Append(YACCFLAGS=['-d', '-v'])
-      bison = env.WhereIs('bison', env['bison_bin'])
-      env.Replace(YACC=bison)
+        if bison:
+            t = Tool('yacc', toolpath=[getLocalPath()])
+            t(env)
+            env.Append(YACCFLAGS=['-d', '-v'])
+            env.Replace(YACC=bison)
 
-      if bison:
-         f =os.popen(str(bison)+" --version")
-         l =f.readline()
-         l =l.split()
-         version_text = re.compile(r"\d+.\d+").match(l[-1])
-         if version_text is None:
-            raise UserWarning, "Unable to retrieve bison version number"
-         version = float(version_text.group(0))
-         f.close()
+            f =os.popen(str(bison)+" --version")
+            l =f.readline()
+            l =l.split()
+            version_text = re.compile(r"\d+.\d+").match(l[-1])
+            if version_text is None:
+              raise UserWarning, "Unable to retrieve bison version number"
+            version = float(version_text.group(0))
+            f.close()
 
-         if version >= 1.30:
-            BISON_HPP =True
-         else:
-            BISON_HPP =False
+            if version >= 1.30:
+              BISON_HPP =True
+            else:
+              BISON_HPP =False
 
-         env.Append(BISON_HPP=BISON_HPP)
-         if BISON_HPP:
-            env.Append(CPPDEFINES =["BISON_HPP"])
-         env['WITH_BISON'] = True  
-         env.Append(CPPDEFINES =["WITH_BISON"])
-      else:
-        env['WITH_BISON'] = False  
+            env.Append(BISON_HPP=BISON_HPP)
+            if BISON_HPP:
+               env.Append(CPPDEFINES =["BISON_HPP"])
+            env['WITH_BISON'] = True  
+            env.Append(CPPDEFINES =["WITH_BISON"])
+        else:
+          print("Error: 'bison' not found. Bison disabled ...")
+          env['WITH_BISON'] = False  
 
 
 
