@@ -382,7 +382,7 @@ def generate(env):
 def enable_modules(self, modules, debug=False, suffix = '') :
     import sys
 
-    qtversion = int(self['QT_VERSION'])
+    qtversion = int(self.get('QT_VERSION',4))
     if qtversion ==4:
         validModules = [
             'QtCore',

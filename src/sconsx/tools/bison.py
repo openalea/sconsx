@@ -81,6 +81,10 @@ class Bison:
          env.Append(BISON_HPP=BISON_HPP)
          if BISON_HPP:
             env.Append(CPPDEFINES =["BISON_HPP"])
+         env['WITH_BISON'] = True  
+         env.Append(CPPDEFINES =["WITH_BISON"])
+      else:
+        env['WITH_BISON'] = False  
 
 
 

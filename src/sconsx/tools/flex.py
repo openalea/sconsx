@@ -77,9 +77,13 @@ class Flex:
 
       t = Tool('lex', toolpath=[getLocalPath()])
       t(env)
-
       flex = env.WhereIs('flex', env['flex_bin'])
-      env.Replace(LEX=flex)
+      if flex:
+        env.Replace(LEX=flex)
+        env['WITH_FLEX'] = True  
+        env.Append(CPPDEFINES =["WITH_FLEX"])
+      else:
+        env['WITH_FLEX'] = False  
 
 
    def configure(self, config):
