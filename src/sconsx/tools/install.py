@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -35,7 +35,10 @@ class Install:
 
     def default(self):
 
-        if isinstance(platform, Win32):
+        if CONDA_ENV:
+            self._default['prefix'] = CONDA_LIBRARY_PREFIX
+
+        elif isinstance(platform, Win32):
             self._default['prefix'] = 'C:' + os.sep + 'local'
 
         elif isinstance(platform, Posix):
@@ -48,43 +51,43 @@ class Install:
         self.default()
 
         # Installation Directories
-        opts.Add(('prefix', 
-                  'install architecture-independent files', 
+        opts.Add(('prefix',
+                  'install architecture-independent files',
                   self._default['prefix']))
 
-        opts.Add(('exec_prefix', 
-                  'install architecture-dependent files', 
+        opts.Add(('exec_prefix',
+                  'install architecture-dependent files',
                   '$prefix'))
 
         # Fine tunning of the installation directory
-        opts.Add(('bindir', 
-                  'user executables', 
+        opts.Add(('bindir',
+                  'user executables',
                   pj('$prefix', 'bin')))
 
-        opts.Add(('libdir', 
-                  'object code libraries', 
+        opts.Add(('libdir',
+                  'object code libraries',
                   pj('$prefix', 'lib')))
 
-        opts.Add(('includedir', 
-                  'header files', 
+        opts.Add(('includedir',
+                  'header files',
                   pj('$prefix', 'include')))
 
-        opts.Add(('datadir', 
-                  'data', 
+        opts.Add(('datadir',
+                  'data',
                   pj('$prefix', 'share')))
 
         # Program & Library names
 
-        opts.Add('program_prefix', 
+        opts.Add('program_prefix',
                   'prepend prefix to installed program names', '')
 
-        opts.Add('program_suffix', 
+        opts.Add('program_suffix',
                   'append suffix to installed program names', '')
 
-        opts.Add('lib_prefix', 
+        opts.Add('lib_prefix',
                   'prepend prefix to installed library names', '')
 
-        opts.Add('lib_suffix', 
+        opts.Add('lib_suffix',
                   'append suffix to installed library names', '')
 
 

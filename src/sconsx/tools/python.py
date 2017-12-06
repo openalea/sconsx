@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -24,6 +24,7 @@ __revision__ = "$Id$"
 import os, sys
 from openalea.sconsx.config import *
 from distutils.sysconfig import *
+
 pj = os.path.join
 
 class Python:
@@ -36,7 +37,12 @@ class Python:
    def default(self):
 
       self._default['include'] = get_python_inc(plat_specific=1)
-      if isinstance(platform, Win32):
+      if CONDA_ENV:
+          if os.name == 'posix':
+              self._default['libpath'] = pj(CONDA_PREFIX, 'lib')
+          else:
+              self._default['libpath'] = pj(CONDA_PREFIX, 'libs')            
+      elif isinstance(platform, Win32):
           lib_dir = pj(PREFIX,"libs")
           if not os.path.exists(lib_dir):
               # case with virtual env...
@@ -54,10 +60,10 @@ class Python:
       self.default()
 
       opts.AddVariables(
-         PathVariable('python_includes', 'Python include files', 
+         PathVariable('python_includes', 'Python include files',
           self._default['include']),
 
-         PathVariable('python_libpath', 'Python library path', 
+         PathVariable('python_libpath', 'Python library path',
          self._default['libpath'])
         )
 
@@ -66,13 +72,13 @@ class Python:
       """ Update the environment with specific flags """
 
       env.AppendUnique(CPPPATH=[env['python_includes']])
-      
+
       if isinstance(platform, Win32):
           version = "%d%d" % (sys.version_info.major,sys.version_info.minor)
-          pylib = 'python' + version          
+          pylib = 'python' + version
           env.AppendUnique(LIBS=[pylib])
           env.AppendUnique(LIBPATH=[env['python_libpath']])
-      
+
       elif isinstance(platform, Darwin):
           # hack to not use python system
           version = "%d.%d" % (sys.version_info.major,sys.version_info.minor)

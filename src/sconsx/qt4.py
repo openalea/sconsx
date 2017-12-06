@@ -251,10 +251,16 @@ def generate(env):
     env['QTDIR']  = _detect(env)
     # TODO: 'Replace' should be 'SetDefault'
 #    env.SetDefault(
+    qtinclude = os.path.join('$QTDIR', 'include')
+    subdirqt = os.path.join(env['QTDIR'], 'include','qt')
+    subdirqtQtCore = os.path.join(subdirqt,'QtCore')
+
+    if os.path.exists(subdirqt) and os.path.exists(subdirqtQtCore) and os.path.isdir(subdirqtQtCore):
+        qtinclude = subdirqt
     env.Replace(
         QTDIR  = _detect(env),
         QT4_BINPATH = os.path.join('$QTDIR', 'bin'),
-        QT4_CPPPATH = os.path.join('$QTDIR', 'include'),
+        QT4_CPPPATH = qtinclude,
         QT4_LIBPATH = os.path.join('$QTDIR', 'lib'),
         # TODO: This is not reliable to QTDIR value changes but needed in order to support '-qt4' variants
         QT4_MOC = locateQt4Command(env,'moc', env['QTDIR']),
@@ -499,7 +505,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
             if os.path.exists(os.path.join(qt4_inc, qt_ext)):
                 self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH", qt_ext)])
                 for module in modules :
-                    if module not in pclessModules:
+                    if module in pclessModules:
                         continue
                     self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                     self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH", qt_ext, module)])
@@ -507,7 +513,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         else:
             #self.AppendUnique(CPPPATH=["$QT4_CPPPATH"])
             for module in modules :
-                if module not in pclessModules:
+                if module in pclessModules:
                     continue
                 self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                 self.AppendUnique(CPPPATH=[os.path.join("$QT4_CPPPATH",module)])
@@ -524,9 +530,9 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         self.AppendUnique(LIBS=[lib+debugSuffix for lib in modules if lib in staticModules])
         if 'QtOpenGL' in modules:
             self.AppendUnique(LIBS=['opengl32'])
-        self.AppendUnique(CPPPATH=[ '$QTDIR/include/'+module
+        self.AppendUnique(CPPPATH=[ '$QT4_CPPPATH/'+module
             for module in modules])
-        self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
+        self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])
         return
 
     if sys.platform == "darwin" :

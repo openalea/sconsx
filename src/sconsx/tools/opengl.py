@@ -4,14 +4,14 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2009 INRIA - CIRAD - INRA  
+#       Copyright 2006-2009 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
 #       Distributed under the Cecill-C License.
 #       See accompanying file LICENSE.txt or copy at
 #           http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html
-# 
+#
 #       OpenAlea WebSite : http://openalea.gforge.inria.fr
 #
 #--------------------------------------------------------------------------------
@@ -34,25 +34,29 @@ class OpenGL:
 
 
    def default(self):
-       if isinstance(platform, Win32):
+       if CONDA_ENV:
+           self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
+           self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
+
+       elif isinstance(platform, Win32):
            #MVSdir = r'C:\Program Files\Microsoft Visual Studio\VC98'
            MVSdir = r'C:\Program Files\Microsoft Platform SDK'
            self._default['msvc_include'] = pj(MVSdir, 'Include')
            self._default['msvc_lib'] = pj(MVSdir, 'Lib')
-        
-           mgw_dir = find_executable_path_from_env("mingw32-make.exe", strip_bin=True)           
+
+           mgw_dir = find_executable_path_from_env("mingw32-make.exe", strip_bin=True)
            mgw_dir = mgw_dir or r'C:\MinGW'
            self._default['mgw_include'] = pj(mgw_dir, 'include', 'GL')
            self._default['mgw_lib'] = pj(mgw_dir, 'lib')
-        
+
            self._default['include'] = self._default['msvc_include']
            self._default['lib'] = self._default['msvc_lib']
        elif isinstance(platform, Posix):
            if exists ('/usr/include/GL/gl.h'):
-               
+
                self._default['include'] = '/usr/include'
                self._default['lib'] = '/usr/lib'
-           else: 
+           else:
                self._default['include'] = '/usr/X11R6/include'
                self._default['lib'] = '/usr/X11R6/lib'
 
@@ -62,7 +66,7 @@ class OpenGL:
 
        if isinstance(platform, Darwin):
            opts.AddVariables(
-                           ('gl_includes', 'GL include files', 
+                           ('gl_includes', 'GL include files',
                             self._default['include']),
                            ('gl_framework_path', 'GL framework path',
                             '/System/Library/Frameworks'),
@@ -71,10 +75,10 @@ class OpenGL:
                            )
        else:
            opts.AddVariables(
-                           ('gl_includes', 'GL include files', 
+                           ('gl_includes', 'GL include files',
                             self._default['include']),
 
-                            ('gl_lib', 'GL library path', 
+                            ('gl_lib', 'GL library path',
                              self._default['lib'])
                             )
 
@@ -87,7 +91,7 @@ class OpenGL:
           for fmk in env['gl_frameworks']:
               env.Append(LINKFLAGS=['-framework',str(fmk)])
           return
-      if env.get('compiler', 'mingw') == 'mingw':
+      if env.get('compiler', 'mingw') == 'mingw' and not CONDA_ENV:
           if env['gl_includes'] == self._default['msvc_include']:
               env['gl_includes'] = self._default['mgw_include']
           if env['gl_lib'] == self._default['msvc_lib']:
@@ -101,7 +105,7 @@ class OpenGL:
       elif isinstance(platform, Posix):
           env.AppendUnique(LIBS=['GLU'])
       elif isinstance(platform, Win32):
-          env.AppendUnique(LIBS=['opengl32'])
+          env.AppendUnique(LIBS=['opengl32','glu32'])
 
 
    def configure(self, config):

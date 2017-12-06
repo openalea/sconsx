@@ -3,6 +3,7 @@ __revision__ = "$Id$"
 
 import os, sys
 from setuptools import setup
+
 pj= os.path.join
 
 
