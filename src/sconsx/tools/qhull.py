@@ -36,7 +36,7 @@ class Qhull:
       self._default['libs_suffix'] = '$compiler_libs_suffix'
 
       if CONDA_ENV:
-            base_dir = CONDA_LIBRARYPREFIX
+            base_dir = CONDA_LIBRARY_PREFIX
             self._default['include'] = pj(base_dir, 'include')
             self._default['lib'] = pj(base_dir, 'lib')
 

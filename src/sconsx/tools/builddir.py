@@ -37,7 +37,7 @@ class BuildDir:
         # self._default['build_prefix']= pj(self.config.dir[0], "build-" + platform.name)
         #if 'CONDA_BUILD' in os.environ:
         #    self._conda_build = True
-        #    prefix = self._default['build_prefix'] = CONDA_LIBRARYPREFIX
+        #    prefix = self._default['build_prefix'] = CONDA_LIBRARY_PREFIX
         #else:
         #    self._conda_build = False
         #    prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")

@@ -44,7 +44,7 @@ class CGAL:
       self._default['flags'] = ''
       self._default['defines'] = ''
       if CONDA_ENV:
-          prefix = CONDA_LIBRARYPREFIX
+          prefix = CONDA_LIBRARY_PREFIX
           self._default['include'] = pj(prefix, "include")
           self._default['libpath'] = pj(prefix, "lib")
           self._default['libs'] = ['CGAL']

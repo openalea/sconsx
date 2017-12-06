@@ -69,8 +69,8 @@ class Boost:
 
         # -- lets now look for decent include dirs --
         if CONDA_ENV:
-            self._default['include'] = pj(CONDA_LIBRARYPREFIX, 'include')
-            self._default['lib'] = pj(CONDA_LIBRARYPREFIX, 'lib')
+            self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
+            self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
             detectedsuffix = get_default_boost_libs_suffix(self._default['lib']) 
             if detectedsuffix:
                 self._default['libs_suffix'] = detectedsuffix 

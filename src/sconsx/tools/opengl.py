@@ -35,8 +35,8 @@ class OpenGL:
 
    def default(self):
        if CONDA_ENV:
-           self._default['include'] = pj(CONDA_LIBRARYPREFIX, 'include')
-           self._default['lib'] = pj(CONDA_LIBRARYPREFIX, 'lib')
+           self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
+           self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
 
        elif isinstance(platform, Win32):
            #MVSdir = r'C:\Program Files\Microsoft Visual Studio\VC98'

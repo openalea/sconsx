@@ -34,7 +34,7 @@ class QT:
 
     def default(self):
         if CONDA_ENV:
-            qt_dir = CONDA_LIBRARYPREFIX
+            qt_dir = CONDA_LIBRARY_PREFIX
             self._default["QTDIR"] = qt_dir
             self._default["QT4_BINPATH"] = pj(qt_dir, 'bin')
             self._default["QT4_CPPPATH"] = pj(qt_dir, 'include')

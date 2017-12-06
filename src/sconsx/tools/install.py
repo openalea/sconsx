@@ -36,7 +36,7 @@ class Install:
     def default(self):
 
         if CONDA_ENV:
-            self._default['prefix'] = CONDA_LIBRARYPREFIX
+            self._default['prefix'] = CONDA_LIBRARY_PREFIX
 
         elif isinstance(platform, Win32):
             self._default['prefix'] = 'C:' + os.sep + 'local'

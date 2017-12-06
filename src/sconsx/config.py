@@ -427,4 +427,4 @@ def conda_library_prefix():
 
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
-CONDA_LIBRARYPREFIX = conda_library_prefix()
+CONDA_LIBRARY_PREFIX = conda_library_prefix()

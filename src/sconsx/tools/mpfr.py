@@ -41,8 +41,8 @@ class MPFR:
       self._default['defines'] = ''
 
       if CONDA_ENV:
-          self._default['include'] = pj(CONDA_LIBRARYPREFIX, 'include')
-          self._default['libpath'] = pj(CONDA_LIBRARYPREFIX, 'lib')
+          self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
+          self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
           self._default['libs'] = 'mpfr'
 
       elif isinstance(platform, Win32):
