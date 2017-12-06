@@ -92,8 +92,7 @@ class Qhull:
         def_qhull_inc = env['qhull_includes']
         qhull_inc = pj(def_qhull_inc, 'libqhull')
         if not os.path.exists(os.path.join(def_qhull_inc, "qhull_a.h")) and not os.path.exists(os.path.join(qhull_inc, "qhull_a.h")) :
-          import warnings
-          warnings.warn("Error: QHull headers not found. QHull disabled ...")
+          print("Error: QHull headers not found. QHull disabled ...")
           env['WITH_QHULL'] = False
 
       if env['WITH_QHULL'] :

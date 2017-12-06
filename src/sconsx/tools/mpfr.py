@@ -116,8 +116,7 @@ class MPFR:
           # mpfr_inc = mpfr_inc.split()
         # mpfr_inc = mpfr_inc[0]
         if not os.path.exists(os.path.join(mpfr_inc,'mpfr.h')):
-          import warnings
-          warnings.warn("Error: MPFR headers not found. MPFR disabled ...")
+          print("Error: MPFR headers not found. MPFR disabled ...")
           env['WITH_MPFR'] = False
       if env['WITH_MPFR']:
         env.AppendUnique(CPPPATH=[env['mpfr_includes']])

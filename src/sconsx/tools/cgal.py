@@ -124,8 +124,7 @@ class CGAL:
           cgal_inc = cgal_inc.split()
         cgal_inc = cgal_inc[0]
         if not os.path.exists(os.path.join(cgal_inc,'CGAL')):
-          import warnings
-          warnings.warn("Error: CGAL headers not found. CGAL disabled ...")
+          print("Error: CGAL headers not found. CGAL disabled ...")
           env['WITH_CGAL'] = False
       if env['WITH_CGAL']:
         env.AppendUnique(CPPPATH=[env['cgal_includes']])
