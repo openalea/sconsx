@@ -53,16 +53,24 @@ def ALEALibrary(env, target, source, *args, **kwds):
             kwds['SHLINKCOM'] = [env['SHLINKCOM'],
             'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
         lib = env.SharedLibrary(_target, source, *args, **kwds)
-    # Bug on mingw with .exp
-    #if env["compiler"] == "mingw":
-    #  lib = [l for l in lib if not str(l).endswith('.exp')]
 
     Alias("build_lib", lib)
     Alias("build", lib)
 
-    inst_lib = env.Install("$libdir", lib)
-    Alias("install_lib", inst_lib)
-    Alias("install", inst_lib)
+    if os.name == 'posix':
+        inst_lib = env.Install("$libdir",lib)
+        Alias("install_lib", inst_lib)
+        Alias("install", inst_lib)
+    else:
+        # On windows, dll should be installed in the bin dir.
+        dll, lib, exp = lib
+        inst_dll = env.Install("$bindir", dll)
+        inst_lib = env.Install("$libdir", lib)
+        Alias("install_lib", inst_lib)
+        Alias("install_lib", inst_dll)
+        Alias("install", inst_lib)
+        Alias("install", inst_dll)
+        inst_lib += inst_dll
     return (lib, inst_lib)
 
 def ALEAIncludes(env, target, includes, *args, **kwds):
