@@ -117,7 +117,7 @@ class ANN:
         ann_inc = env['ann_includes']
         ann_header = os.path.join(ann_inc,'ANN','ANN.h')
         if not os.path.exists(ann_header):
-          warnings.warn("Error: ANN headers not found. ANN disabled ...")
+          print("Error: ANN headers not found. ANN disabled ...")
           env['WITH_ANN'] = False
       if env['WITH_ANN']:
         env.AppendUnique(CPPPATH=[env['ann_includes']])

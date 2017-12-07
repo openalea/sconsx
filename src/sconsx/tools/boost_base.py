@@ -24,19 +24,22 @@ import os, sys, glob, re
 from openalea.sconsx.config import *
 
 from os.path import join as pj
+import sys
 
 reg  = r".*boost.*([0-9]\.[0-9][0-9]\.?[0-9]?).*"
 regc = re.compile(reg)
 
+#sharedlib_ext = {'linux2' : 'so', 'win32' : 'dll', 'cygwin' : 'dll', 'darwin' : 'dylib', 
+#                 'os2' : 'dll', 'os2emx' : 'dll', 'riscos' : 'so'}
 
 def get_default_boost_libs_suffix(path):
     import glob
     boost_libs_suffix=None
     libname = 'boost_python'
     bp = glob.glob(os.path.join(path,'*'+libname+'*.*'))
-    if not bp is None:
-        bp = os.path.splitext(os.path.basename(bp[0]))[0]
-        boost_libs_suffix = bp[bp.index(libname)+len(libname):]
+    if not bp is None and len(bp) > 0:
+        bp = os.path.basename(bp[0])
+        boost_libs_suffix = bp[bp.index(libname)+len(libname):bp.index('.')]
     return boost_libs_suffix
 
 
@@ -126,55 +129,58 @@ class Boost:
 
             ('boost_libs_suffix',
               self.name + ' library suffix name like -vc80-mt or -gcc',
-              self._default['libs_suffix'])
+              self._default['libs_suffix']),
+
+            BoolVariable('WITH_BOOST',
+              'Specify whether you want to compile your project with boost', True)
       )
 
 
     def update(self, env):
         """ Update the environment with specific flags """
+        if env['WITH_BOOST']:
+            env.AppendUnique(CPPPATH=[env['boost_includes']])
+            env.AppendUnique(LIBPATH=[env['boost_lib']])
+            env.Append(CPPDEFINES='$%s_defines'%(self.name,))
+            env.Append(CPPFLAGS='$%s_flags'%(self.name,))
 
-        env.AppendUnique(CPPPATH=[env['boost_includes']])
-        env.AppendUnique(LIBPATH=[env['boost_lib']])
-        env.Append(CPPDEFINES='$%s_defines'%(self.name,))
-        env.Append(CPPFLAGS='$%s_flags'%(self.name,))
+            #boost > 1.43 changed naming scheme for mingw/cygwin.
+            if env['compiler'] == 'mingw' or platform==Cygwin:
+                if not self.__usingEgg: # ---- get version, from user boost or system
+                    boostLibs = glob.glob(pj(env['boost_lib'],'libboost*'))
+                    version   = None
+                    #find versions in there
+                    for lib in boostLibs:
+                        res = regc.search(lib)
+                        if res and len(res.groups()):
+                            version = res.groups()[0]
+                            break
+                else: #get version, from egg
+                    from openalea.deploy import get_metainfo
+                    try:
+                        version = get_metainfo("boost", "version")
+                    except:
+                        version = get_metainfo("boostpython", "version")
 
-        #boost > 1.43 changed naming scheme for mingw/cygwin.
-        if env['compiler'] == 'mingw' or platform==Cygwin:
-            if not self.__usingEgg: # ---- get version, from user boost or system
-                boostLibs = glob.glob(pj(env['boost_lib'],'libboost*'))
-                version   = None
-                #find versions in there
-                for lib in boostLibs:
-                    res = regc.search(lib)
-                    if res and len(res.groups()):
-                        version = res.groups()[0]
-                        break
-            else: #get version, from egg
-                from openalea.deploy import get_metainfo
-                try:
-                    version = get_metainfo("boost", "version")
-                except:
-                    version = get_metainfo("boostpython", "version")
+                periods = version.count(".")
+                if periods == 1:
+                    maj, min = map(int, version.split("."))
+                    patch = 0
+                elif periods == 2:
+                    maj, min, patch = map(int, version.split("."))
+                else:
+                    raise Exception("Cannot determine the version of boost.")
+                # ---- OK we have the version numbers (maj, min, patch) and string (version)
 
-            periods = version.count(".")
-            if periods == 1:
-                maj, min = map(int, version.split("."))
-                patch = 0
-            elif periods == 2:
-                maj, min, patch = map(int, version.split("."))
-            else:
-                raise Exception("Cannot determine the version of boost.")
-            # ---- OK we have the version numbers (maj, min, patch) and string (version)
+                version = version.replace(".", "_")
 
-            version = version.replace(".", "_")
-
-            if maj >= 1 and min >= 43 :
-                boost_name= self.name +".dll" #on Windows mingw/cygwin we now only support boost compilations with --layout=system
+                if maj >= 1 and min >= 43 :
+                    boost_name= self.name +".dll" #on Windows mingw/cygwin we now only support boost compilations with --layout=system
+                else:
+                    boost_name= self.name + env['boost_libs_suffix']
             else:
                 boost_name= self.name + env['boost_libs_suffix']
-        else:
-            boost_name= self.name + env['boost_libs_suffix']
-        env.AppendUnique(LIBS=[boost_name])
+            env.AppendUnique(LIBS=[boost_name])
 
 
     def configure(self, config):

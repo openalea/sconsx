@@ -113,8 +113,7 @@ class GMP:
           # gmp_inc = gmp_inc.split()
         #gmp_inc = gmp_inc[0]
         if not os.path.exists(os.path.join(gmp_inc,'gmpxx.h')):
-          import warnings
-          warnings.warn("Error: GMP headers not found. GMP disabled ...")
+          print("Error: GMP headers not found. GMP disabled ...")
           env['WITH_GMP'] = False
       if env['WITH_GMP']:
         env.AppendUnique(CPPPATH=[env['gmp_includes']])
