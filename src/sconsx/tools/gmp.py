@@ -40,7 +40,7 @@ class GMP:
       self._default['defines'] = ''
 
       if CONDA_ENV:
-         prefix = CONDA_PREFIX
+         prefix = CONDA_LIBRARY_PREFIX
          self._default['include'] = pj(prefix, 'include')
          self._default['libpath'] = pj(prefix, 'lib')
          self._default['libs'] = 'gmp'
@@ -112,9 +112,8 @@ class GMP:
         # if type(gmp_inc) == str:
           # gmp_inc = gmp_inc.split()
         #gmp_inc = gmp_inc[0]
-        if not os.path.exists(os.path.join(gmp_inc,'gmp.h')):
-          import warnings
-          warnings.warn("Error: GMP headers not found. GMP disabled ...")
+        if not os.path.exists(os.path.join(gmp_inc,'gmpxx.h')):
+          print("Error: GMP headers not found. GMP disabled ...")
           env['WITH_GMP'] = False
       if env['WITH_GMP']:
         env.AppendUnique(CPPPATH=[env['gmp_includes']])
@@ -127,7 +126,7 @@ class GMP:
 
 
    def configure(self, config):
-      if not config.conf.CheckCXXHeader('gmp.h'):
+      if not config.conf.CheckCXXHeader('gmpxx.h'):
         print "Error: GMP headers not found."
         exit()
 

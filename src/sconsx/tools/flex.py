@@ -34,7 +34,11 @@ class Flex:
    def default(self):
 
       if CONDA_ENV:
-          base_dir = CONDA_PREFIX
+          if os.name == 'posix':
+            base_dir = CONDA_LIBRARY_PREFIX
+          else:
+            # On windows, the conda package providing flex (m2-flex) is located in Library/usr
+            base_dir = os.path.join(CONDA_LIBRARY_PREFIX, 'usr')
           self._default['bin'] = pj(base_dir, 'bin')
           self._default['include'] = pj(base_dir, 'include')
           if not isinstance(platform, Win32):
@@ -73,20 +77,29 @@ class Flex:
       opts.Add('flex_include', 'Flex include path',
                 self._default['include'])
 
+      opts.Add(BoolVariable('WITH_FLEX',
+           'Specify whether you want to compile your project with flex', True))
+
 
    def update(self, env):
       """ Update the environment with specific flags """
 
-      if not isinstance(platform, Win32):
-         env.AppendUnique(LIBS=env['flex_libs'])
-         env.AppendUnique(LIBPATH=[env['flex_libpath']])
-      env.AppendUnique(CPPPATH=[env['flex_include']])
+      if env['WITH_FLEX']:
+        flex = env.WhereIs('flex', env['flex_bin'])
+        if flex:
+          t = Tool('lex', toolpath=[getLocalPath()])
+          t(env)
+          if not isinstance(platform, Win32):
+             env.AppendUnique(LIBS=env['flex_libs'])
+             env.AppendUnique(LIBPATH=[env['flex_libpath']])
+          env.AppendUnique(CPPPATH=[env['flex_include']])
 
-      t = Tool('lex', toolpath=[getLocalPath()])
-      t(env)
-
-      flex = env.WhereIs('flex', env['flex_bin'])
-      env.Replace(LEX=flex)
+          env.Replace(LEX=flex)
+          env['WITH_FLEX'] = True  
+          env.Append(CPPDEFINES =["WITH_FLEX"])
+        else:
+          print("Error: 'flex' not found. Flex disabled ...")
+          env['WITH_FLEX'] = False  
 
 
    def configure(self, config):

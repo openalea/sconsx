@@ -40,8 +40,8 @@ class ANN:
    def default(self):
 
       if CONDA_ENV:
-         self._default['include'] = pj(CONDA_PREFIX,'include')
-         self._default['libpath'] = pj(CONDA_PREFIX,'lib')
+         self._default['include'] = pj(CONDA_LIBRARY_PREFIX,'include')
+         self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX,'lib')
          self._default['libs'] = 'ann'
          self._default['flags'] = ''
          self._default['defines'] = ''
@@ -117,7 +117,7 @@ class ANN:
         ann_inc = env['ann_includes']
         ann_header = os.path.join(ann_inc,'ANN','ANN.h')
         if not os.path.exists(ann_header):
-          warnings.warn("Error: ANN headers not found. ANN disabled ...")
+          print("Error: ANN headers not found. ANN disabled ...")
           env['WITH_ANN'] = False
       if env['WITH_ANN']:
         env.AppendUnique(CPPPATH=[env['ann_includes']])

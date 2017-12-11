@@ -318,8 +318,15 @@ class Config(object):
         """
 
         # Create Configure
+        import traceback, sys
+        import warnings
         for tool in self.tools:
-            tool.update(env)
+            try:
+                tool.update(env)
+            except:
+                traceback.print_exception(*sys.exc_info())
+                warnings.warn("Cannot update correctly tool "+repr(tool.name))
+
 
 
 #------------------------------------------------------------------------------
@@ -386,6 +393,7 @@ def find_executable_path_from_env(exe, strip_bin=True):
             okPath = p
             break
 
+    if okPath is None : return None
     bin = okPath[-4:]
     if strip_bin and okPath and "bin" in bin and os.sep in bin:
         return okPath[:-4]
@@ -407,5 +415,16 @@ def conda_prefix():
         else:
             return os.environ['CONDA_PREFIX']
 
+def conda_library_prefix():
+    if os.name == 'posix' : 
+        return conda_prefix()
+    elif is_conda():
+    	library_prefix= pj(os.environ.get('CONDA_PREFIX'),'Library')
+        if 'CONDA_BUILD' in os.environ:
+            return os.environ.get('LIBRARY_PREFIX', library_prefix)
+        else:
+            return library_prefix
+
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
+CONDA_LIBRARY_PREFIX = conda_library_prefix()

@@ -36,7 +36,7 @@ class Eigen:
     def default(self):
         name = str(platform)
         if CONDA_ENV:
-            inc_path = pj(CONDA_PREFIX, 'include', 'eigen3')
+            inc_path = pj(CONDA_LIBRARY_PREFIX, 'include', 'eigen3')
         elif isinstance(platform, Linux):
             dist = platform.distribution()
             name += " " + dist
@@ -74,8 +74,7 @@ class Eigen:
                 eigen_includes = eigen_includes.split()
             eigen_includes = eigen_includes[0]
             if not os.path.exists(os.path.join(eigen_includes, 'Eigen')):
-                import warnings
-                warnings.warn("Error: EIGEN lib not found. EIGEN disabled ...")
+                print("Error: EIGEN lib not found. EIGEN disabled ...")
                 env['WITH_EIGEN'] = False
         if env['WITH_EIGEN']:
             env.AppendUnique(CPPPATH=[env['eigen_includes']])

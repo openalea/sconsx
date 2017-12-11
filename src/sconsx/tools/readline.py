@@ -35,8 +35,8 @@ class Readline:
 
    def default(self):
       if CONDA_ENV:
-         self._default['include'] = pj(CONDA_PREFIX, 'include')
-         self._default['lib'] = pj(CONDA_PREFIX, 'lib')
+         self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
+         self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
 
       elif isinstance(platform, Posix):
 

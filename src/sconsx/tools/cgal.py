@@ -44,7 +44,7 @@ class CGAL:
       self._default['flags'] = ''
       self._default['defines'] = ''
       if CONDA_ENV:
-          prefix = CONDA_PREFIX
+          prefix = CONDA_LIBRARY_PREFIX
           self._default['include'] = pj(prefix, "include")
           self._default['libpath'] = pj(prefix, "lib")
           self._default['libs'] = ['CGAL']
@@ -124,8 +124,7 @@ class CGAL:
           cgal_inc = cgal_inc.split()
         cgal_inc = cgal_inc[0]
         if not os.path.exists(os.path.join(cgal_inc,'CGAL')):
-          import warnings
-          warnings.warn("Error: CGAL headers not found. CGAL disabled ...")
+          print("Error: CGAL headers not found. CGAL disabled ...")
           env['WITH_CGAL'] = False
       if env['WITH_CGAL']:
         env.AppendUnique(CPPPATH=[env['cgal_includes']])

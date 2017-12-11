@@ -41,8 +41,8 @@ class MPFR:
       self._default['defines'] = ''
 
       if CONDA_ENV:
-          self._default['include'] = pj(CONDA_PREFIX, 'include')
-          self._default['libpath'] = pj(CONDA_PREFIX, 'lib')
+          self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
+          self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
           self._default['libs'] = 'mpfr'
 
       elif isinstance(platform, Win32):
@@ -116,8 +116,7 @@ class MPFR:
           # mpfr_inc = mpfr_inc.split()
         # mpfr_inc = mpfr_inc[0]
         if not os.path.exists(os.path.join(mpfr_inc,'mpfr.h')):
-          import warnings
-          warnings.warn("Error: MPFR headers not found. MPFR disabled ...")
+          print("Error: MPFR headers not found. MPFR disabled ...")
           env['WITH_MPFR'] = False
       if env['WITH_MPFR']:
         env.AppendUnique(CPPPATH=[env['mpfr_includes']])
