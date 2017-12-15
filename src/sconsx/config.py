@@ -415,7 +415,7 @@ def detect_posix_project_installpath(filepattern, potentialdirs = []):
         detect_posix_project_installpath('GL', ['/usr/X11R6'])
     """
     from os.path import join, exists
-    mpotentialdirs = potentialdirs+['/usr','/usr/local','/opt/local']
+    mpotentialdirs = potentialdirs+['/opt/local','/usr/local','/usr']
     if is_conda():
         mpotentialdirs.prepend(conda_library_prefix())
     for potentialdir in mpotentialdirs:

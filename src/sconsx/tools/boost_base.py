@@ -99,6 +99,9 @@ class Boost:
                     defdir = detect_posix_project_installpath('include/boost')
                     self._default['include'] = join(defdir,'include')
                     self._default['libpath']     = join(defdir,'lib')
+                    detectedsuffix = get_default_boost_libs_suffix(self._default['libpath']) 
+                    if detectedsuffix:
+                        self._default['libs_suffix'] = detectedsuffix
 
 
     def get_default_flags(self):
