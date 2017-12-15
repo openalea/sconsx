@@ -529,7 +529,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         self.AppendUnique(LIBS=[lib+'4'+debugSuffix for lib in modules if lib not in staticModules])
         self.AppendUnique(LIBS=[lib+debugSuffix for lib in modules if lib in staticModules])
         if 'QtOpenGL' in modules:
-            self.AppendUnique(LIBS=['opengl32'])
+            self.AppendUnique(LIBS=['opengl32','glu32'])
         self.AppendUnique(CPPPATH=[ '$QT4_CPPPATH/'+module
             for module in modules])
         self.AppendUnique(LIBPATH=["$QT4_LIBPATH"])

@@ -74,7 +74,8 @@ class Eigen:
                 eigen_includes = eigen_includes.split()
             eigen_includes = eigen_includes[0]
             if not os.path.exists(os.path.join(eigen_includes, 'Eigen')):
-                print("Error: EIGEN lib not found. EIGEN disabled ...")
+                import openalea.sconsx.errormsg as em
+                em.error("EIGEN lib not found. EIGEN disabled ...")
                 env['WITH_EIGEN'] = False
         if env['WITH_EIGEN']:
             env.AppendUnique(CPPPATH=[env['eigen_includes']])

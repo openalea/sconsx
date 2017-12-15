@@ -22,7 +22,7 @@ __revision__ = "$Id$"
 
 import os, sys, re
 from openalea.sconsx.config import *
-
+from os.path import join
 
 class Bison:
    def __init__(self, config):
@@ -49,7 +49,8 @@ class Bison:
             self._default['bin'] = r'C:\Tools\Bin'
 
       elif isinstance(platform, Posix):
-         self._default['bin'] = '/usr/bin'
+         defdir = detect_posix_project_installpath('bin/bison')
+         self._default['bin'] = os.path.join(defdir, 'bin')
 
 
    def option( self, opts):
@@ -65,6 +66,7 @@ class Bison:
 
    def update(self, env):
       """ Update the environment with specific flags """
+      import openalea.sconsx.errormsg as em
       if env['WITH_BISON']:
         bison = env.WhereIs('bison', env['bison_bin'])
 
@@ -79,7 +81,7 @@ class Bison:
             l =l.split()
             version_text = re.compile(r"\d+.\d+").match(l[-1])
             if version_text is None:
-              raise UserWarning, "Unable to retrieve bison version number"
+                em.error("Unable to retrieve bison version number")
             version = float(version_text.group(0))
             f.close()
 
@@ -94,7 +96,7 @@ class Bison:
             env['WITH_BISON'] = True  
             env.Append(CPPDEFINES =["WITH_BISON"])
         else:
-          print("Error: 'bison' not found. Bison disabled ...")
+          em.error("'bison' not found. Bison disabled ...")
           env['WITH_BISON'] = False  
 
 

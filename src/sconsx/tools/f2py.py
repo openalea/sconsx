@@ -51,7 +51,7 @@ class F2py:
 
 
 def create(config):
-    " Create flex tool "
+    " Create f2py tool "
     f2py = F2py(config)
 
     deps= f2py.depends()

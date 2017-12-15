@@ -22,7 +22,7 @@ __revision__ = "$Id$"
 
 import os, sys
 from openalea.sconsx.config import *
-from os.path import join as pj
+from os.path import join
 
 class GMP:
    def __init__(self, config):
@@ -41,16 +41,16 @@ class GMP:
 
       if CONDA_ENV:
          prefix = CONDA_LIBRARY_PREFIX
-         self._default['include'] = pj(prefix, 'include')
-         self._default['libpath'] = pj(prefix, 'lib')
+         self._default['include'] = join(prefix, 'include')
+         self._default['libpath'] = join(prefix, 'lib')
          self._default['libs'] = 'gmp'
 
       elif isinstance(platform, Win32):
 
          try:
             cgalroot = os.environ['CGALROOT']
-            self._default['include'] = pj(cgalroot,'auxiliary','gmp','include')
-            self._default['libpath'] = pj(cgalroot,'auxiliary','gmp','lib')
+            self._default['include'] = join(cgalroot,'auxiliary','gmp','include')
+            self._default['libpath'] = join(cgalroot,'auxiliary','gmp','lib')
             self._default['libs'] = 'libgmp-10'
          except:
             try:
@@ -62,8 +62,8 @@ class GMP:
                   import pkg_resources as pkg
                   egg_env = pkg.Environment()
                   mingw_base = egg_env["mingw"][0].location
-                  self._default['include'] = pj(mingw_base, "include")
-                  self._default['libpath'] = pj(mingw_base, "lib")
+                  self._default['include'] = join(mingw_base, "include")
+                  self._default['libpath'] = join(mingw_base, "lib")
                except Exception, e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
@@ -71,8 +71,9 @@ class GMP:
             self._default['libs'] = 'gmp'
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('include/gmp.h')
+         self._default['include'] = join(defdir,'include')
+         self._default['libpath'] = join(defdir,'lib')
          self._default['libs'] = 'gmp'
 
 
@@ -113,7 +114,8 @@ class GMP:
           # gmp_inc = gmp_inc.split()
         #gmp_inc = gmp_inc[0]
         if not os.path.exists(os.path.join(gmp_inc,'gmpxx.h')):
-          print("Error: GMP headers not found. GMP disabled ...")
+          import openalea.sconsx.errormsg as em
+          em.error("GMP headers not found. GMP disabled ...")
           env['WITH_GMP'] = False
       if env['WITH_GMP']:
         env.AppendUnique(CPPPATH=[env['gmp_includes']])

@@ -22,7 +22,7 @@ __revision__ = "$Id: mpfr.py 12233 2012-06-19 04:54:14Z pradal $"
 
 import os, sys
 from openalea.sconsx.config import *
-
+from os.path import join
 
 class MPFR:
    def __init__(self, config):
@@ -46,7 +46,6 @@ class MPFR:
           self._default['libs'] = 'mpfr'
 
       elif isinstance(platform, Win32):
-
 
          try:
             cgalroot = os.environ['CGALROOT']
@@ -72,8 +71,9 @@ class MPFR:
             self._default['libs'] = 'mpfr'
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('include/mpfr.h')
+         self._default['include'] = join(defdir,'include')
+         self._default['libpath'] = join(defdir,'lib')
          self._default['libs'] = 'mpfr'
          self._default['flags'] = ''
          self._default['defines'] = ''
@@ -116,7 +116,8 @@ class MPFR:
           # mpfr_inc = mpfr_inc.split()
         # mpfr_inc = mpfr_inc[0]
         if not os.path.exists(os.path.join(mpfr_inc,'mpfr.h')):
-          print("Error: MPFR headers not found. MPFR disabled ...")
+          import openalea.sconsx.errormsg as em
+          em.error("MPFR headers not found. MPFR disabled ...")
           env['WITH_MPFR'] = False
       if env['WITH_MPFR']:
         env.AppendUnique(CPPPATH=[env['mpfr_includes']])

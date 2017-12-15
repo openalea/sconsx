@@ -23,7 +23,7 @@ __revision__ = "$Id$"
 import os, sys, glob, re
 from openalea.sconsx.config import *
 
-from os.path import join as pj
+from os.path import join
 import sys
 
 reg  = r".*boost.*([0-9]\.[0-9][0-9]\.?[0-9]?).*"
@@ -72,9 +72,9 @@ class Boost:
 
         # -- lets now look for decent include dirs --
         if CONDA_ENV:
-            self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
-            self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
-            detectedsuffix = get_default_boost_libs_suffix(self._default['lib']) 
+            self._default['include'] = join(CONDA_LIBRARY_PREFIX, 'include')
+            self._default['libpath'] = join(CONDA_LIBRARY_PREFIX, 'lib')
+            detectedsuffix = get_default_boost_libs_suffix(self._default['libpath']) 
             if detectedsuffix:
                 self._default['libs_suffix'] = detectedsuffix 
             self.__usingEgg = False
@@ -86,18 +86,19 @@ class Boost:
                     base_dir = get_base_dir("boost")
                 except:
                     base_dir = get_base_dir("boostpython")
-                self._default['include'] = pj(base_dir, 'include')
-                self._default['lib'] = pj(base_dir, 'lib')
+                self._default['include'] = join(base_dir, 'include')
+                self._default['libpath'] = join(base_dir, 'lib')
                 self.__usingEgg = True
             except:
                 try:
                     import openalea.config as conf
                     self._default['include'] = conf.include_dir
-                    self._default['lib'] = conf.lib_dir
+                    self._default['libpath'] = conf.lib_dir
 
                 except ImportError, e:
-                    self._default['include'] = '/usr/include' if isPosix else pj(os.getcwd(), "include")
-                    self._default['lib']     = '/usr/lib' if isPosix else pj(os.getcwd(), "lib")
+                    defdir = detect_posix_project_installpath('include/boost')
+                    self._default['include'] = join(defdir,'include')
+                    self._default['libpath']     = join(defdir,'lib')
 
 
     def get_default_flags(self):
@@ -115,9 +116,9 @@ class Boost:
                             'boost include files',
                             self._default['include']),
 
-            PathVariable('boost_lib',
+            PathVariable(('boost_libpath','boost_lib'),
                             'boost libraries path',
-                            self._default['lib']),
+                            self._default['libpath']),
 
             (self.name + '_flags',
               self.name + ' compiler flags',
@@ -140,14 +141,14 @@ class Boost:
         """ Update the environment with specific flags """
         if env['WITH_BOOST']:
             env.AppendUnique(CPPPATH=[env['boost_includes']])
-            env.AppendUnique(LIBPATH=[env['boost_lib']])
+            env.AppendUnique(LIBPATH=[env['boost_libpath']])
             env.Append(CPPDEFINES='$%s_defines'%(self.name,))
             env.Append(CPPFLAGS='$%s_flags'%(self.name,))
 
             #boost > 1.43 changed naming scheme for mingw/cygwin.
             if env['compiler'] == 'mingw' or platform==Cygwin:
                 if not self.__usingEgg: # ---- get version, from user boost or system
-                    boostLibs = glob.glob(pj(env['boost_lib'],'libboost*'))
+                    boostLibs = glob.glob(join(env['boost_lib'],'libboost*'))
                     version   = None
                     #find versions in there
                     for lib in boostLibs:

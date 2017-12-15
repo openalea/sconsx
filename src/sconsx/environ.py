@@ -57,7 +57,9 @@ def ALEALibrary(env, target, source, *args, **kwds):
     Alias("build_lib", lib)
     Alias("build", lib)
 
-    if os.name == 'posix':
+    if env.subst("$build_libdir") == env.subst("$libdir"):
+        inst_lib =  []
+    elif os.name == 'posix':
         inst_lib = env.Install("$libdir",lib)
         Alias("install_lib", inst_lib)
         Alias("install", inst_lib)
@@ -81,9 +83,12 @@ def ALEAIncludes(env, target, includes, *args, **kwds):
     inc = env.Install("$build_includedir/%s" % (target,), includes, *args, **kwds)
     env.Alias("build_lib", inc)
     env.Alias("build", inc)
-    inst_inc = env.Install("$includedir/%s" % (target,), includes, *args, **kwds)
-    Alias("install_lib", inst_inc)
-    Alias("install", inst_inc)
+    if env.subst("$build_includedir") == env.subst("$includedir"):
+        inst_inc =  []
+    else:
+        inst_inc = env.Install("$includedir/%s" % (target,), includes, *args, **kwds)
+        Alias("install_lib", inst_inc)
+        Alias("install", inst_inc)
     return (inc, inst_inc)
 
 # def ALEAIncludes(env, target, includes, *args, **kwds):
@@ -113,7 +118,10 @@ def ALEAProgram(env, target, source, *args, **kwds):
     bin = env.Program("$build_bindir/%s" % (target,), source, *args, **kwds)
     Alias("build", bin)
     Alias("build_lib", bin)
-    inst_bin = env.Install("$bindir", bin)
+    if env.subst("$build_bindir") == env.subst("$bindir"):
+        inst_bin =  []
+    else:
+        inst_bin = env.Install("$bindir", bin)
     Alias("install_lib", inst_bin)
     Alias("install", inst_bin)
     return (bin, inst_bin)

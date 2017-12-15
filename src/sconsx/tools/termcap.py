@@ -35,11 +35,12 @@ class Termcap:
       self._default['ncurses'] = False
       if CONDA_ENV:
          self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
-         self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
+         self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
       elif isinstance(platform, Posix):
-         self._default['include'] = pj('/usr','include')
-         self._default['lib'] = pj('/usr', 'lib')
-         self._default['ncurses'] = False
+            defdir = detect_posix_project_installpath('include/termcap.h')
+            self._default['include'] = join(defdir,'include')
+            self._default['libpath']     = join(defdir,'lib') 
+            self._default['ncurses'] = False
 
 
    def option( self, opts):
@@ -49,7 +50,7 @@ class Termcap:
          opts.AddVariables(
             PathVariable('termcap_includes', 'termcap include files',
                         self._default['include']),
-            PathVariable('termcap_lib', 'termcap libraries path',
+            PathVariable(('termcap_libpath','termcap_lib'), 'termcap libraries path',
                         self._default['lib'])
 
            )
@@ -60,7 +61,7 @@ class Termcap:
    def update(self, env):
       if isinstance(platform, Posix):
          env.AppendUnique(CPPPATH=[env['termcap_includes']])
-         env.AppendUnique(LIBPATH=[env['termcap_lib']])
+         env.AppendUnique(LIBPATH=[env['termcap_libpath']])
          termcap_lib = 'termcap'
          if env['WITH_NCURSES']:
             termcap_lib = 'ncurses'

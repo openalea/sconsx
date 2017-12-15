@@ -24,6 +24,7 @@ import os, sys
 import warnings
 
 from openalea.sconsx.config import *
+from os.path import join
 
 
 class ANN:
@@ -75,8 +76,9 @@ class ANN:
             self._default['libs'] = 'ANN'
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('include/ANN')
+         self._default['include'] = join(defdir,'include')
+         self._default['libpath'] = join(defdir,'lib')
          self._default['libs'] = 'ann'
          self._default['flags'] = ''
          self._default['defines'] = ''
@@ -117,8 +119,9 @@ class ANN:
         ann_inc = env['ann_includes']
         ann_header = os.path.join(ann_inc,'ANN','ANN.h')
         if not os.path.exists(ann_header):
-          print("Error: ANN headers not found. ANN disabled ...")
-          env['WITH_ANN'] = False
+            import openalea.sconsx.errormsg as em
+            em.error("ANN headers not found. ANN disabled ...")
+            env['WITH_ANN'] = False
       if env['WITH_ANN']:
         env.AppendUnique(CPPPATH=[env['ann_includes']])
         env.AppendUnique(LIBPATH=[env['ann_libpath']])

@@ -56,10 +56,11 @@ class Flex:
               self._default['include'] = pj('C:\\', 'Tools', 'Include')
 
       elif isinstance(platform, Posix):
-         self._default['bin'] = '/usr/bin'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('bin/flex')
+         self._default['bin'] = os.path.join(defdir, 'bin')
+         self._default['libpath'] = os.path.join(defdir, 'lib')
+         self._default['include'] = os.path.join(defdir, 'include')
          self._default['libs'] = ['m','fl']
-         self._default['include'] = '/usr/include'
 
 
    def option( self, opts):
@@ -98,7 +99,8 @@ class Flex:
           env['WITH_FLEX'] = True  
           env.Append(CPPDEFINES =["WITH_FLEX"])
         else:
-          print("Error: 'flex' not found. Flex disabled ...")
+          import openalea.sconsx.errormsg as em
+          em.error("'flex' not found. Flex disabled ...")
           env['WITH_FLEX'] = False  
 
 

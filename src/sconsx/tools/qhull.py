@@ -38,7 +38,7 @@ class Qhull:
       if CONDA_ENV:
             base_dir = CONDA_LIBRARY_PREFIX
             self._default['include'] = pj(base_dir, 'include')
-            self._default['lib'] = pj(base_dir, 'lib')
+            self._default['libpath'] = pj(base_dir, 'lib')
 
       elif isinstance(platform, Win32):
          try:
@@ -46,21 +46,22 @@ class Qhull:
             from openalea.deploy import get_base_dir
             base_dir = get_base_dir("qhull")
             self._default['include'] = pj(base_dir, 'include')
-            self._default['lib'] = pj(base_dir, 'lib')
+            self._default['libpath'] = pj(base_dir, 'lib')
 
          except:
             try:
                 import openalea.config as conf
                 self._default['include'] = conf.include_dir
-                self._default['lib'] = conf.lib_dir
+                self._default['libpath'] = conf.lib_dir
 
             except ImportError, e:
                 self._default['include'] = 'C:'+os.sep
-                self._default['lib'] = 'C:'+os.sep
+                self._default['libpath'] = 'C:'+os.sep
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['lib'] = '/usr/lib'
+           defdir = detect_posix_project_installpath('include/libqhull')
+           self._default['include'] = join(defdir,'include')
+           self._default['libpath']     = join(defdir,'lib') 
 
 
    def option( self, opts):
@@ -72,9 +73,9 @@ class Qhull:
            'Qhull include files',
            self._default['include']),
 
-         ('qhull_lib',
+         (('qhull_libpath','qhull_lib'),
            'Qhull library path',
-           self._default['lib']),
+           self._default['libpath']),
 
          ('qhull_libs_suffix',
            'Qhull library suffix name like -vc80 or -mgw',
@@ -91,18 +92,16 @@ class Qhull:
       if env['WITH_QHULL'] :
         def_qhull_inc = env['qhull_includes']
         qhull_inc = pj(def_qhull_inc, 'libqhull')
-        if not os.path.exists(os.path.join(def_qhull_inc, "qhull_a.h")) and not os.path.exists(os.path.join(qhull_inc, "qhull_a.h")) :
-          print("Error: QHull headers not found. QHull disabled ...")
+        if not os.path.exists(os.path.join(qhull_inc, "qhull_a.h")) :
+          import openalea.sconsx.errormsg as em
+          em.error("Error: QHull headers not found. QHull disabled ...")
           env['WITH_QHULL'] = False
 
       if env['WITH_QHULL'] :
         env.AppendUnique(CPPPATH=[env['qhull_includes']])
-        env.AppendUnique(LIBPATH=[env['qhull_lib']])
+        env.AppendUnique(LIBPATH=[env['qhull_libpath']])
 
-        qhull_inc = pj(env['qhull_includes'], 'libqhull')
-        if os.path.exists(qhull_inc):
-          env.AppendUnique( CPPDEFINES = ['WITH_QHULL_2011'] )
-
+        env.AppendUnique( CPPDEFINES = ['WITH_QHULL_2011'] )
         env.AppendUnique( CPPDEFINES = ['WITH_QHULL'] )
 
         qhull_name = 'qhull'+env['qhull_libs_suffix']

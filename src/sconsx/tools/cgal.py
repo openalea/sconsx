@@ -23,7 +23,7 @@ __revision__ = "$Id$"
 import os, sys
 from os.path import exists
 from openalea.sconsx.config import *
-
+from os.path import join
 
 class CGAL:
    def __init__(self, config):
@@ -77,13 +77,10 @@ class CGAL:
             self._default['libs'] = ['CGAL']
 
       elif isinstance(platform, Posix):
-         if exists('/usr/lib/libCGAL.so') :
-             self._default['include'] = '/usr/include'
-             self._default['libpath'] = '/usr/lib'
-         else :
-             self._default['include'] = '/usr/local/include'
-             self._default['libpath'] = '/usr/local/lib'
-         self._default['libs'] = 'CGAL'
+        defdir = detect_posix_project_installpath('include/CGAL')
+        self._default['include'] = pj(defdir,'include')
+        self._default['libpath']     = pj(defdir,'lib')
+        self._default['libs'] = 'CGAL'
 
 
 
@@ -124,7 +121,8 @@ class CGAL:
           cgal_inc = cgal_inc.split()
         cgal_inc = cgal_inc[0]
         if not os.path.exists(os.path.join(cgal_inc,'CGAL')):
-          print("Error: CGAL headers not found. CGAL disabled ...")
+          import openalea.sconsx.errormsg as em
+          em.error("CGAL headers not found. CGAL disabled ...")
           env['WITH_CGAL'] = False
       if env['WITH_CGAL']:
         env.AppendUnique(CPPPATH=[env['cgal_includes']])
