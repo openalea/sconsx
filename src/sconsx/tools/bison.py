@@ -26,7 +26,7 @@ from os.path import join
 
 
 def get_bison_version(bisonpath):
-    f =os.popen(str(bison)+" --version")
+    f =os.popen(str(bisonpath)+" --version")
     l =f.readline()
     l =l.split()
     version_text = re.compile(r"\d+.\d+").match(l[-1])
