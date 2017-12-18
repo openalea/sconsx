@@ -24,6 +24,7 @@ import os, sys
 from openalea.sconsx.config import *
 
 exists = os.path.exists
+join = os.path.join
 
 class QT:
     def __init__(self, config):
@@ -36,9 +37,9 @@ class QT:
         if CONDA_ENV:
             qt_dir = CONDA_LIBRARY_PREFIX
             self._default["QTDIR"] = qt_dir
-            self._default["QT4_BINPATH"] = pj(qt_dir, 'bin')
-            self._default["QT4_CPPPATH"] = pj(qt_dir, 'include')
-            self._default["QT4_LIBPATH"] = pj(qt_dir, 'lib')
+            self._default["QT4_BINPATH"] = join(qt_dir, 'bin')
+            self._default["QT4_CPPPATH"] = join(qt_dir, 'include')
+            self._default["QT4_LIBPATH"] = join(qt_dir, 'lib')
             self._default["QT4_FRAMEWORK"] = False
             return
 
@@ -75,8 +76,8 @@ class QT:
                         qt_dir = find_executable_path_from_env("moc.exe", strip_bin=True)
 
                 elif isinstance(platform, Posix):
-                    qt_dir = pj('/usr', 'lib', 'qt4')
-                    if not exists(pj(qt_dir, 'bin')):
+                    qt_dir = join('/usr', 'lib', 'qt4')
+                    if not exists(join(qt_dir, 'bin')):
                         # Use LSB spec
                         qt_dir = '/usr'
                         qt_bin = '/usr/bin'
