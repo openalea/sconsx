@@ -24,6 +24,18 @@ import os, sys, re
 from openalea.sconsx.config import *
 from os.path import join
 
+
+def get_bison_version(bisonpath):
+    f =os.popen(str(bison)+" --version")
+    l =f.readline()
+    l =l.split()
+    version_text = re.compile(r"\d+.\d+").match(l[-1])
+    if version_text is None:
+        return None
+    version = float(version_text.group(0))
+    f.close()
+    return version
+
 class Bison:
    def __init__(self, config):
       self.name = 'bison'
@@ -71,26 +83,20 @@ class Bison:
         bison = env.WhereIs('bison', env['bison_bin'])
 
         if bison:
+            version = get_bison_version(bison)
+            if version is None:
+                em.error("Unable to retrieve bison version number. Problem with bison. Bison disabled ...")
+                env['WITH_BISON'] = False
+                return
+
             t = Tool('yacc', toolpath=[getLocalPath()])
             t(env)
             env.Append(YACCFLAGS=['-d', '-v'])
             env.Replace(YACC=bison)
 
-            f =os.popen(str(bison)+" --version")
-            l =f.readline()
-            l =l.split()
-            version_text = re.compile(r"\d+.\d+").match(l[-1])
-            if version_text is None:
-                em.error("Unable to retrieve bison version number")
-            version = float(version_text.group(0))
-            f.close()
-
-            if version >= 1.30:
-              BISON_HPP =True
-            else:
-              BISON_HPP =False
-
+            BISON_HPP = (version >= 1.30)
             env.Append(BISON_HPP=BISON_HPP)
+
             if BISON_HPP:
                env.Append(CPPDEFINES =["BISON_HPP"])
             env['WITH_BISON'] = True  
