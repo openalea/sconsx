@@ -22,23 +22,23 @@ __revision__ = "$Id$"
 
 import os, sys
 from openalea.sconsx.config import *
-from boost_base import Boost
+from boost_base import BoostBase
 
-class Boost_Python(Boost):
+class Boost_Python(BoostBase):
 
     def depends(self):
-        return Boost.depends(self)+['python']
+        return BoostBase.depends(self)+['python']
 
-    # -- reimplement this from boost_base.Boost --
+    # -- reimplement this from boost_base.BoostBase --
     def get_default_flags(self):
         isPosix = isinstance(platform, Posix)
         return ' -ftemplate-depth-100 ' if isPosix else ''
 
-    # -- reimplement this from boost_base.Boost --
+    # -- reimplement this from boost_base.BoostBase --
     def get_default_defines(self):
         return 'BOOST_PYTHON_DYNAMIC_LIB'
 
-    # -- reimplement this from boost_base.Boost --
+    # -- reimplement this from boost_base.BoostBase --
     def configure(self, config):
         if not config.conf.CheckCXXHeader('boost/python.hpp'):
             print "Error: boost.python headers not found."

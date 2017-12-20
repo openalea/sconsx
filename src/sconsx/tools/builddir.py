@@ -42,10 +42,11 @@ class BuildDir:
         #    self._conda_build = False
         #    prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
 
-        prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
         self._conda_build = ('CONDA_BUILD' in os.environ)
+        prefix = pj(self.config.dir[0],"build-scons")
 
 
+        self._default['build_prefix'] = prefix
         self._default['build_bindir'] = pj(prefix,"bin")
         self._default['build_libdir'] = pj(prefix,"lib")
         self._default['build_includedir'] = pj(prefix,"include")
@@ -94,6 +95,7 @@ class BuildDir:
             _path = build[udir]
             env[udir] = os.path.abspath(_path)
             if _path and not os.path.exists(_path):
+                print 'Create', repr(_path)
                 os.makedirs(_path)
 
         if not env['with_build_dir']:
