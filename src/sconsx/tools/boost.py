@@ -33,7 +33,7 @@ ModuleDefines = {
 }
 
 ModuleFlags = {
-    'python' :' -ftemplate-depth-100 ' if isinstance(platform, Posix) else ''
+    'python' :' -ftemplate-depth-100 ' if isinstance(platform, Posix) else '',
     'thread' :' -ftemplate-depth-100 ' if isinstance(platform, Posix) else ''
 }
 
