@@ -43,10 +43,7 @@ class BuildDir:
         #    prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
 
         self._conda_build = ('CONDA_BUILD' in os.environ)
-        if self._conda_build:
-            prefix = pj(os.environ['SRC_DIR'],"build-scons")
-        else:
-            prefix = pj(self.config.dir[0],"build-scons")
+        prefix = pj(self.config.dir[0],"build-scons")
 
 
         self._default['build_prefix'] = prefix
