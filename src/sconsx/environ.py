@@ -59,6 +59,9 @@ def ALEALibrary(env, target, source, *args, **kwds):
 
     if env.subst("$build_libdir") == env.subst("$libdir"):
         inst_lib =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", lib)
+        Alias("install", lib)
     elif os.name == 'posix':
         inst_lib = env.Install("$libdir",lib)
         Alias("install_lib", inst_lib)
@@ -85,6 +88,9 @@ def ALEAIncludes(env, target, includes, *args, **kwds):
     env.Alias("build", inc)
     if env.subst("$build_includedir") == env.subst("$includedir"):
         inst_inc =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", inc)
+        Alias("install", inc)
     else:
         inst_inc = env.Install("$includedir/%s" % (target,), includes, *args, **kwds)
         Alias("install_lib", inst_inc)
@@ -120,10 +126,13 @@ def ALEAProgram(env, target, source, *args, **kwds):
     Alias("build_lib", bin)
     if env.subst("$build_bindir") == env.subst("$bindir"):
         inst_bin =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", bin)
+        Alias("install", bin)
     else:
         inst_bin = env.Install("$bindir", bin)
-    Alias("install_lib", inst_bin)
-    Alias("install", inst_bin)
+        Alias("install_lib", inst_bin)
+        Alias("install", inst_bin)
     return (bin, inst_bin)
 
 def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
@@ -159,6 +168,8 @@ def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
                            *args, **kwds)
     Alias("build_wrapper", wrap)
     Alias("build", wrap)
+    # This target should simply be build for install mode
+    Alias("install", wrap)
     return wrap
 
 ## def ALEAPython(env, python_dir, depends = [], *args, **kwds):

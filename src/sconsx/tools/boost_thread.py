@@ -22,17 +22,17 @@ __revision__ = "$Id: boost_python.py 3049 2010-11-04 15:11:28Z dbarbeau $"
 
 import os, sys
 from openalea.sconsx.config import *
-from boost_base import Boost
+from boost_base import BoostBase
 
-class Boost_Thread(Boost):
+class Boost_Thread(BoostBase):
 
-    # -- reimplement this from boost_base.Boost --
+    # -- reimplement this from boost_base.BoostBase --
     def get_default_flags(self):
         isPosix = isinstance(platform, Posix)
         return ' -ftemplate-depth-100 ' if isPosix else ''
 
 
-    # -- reimplement this from boost_base.Boost --
+    # -- reimplement this from boost_base.BoostBase --
     def configure(self, config):
         if not config.conf.CheckCXXHeader('boost/thread.hpp'):
             print "Error: boost.thread headers not found."

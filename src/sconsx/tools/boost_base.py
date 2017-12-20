@@ -44,7 +44,7 @@ def get_default_boost_libs_suffix(path):
 
 
 
-class Boost:
+class BoostBase:
     def __init__(self, config):
         self.name = self.__class__.__name__.lower()
         self.config = config
