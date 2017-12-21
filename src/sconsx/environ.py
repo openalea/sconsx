@@ -49,7 +49,7 @@ def ALEALibrary(env, target, source, *args, **kwds):
     if env.get("static"):
         lib = env.StaticLibrary(_target, source, *args, **kwds)
     else:
-        if (env['compiler'] == 'msvc') and ('8.0' in env['MSVS_VERSION']):
+        if (env['compiler'] == 'msvc') and ('8.0' in env['MSVC_VERSION']):
             kwds['SHLINKCOM'] = [env['SHLINKCOM'],
             'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
         lib = env.SharedLibrary(_target, source, *args, **kwds)
@@ -146,7 +146,7 @@ def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
     else:
         kwds['SHLIBSUFFIX'] = '.so'
 
-    if (env['compiler'] == 'msvc') and ('8.0' in env['MSVS_VERSION']):
+    if (env['compiler'] == 'msvc') and ('8.0' in env['MSVC_VERSION']):
         kwds['SHLINKCOM'] = [env['SHLINKCOM'],
         'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
 
