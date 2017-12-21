@@ -92,6 +92,9 @@ class Compiler:
         opts.Add('EXTRA_LIBPATH', 'Specific user library path', '')
         opts.Add('EXTRA_LIBS', 'Specific user libraries', '')
 
+        if isinstance(platform, Win32):
+            opts.Add(EnumVariable('TARGET_ARCH', 'Target Architecture','amd64' if sys.maxsize.bit_length() == 63 else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
+
     def update(self, env):
         """ Update the environment with specific flags """
 
