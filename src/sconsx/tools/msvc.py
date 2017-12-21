@@ -33,6 +33,8 @@ class Msvc:
 
    def option(self, opts):
       pass
+      
+      opts.AddVariables((EnumVariable('TARGET_ARCH', 'Target Architecture','amd64' if sys.maxsize.bit_length() == 63 else 'x86', allowed_values=('x86','amd64'))))
 
    def update(self, env):
       """ Update the environment with specific flags """
