@@ -31,6 +31,27 @@ from SCons.Util import Split, WhereIs
 import os, sys
 from openalea.sconsx.config import *
 
+MsvcVersion = {
+    1910 : '14.1', 
+    1900 : '14.0', 
+    1800 : '12.0', 
+    1700 : '11.0', 
+    1600 : '10.0', 
+    1500 : '9.0', 
+    1400 : '8.0', 
+    1310 : '7.1', 
+    1300 : '7.0', 
+    1200 : '6.0'
+     
+}
+
+def get_default_msvc():
+    import platform
+    version = platform.python_compiler().split()[1][2:]
+    return MsvcVersion[int(version)]
+
+
+
 class Compiler:
 
     def __init__(self, config):
@@ -92,11 +113,22 @@ class Compiler:
         opts.Add('EXTRA_LIBPATH', 'Specific user library path', '')
         opts.Add('EXTRA_LIBS', 'Specific user libraries', '')
 
+        if isinstance(platform, Win32):
+            opts.Add(EnumVariable('target_arch', 'Target Architecture','amd64' if sys.maxsize.bit_length() == 63 else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
+            opts.Add(EnumVariable('msvc_version', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=MsvcVersion.values()+['']))
+
     def update(self, env):
         """ Update the environment with specific flags """
 
         # Set the compiler
         compiler_name = env['compiler']
+
+        if isinstance(platform, Win32):
+            # Configuring properly the msvc compiler
+            env['TARGET_ARCH'] = env['target_arch']
+            if env['msvc_version'] != '' : 
+                env['MSVC_VERSION'] = env['msvc_version']
+
         self.config.add_tool(compiler_name)
       
         if isinstance(platform, Cygwin):
