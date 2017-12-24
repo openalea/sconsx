@@ -486,8 +486,18 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         self.AppendUnique(LIBS=[lib+debugSuffix for lib in modules if lib in staticModules])
         if 'QtOpenGL' in modules:
             self.AppendUnique(LIBS=['opengl32','glu32'])
-        self.AppendUnique(CPPPATH=[ '$QTDIR/include/'+module
-            for module in modules])
+        qt5_inc = self.subst('$QT5_CPPPATH')
+        for qt_ext in ("qt5", "qt"):
+            if os.path.exists(os.path.join(qt5_inc, qt_ext)):
+                self.AppendUnique(CPPPATH=[os.path.join("$QT5_CPPPATH", qt_ext)])
+                for module in modules :
+                    if module not in pclessModules:
+                        continue
+                    self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
+                    self.AppendUnique(CPPPATH=[os.path.join("$QT5_CPPPATH", qt_ext, module)])
+                    break
+        else:
+            self.AppendUnique(CPPPATH=[ '$QTDIR/include/'+module for module in modules])
         self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
         return
 
