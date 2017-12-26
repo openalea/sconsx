@@ -491,11 +491,8 @@ def enable_modules(self, modules, debug=False, suffix = '') :
             if os.path.exists(os.path.join(qt5_inc, qt_ext)):
                 self.AppendUnique(CPPPATH=[os.path.join("$QT5_CPPPATH", qt_ext)])
                 for module in modules :
-                    if module not in pclessModules:
-                        continue
-                    self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
                     self.AppendUnique(CPPPATH=[os.path.join("$QT5_CPPPATH", qt_ext, module)])
-                    break
+                break
         else:
             self.AppendUnique(CPPPATH=[ '$QTDIR/include/'+module for module in modules])
         self.AppendUnique(LIBPATH=[os.path.join('$QTDIR','lib')])
