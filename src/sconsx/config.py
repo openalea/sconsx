@@ -472,3 +472,13 @@ def conda_library_prefix():
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
 CONDA_LIBRARY_PREFIX = conda_library_prefix()
+
+#------------------------------------------------------------------------------
+# system detection
+
+def is_32bit_environment():
+    return not is_64bit_environment()
+
+def is_64bit_environment():
+    import sys
+    return sys.maxsize.bit_length() == 63
