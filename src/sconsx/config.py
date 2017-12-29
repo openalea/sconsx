@@ -367,7 +367,7 @@ def ALEASolution(options, tools=[], dir=[]):
     from copy import deepcopy
     SConsignFile()
     
-    msvc_version = ''
+    env_compiler_options = {}
     if isinstance(platform, Win32):
         # Checking for compiler info first
         compileroptions = deepcopy(options)
@@ -377,14 +377,16 @@ def ALEASolution(options, tools=[], dir=[]):
         compileroptions.Update(compilerenv)
         compilerconf.Update(compilerenv)
         if compilerenv['compiler'] == 'msvc':
-            msvc_version = compilerenv['msvc_version']
+            if compilerenv['msvc_version'] != '':
+                env_compiler_options['MSVC_VERSION'] = compilerenv['msvc_version']
+                env_compiler_options['TARGET_ARCH'] = compilerenv['target_arch']
     
     conf = Config(tools, dir)
     conf.UpdateOptions(options)
     
-    if msvc_version != '':
-        print ('Force environment with MSVC '+msvc_version)
-        env = Environment(options=options, MSVC_VERSION = msvc_version)
+    if len(env_compiler_options) > 0:
+        print ('Force environment with compiler options : '+str(env_compiler_options))
+        env = Environment(options=options, **env_compiler_options)
     else:
         env = Environment(options=options)
     
