@@ -25,12 +25,12 @@ import sys
 from os.path import exists, join
 pj = os.path.join
 
-from SCons.Script import SConsignFile, Help
+from SCons.Script import SConsignFile, Help, GetOption
 try:
     from SCons.Script import VariantDir
 except ImportError:
     from SCons.Script import BuildDir as VariantDir
-from SCons.Options import  Options
+from SCons.Options import  Options 
 from SCons.Options import  PathOption, BoolOption, EnumOption
 from SCons.Variables import PathVariable
 from SCons.Variables import BoolVariable
@@ -364,14 +364,34 @@ def ALEAEnvironment(conf, *args, **kwds):
 
 
 def ALEASolution(options, tools=[], dir=[]):
+    from copy import deepcopy
     SConsignFile()
+    
+    msvc_version = ''
+    if isinstance(platform, Win32):
+        # Checking for compiler info first
+        compileroptions = deepcopy(options)
+        compilerconf = Config(default_tools,dir)
+        compilerconf.UpdateOptions(compileroptions)
+        compilerenv = Environment()
+        compileroptions.Update(compilerenv)
+        compilerconf.Update(compilerenv)
+        if compilerenv['compiler'] == 'msvc':
+            msvc_version = compilerenv['msvc_version']
+    
     conf = Config(tools, dir)
     conf.UpdateOptions(options)
-
-    env = Environment(options=options)
+    
+    if msvc_version != '':
+        print ('Force environment with MSVC '+msvc_version)
+        env = Environment(options=options, MSVC_VERSION = msvc_version)
+    else:
+        env = Environment(options=options)
+    
     options.Update(env)
     conf.Update(env)
-
+    
+    
     Help(options.GenerateHelpText(env))
 
     prefix = env['build_prefix']
