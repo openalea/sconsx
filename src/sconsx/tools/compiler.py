@@ -70,7 +70,7 @@ class Compiler:
             compilers = ['gcc']
             libs_suffix = ''
         elif isinstance(platform, Win32):
-            if CONDA:
+            if CONDA_ENV :
                 compilers = ['msvc','mingw']
             else:
                 compilers = ['mingw', 'msvc']
