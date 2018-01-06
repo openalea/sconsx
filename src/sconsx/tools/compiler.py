@@ -70,8 +70,11 @@ class Compiler:
             compilers = ['gcc']
             libs_suffix = ''
         elif isinstance(platform, Win32):
-            compilers = ['mingw', 'msvc']
-            libs_suffix = '-vc80'
+            if CONDA_ENV :
+                compilers = ['msvc','mingw']
+            else:
+                compilers = ['mingw', 'msvc']
+            libs_suffix = '-vc90'
         else:
             raise "Add a compiler support for your os !!!"
 
@@ -114,8 +117,8 @@ class Compiler:
         opts.Add('EXTRA_LIBS', 'Specific user libraries', '')
 
         if isinstance(platform, Win32):
-            opts.Add(EnumVariable('target_arch', 'Target Architecture','amd64' if sys.maxsize.bit_length() == 63 else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
-            opts.Add(EnumVariable('msvc_version', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=MsvcVersion.values()+['']))
+            opts.Add(EnumVariable('target_arch', 'Target Architecture','amd64' if is_64bit_environment() else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
+            opts.Add(EnumVariable('msvc_version', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=sorted(MsvcVersion.values())+['']))
 
     def update(self, env):
         """ Update the environment with specific flags """
