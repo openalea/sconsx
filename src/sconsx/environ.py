@@ -68,7 +68,12 @@ def ALEALibrary(env, target, source, *args, **kwds):
         Alias("install", inst_lib)
     else:
         # On windows, dll should be installed in the bin dir.
-        dll, lib, exp = lib
+        try:
+            # Visual style
+            dll, lib, exp = lib
+        except:
+            # mingw style
+            dll, lib = lib
         inst_dll = env.Install("$bindir", dll)
         inst_lib = env.Install("$libdir", lib)
         Alias("install_lib", inst_lib)

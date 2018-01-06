@@ -377,9 +377,11 @@ def ALEASolution(options, tools=[], dir=[]):
         compileroptions.Update(compilerenv)
         compilerconf.Update(compilerenv)
         if compilerenv['compiler'] == 'msvc':
-            if compilerenv['msvc_version'] != '':
-                env_compiler_options['MSVC_VERSION'] = compilerenv['msvc_version']
-                env_compiler_options['TARGET_ARCH'] = compilerenv['target_arch']
+            if compilerenv['MSVC_VERSION'] != '':
+                env_compiler_options['MSVC_VERSION'] = compilerenv['MSVC_VERSION']
+                env_compiler_options['TARGET_ARCH'] = compilerenv['TARGET_ARCH']
+        elif compilerenv['compiler'] == 'mingw':
+            env_compiler_options['tools'] = ['mingw']
     
     conf = Config(tools, dir)
     conf.UpdateOptions(options)

@@ -117,20 +117,14 @@ class Compiler:
         opts.Add('EXTRA_LIBS', 'Specific user libraries', '')
 
         if isinstance(platform, Win32):
-            opts.Add(EnumVariable('target_arch', 'Target Architecture','amd64' if is_64bit_environment() else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
-            opts.Add(EnumVariable('msvc_version', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=sorted(MsvcVersion.values())+['']))
+            opts.Add(EnumVariable('TARGET_ARCH', 'Target Architecture','amd64' if is_64bit_environment() else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
+            opts.Add(EnumVariable('MSVC_VERSION', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=sorted(MsvcVersion.values())+['']))
 
     def update(self, env):
         """ Update the environment with specific flags """
 
         # Set the compiler
         compiler_name = env['compiler']
-
-        if isinstance(platform, Win32):
-            # Configuring properly the msvc compiler
-            env['TARGET_ARCH'] = env['target_arch']
-            if env['msvc_version'] != '' : 
-                env['MSVC_VERSION'] = env['msvc_version']
 
         self.config.add_tool(compiler_name)
       
