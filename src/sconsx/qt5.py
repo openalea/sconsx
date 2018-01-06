@@ -138,8 +138,8 @@ class _Automoc:
             if not obj.has_builder():
                 # binary obj file provided
                 if debug:
-                    print "scons: qt: '%s' seems to be a binary. Discarded." \
-                        % str(obj)
+                    print("scons: qt: '%s' seems to be a binary. Discarded." \
+                        % str(obj))
                 continue
             try:
                 cpp = obj.sources[0]
@@ -147,8 +147,8 @@ class _Automoc:
                 continue
             if not splitext(str(cpp))[1] in cxx_suffixes:
                 if debug:
-                    print "scons: qt: '%s' is no cxx file. Discarded." \
-                        % str(cpp)
+                    print("scons: qt: '%s' is no cxx file. Discarded." \
+                        % str(cpp))
                 # c or fortran source
                 continue
             #cpp_contents = comment.sub('', cpp.get_contents())
@@ -164,13 +164,13 @@ class _Automoc:
                 h = find_file(hname, (cpp.get_dir(),), env.File)
                 if h:
                     if debug:
-                        print "scons: qt: Scanning '%s' (header of '%s')" % \
-                            (str(h), str(cpp))
+                        print("scons: qt: Scanning '%s' (header of '%s')" % \
+                            (str(h), str(cpp)))
                     #h_contents = comment.sub('', h.get_contents())
                     h_contents = h.get_contents()
                     break
             if not h and debug:
-                print "scons: qt: no header for '%s'." % (str(cpp))
+                print("scons: qt: no header for '%s'." % (str(cpp)))
             if h and q_object_search.search(h_contents):
                 # h file with the Q_OBJECT macro found -> add moc_cpp
                 moc_cpp = env.Moc5(h)
@@ -178,14 +178,14 @@ class _Automoc:
                 out_sources.append(moc_o)
                 #moc_cpp.target_scanner = SCons.Defaults.CScan
                 if debug:
-                    print "scons: qt: found Q_OBJECT macro in '%s', moc'ing to '%s'" % (str(h), str(moc_cpp))
+                    print("scons: qt: found Q_OBJECT macro in '%s', moc'ing to '%s'" % (str(h), str(moc_cpp)))
             if cpp and q_object_search.search(cpp_contents):
                 # cpp file with Q_OBJECT macro found -> add moc
                 # (to be included in cpp)
                 moc = env.Moc5(cpp)
                 env.Ignore(moc, moc)
                 if debug:
-                    print "scons: qt: found Q_OBJECT macro in '%s', moc'ing to '%s'" % (str(cpp), str(moc))
+                    print("scons: qt: found Q_OBJECT macro in '%s', moc'ing to '%s'" % (str(cpp), str(moc)))
                 #moc.source_scanner = SCons.Defaults.CScan
         # restore the original env attributes (FIXME)
         objBuilder.env = objBuilderEnv
@@ -222,7 +222,7 @@ def _detect(env):
 def generate(env):
     """Add Builders and construction variables for qt to an Environment."""
 
-    print "Loading qt5 tool..."
+    print("Loading qt5 tool...")
 
     def locateQt5Command(env, command, qtdir) :
         fullpath1 = os.path.join(qtdir, 'bin', command +'-qt5')

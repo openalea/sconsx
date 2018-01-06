@@ -68,8 +68,8 @@ class Pthread:
 
    def configure(self, config):
       if not config.conf.CheckCHeader('pthread.h'):
-         print """Error: pthread.h not found !!!
-         Please install pthread and start again."""
+         print("""Error: pthread.h not found !!!
+         Please install pthread and start again.""")
          sys.exit(-1)
 
 

@@ -112,7 +112,7 @@ class Flex:
         Warning !!! Flex not found !
         Please, install Flex and try again.
         """
-        print s
+        print(s)
         sys.exit(-1)
 
 

@@ -22,7 +22,7 @@ __revision__ = "$Id$"
 
 import os, sys
 from openalea.sconsx.config import *
-from boost_base import BoostBase
+from .boost_base import BoostBase
 
 ModuleInterDependency = {
     

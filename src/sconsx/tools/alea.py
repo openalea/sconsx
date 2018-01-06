@@ -39,7 +39,7 @@ class Alea:
          self._default[ "openalea_lib" ]= alea_conf.lib_dir
          self._default[ "openalea_include" ]= alea_conf.include_dir
 
-      except ImportError, e :
+      except ImportError as e :
 
          if isinstance( platform, Win32 ):
             self._default[ "openalea_lib" ]= 'C:\\openalea\\lib'
@@ -74,9 +74,9 @@ class Alea:
    def configure( self, config ):
       try:
          import openalea.config as alea_conf
-      except ImportError, e :
-         print '!!Warning : OpenAlea config not found.'
-         print 'You can download it from http://openalea.gforge.inria.fr'
+      except ImportError as e :
+         print('!!Warning : OpenAlea config not found.')
+         print('You can download it from http://openalea.gforge.inria.fr')
 
 
 # def _EnableALEALib(env, libs, *args, **kwds ):

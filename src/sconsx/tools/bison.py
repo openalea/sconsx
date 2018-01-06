@@ -115,7 +115,7 @@ class Bison:
         Warning !!! Bison not found !
         Please, install Bison and try again.
         """
-        print s
+        print(s)
         sys.exit(-1)
 
 

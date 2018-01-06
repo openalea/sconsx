@@ -62,14 +62,14 @@ class ANN:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                try:
                   import pkg_resources as pkg
                   egg_env = pkg.Environment()
                   ann_base = egg_env["ann"][0].location
                   self._default['include'] = pj(ann_base, "include")
                   self._default['libpath'] = pj(ann_base, "lib")
-               except Exception, e:
+               except Exception as e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
 
@@ -134,7 +134,7 @@ class ANN:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('ANN/ANN.h'):
-        print "Error: ANN headers not found."
+        print("Error: ANN headers not found.")
         exit()
 
 
@@ -152,6 +152,6 @@ def create(config):
 
         return tool
    except:
-       print "Error creating ANN Tool"
+       print("Error creating ANN Tool")
        raise Exception("Error in Tool Creation")
 
