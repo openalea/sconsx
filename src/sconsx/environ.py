@@ -201,7 +201,7 @@ def ALEAGlob(env, pattern, dir = '.'):
     if '*' in dir:
         here = env.Dir('.').srcnode().abspath
         d = os.path.join(here, dir)
-        dirs = filter(os.path.isdir, glob.glob(d))
+        dirs = list(filter(os.path.isdir, glob.glob(d)))
         is_multidirs = True
     else:
         here = env.Dir(dir).srcnode().abspath
@@ -221,8 +221,8 @@ def ALEAGlobDir(env, pattern, dir='.'):
 
     here = env.Dir(dir).srcnode().abspath
     d = os.path.join(here, pattern)
-    dirs = filter(os.path.isdir, glob.glob(d))
-    dirs = map(lambda d: d.replace(here, dir), dirs)
+    dirs = list(filter(os.path.isdir, glob.glob(d)))
+    dirs = [d.replace(here, dir) for d in dirs]
 
     return dirs
 

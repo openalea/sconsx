@@ -71,8 +71,8 @@ class Termcap:
    def configure(self, config):
       if isinstance(platform, Posix):
          if not config.conf.CheckCHeader('termcap.h'):
-            print """Error: termcap.h not found !!!
-            Please install termcap and start again."""
+            print("""Error: termcap.h not found !!!
+            Please install termcap and start again.""")
             sys.exit(-1)
 
 

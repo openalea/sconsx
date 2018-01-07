@@ -83,8 +83,8 @@ class Eigen:
 
     def configure(self, config):
         if not config.conf.CheckCHeader('Eigen/Core'):
-            print """Error: Eigen headers not found !!!
-         Please install eigen and start again."""
+            print("""Error: Eigen headers not found !!!
+         Please install eigen and start again.""")
             sys.exit(-1)
 
 

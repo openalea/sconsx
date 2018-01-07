@@ -74,7 +74,7 @@ def import_tool(name, import_dir):
 
     try:
         mod = __import__('sconsx_ext.'+name)
-        print "import local definition of tool '"+name+"'", "at", mod.__path__
+        print("import local definition of tool '"+name+"'", "at", mod.__path__)
         mod = getattr(mod, name)
     except ImportError:
         try:
@@ -267,9 +267,9 @@ class Config(object):
         try:
             mod = import_tool(tool, self.dir)
             t = mod.create(self)
-        except Exception, e:
+        except Exception as e:
             # Try to import EGG LIB
-            print "trying egglib import", e
+            print("trying egglib import", e)
             mod = import_tool("egglib", self.dir)
             t = mod.create(tool, self)
 
@@ -387,7 +387,7 @@ def ALEASolution(options, tools=[], dir=[]):
     conf.UpdateOptions(options)
     
     if len(env_compiler_options) > 0:
-        print ('Force environment with compiler options : '+str(env_compiler_options))
+        print(('Force environment with compiler options : '+str(env_compiler_options)))
         env = Environment(options=options, **env_compiler_options)
     else:
         env = Environment(options=options)

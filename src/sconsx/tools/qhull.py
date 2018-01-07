@@ -54,7 +54,7 @@ class Qhull:
                 self._default['include'] = conf.include_dir
                 self._default['libpath'] = conf.lib_dir
 
-            except ImportError, e:
+            except ImportError as e:
                 self._default['include'] = 'C:'+os.sep
                 self._default['libpath'] = 'C:'+os.sep
 
@@ -110,7 +110,7 @@ class Qhull:
 
    def configure(self, config):
       if not config.conf.CheckCHeader('qhull/qhull_a.h'):
-         print "Error: qhull headers not found."
+         print("Error: qhull headers not found.")
          sys.exit(-1)
 
 

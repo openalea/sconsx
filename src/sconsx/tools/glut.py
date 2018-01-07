@@ -99,7 +99,7 @@ class GLUT:
 
    def configure(self, config):
       if not config.conf.CheckLibWithHeader('GL',['GL/glut.h'], 'c++', autoadd = 0):
-         print "Error: glut.h not found, probably failure in automatic opengl detection"
+         print("Error: glut.h not found, probably failure in automatic opengl detection")
          sys.exit(-1)
 
 

@@ -52,8 +52,8 @@ class EggLib:
          self._default[self.lib_key] = dirs
          self._default[self.include_key] = incs
 
-      except Exception, e:
-         print "Cannot find build parameters for %s : "%(self.name,), e
+      except Exception as e:
+         print("Cannot find build parameters for %s : "%(self.name,), e)
          self._default[self.lib_key] = ""
          self._default[self.include_key] = ""
       

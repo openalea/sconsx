@@ -57,14 +57,14 @@ class MPFR:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                try:
                   import pkg_resources as pkg
                   egg_env = pkg.Environment()
                   mingw_base = egg_env["mingw"][0].location
                   self._default['include'] = pj(mingw_base, "include")
                   self._default['libpath'] = pj(mingw_base, "lib")
-               except Exception, e:
+               except Exception as e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
 
@@ -131,7 +131,7 @@ class MPFR:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('mpfr.h'):
-        print "Error: MPFR headers not found."
+        print("Error: MPFR headers not found.")
         exit()
 
 
@@ -149,6 +149,6 @@ def create(config):
 
         return tool
    except:
-       print "Error creating MPFR Tool"
+       print("Error creating MPFR Tool")
        raise Exception("Error in Tool Creation")
 

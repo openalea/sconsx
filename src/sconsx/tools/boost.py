@@ -22,7 +22,7 @@ __revision__ = "$Id$"
 
 import os, sys
 from openalea.sconsx.config import *
-from boost_base import BoostBase
+from .boost_base import BoostBase
 
 ModuleInterDependency = {
     
@@ -38,16 +38,28 @@ ModuleFlags = {
 }
 
 
-def EnableBoostModule(env, libname):
-    libfullname= 'boost_' + libname + env['boost_libs_suffix']
-    env.AppendUnique(LIBS=[libfullname])
-    if libname in ModuleDefines:
-        env.Append(CPPDEFINES=ModuleDefines[libname])
-    if libname in ModuleFlags:
-        env.Append(CPPFLAGS=ModuleFlags[libname])
-    if libname in ModuleInterDependency:
-        for boostmodule in ModuleInterDependency[libname]:
-            EnableBoostModule(env, boostmodule)
+def EnableBoostModules(env, libnames):
+
+    def enablemodule(libname):
+        libfullname= 'boost_' + libname + env['boost_libs_suffix']
+        env.AppendUnique(LIBS=[libfullname])
+        if libname in ModuleDefines:
+            env.Append(CPPDEFINES=ModuleDefines[libname])
+        if libname in ModuleFlags:
+            env.Append(CPPFLAGS=ModuleFlags[libname])
+        return ModuleInterDependency.get(libname,[])
+
+    env.AppendUnique(CPPPATH=[env['boost_includes']])
+    env.AppendUnique(LIBPATH=[env['boost_libpath']])
+    libnames = list(libnames)
+    donelibs = set()
+    while len(libnames) > 0:
+        donelibs.add(libname)
+        deps = enablemodule(libname)
+        for dep in deps:
+            if not dep in donelibs:
+                libnames.append(dep)
+
 
 
 class Boost(BoostBase):
@@ -55,9 +67,7 @@ class Boost(BoostBase):
     def update(self, env):
         """ Update the environment with specific flags """
         if env['WITH_BOOST']:
-            env.AppendUnique(CPPPATH=[env['boost_includes']])
-            env.AppendUnique(LIBPATH=[env['boost_libpath']])
-            env.EnableBoostModule = EnableBoostModule
+            env.EnableBoostModules = EnableBoostModules
 
 
 def create(config):

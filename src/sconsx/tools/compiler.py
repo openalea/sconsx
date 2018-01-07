@@ -76,7 +76,7 @@ class Compiler:
                 compilers = ['mingw', 'msvc']
             libs_suffix = '-vc90'
         else:
-            raise "Add a compiler support for your os !!!"
+            raise Exception("Add a compiler support for your os !!!")
 
         self._default['compilers'] = compilers
         self._default['libs_suffix'] = libs_suffix

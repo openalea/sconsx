@@ -22,14 +22,14 @@ __revision__ = "$Id$"
 
 import os, sys
 from openalea.sconsx.config import *
-from boost_base import BoostBase
+from .boost_base import BoostBase
 
 class Boost_Math_C99(BoostBase):
 
     # -- reimplement this from boost_base.BoostBase --
     def configure(self, config):
         if not config.conf.CheckCXXHeader('boost/math/distributions.hpp'):
-            print "Error: boost.math headers not found."
+            print("Error: boost.math headers not found.")
             sys.exit(-1)
 
 
