@@ -95,7 +95,7 @@ class BoostBase:
                     self._default['include'] = conf.include_dir
                     self._default['libpath'] = conf.lib_dir
 
-                except ImportError, e:
+                except ImportError as e:
                     defdir = detect_posix_project_installpath('include/boost')
                     self._default['include'] = join(defdir,'include')
                     self._default['libpath']     = join(defdir,'lib')
@@ -168,10 +168,10 @@ class BoostBase:
 
                 periods = version.count(".")
                 if periods == 1:
-                    maj, min = map(int, version.split("."))
+                    maj, min = list(map(int, version.split(".")))
                     patch = 0
                 elif periods == 2:
-                    maj, min, patch = map(int, version.split("."))
+                    maj, min, patch = list(map(int, version.split(".")))
                 else:
                     raise Exception("Cannot determine the version of boost.")
                 # ---- OK we have the version numbers (maj, min, patch) and string (version)

@@ -100,8 +100,8 @@ class QT:
                                               'c++',
                                               'QApplication qapp(0,0);', autoadd=0):
 
-            print """Error: QT not found ! 
-                  Please, install QT and try again."""
+            print("""Error: QT not found ! 
+                  Please, install QT and try again.""")
             sys.exit(-1)
 
 

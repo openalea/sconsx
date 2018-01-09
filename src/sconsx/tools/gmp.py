@@ -57,14 +57,14 @@ class GMP:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                try:
                   import pkg_resources as pkg
                   egg_env = pkg.Environment()
                   mingw_base = egg_env["mingw"][0].location
                   self._default['include'] = join(mingw_base, "include")
                   self._default['libpath'] = join(mingw_base, "lib")
-               except Exception, e:
+               except Exception as e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
 
@@ -129,7 +129,7 @@ class GMP:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('gmpxx.h'):
-        print "Error: GMP headers not found."
+        print("Error: GMP headers not found.")
         exit()
 
 

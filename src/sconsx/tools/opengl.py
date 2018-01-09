@@ -114,7 +114,7 @@ class OpenGL:
 
    def configure(self, config):
       if not config.conf.CheckLibWithHeader('GL',['GL/gl.h', 'GL/glu.h'], 'c++', autoadd = 0):
-         print "Error: gl.h not found, probably failure in automatic opengl detection"
+         print("Error: gl.h not found, probably failure in automatic opengl detection")
          sys.exit(-1)
 
 

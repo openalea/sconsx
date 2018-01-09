@@ -72,8 +72,8 @@ class Readline:
          if not config.conf.CheckCHeader(['stdio.h',
                                             'string.h',
                                             'readline/readline.h']):
-            print """Error: readline.h not found !!!
-            Please install readline and start again."""
+            print("""Error: readline.h not found !!!
+            Please install readline and start again.""")
             sys.exit(-1)
 
 

@@ -61,7 +61,7 @@ class LAPACK:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                self._default['include'] = 'C:' + os.sep
                self._default['libpath'] = 'C:' + os.sep
 
@@ -113,7 +113,7 @@ class LAPACK:
           lapack_lib = lapack_lib.split()
         lapack_lib = lapack_lib[0]
         libnames = ['liblapack.so','liblapack.a', 'lapack.lib', 'liblapack.lib', 'liblapack.dylib']
-        if sum( map(lambda x: os.path.exists(os.path.join(lapack_lib,x)),libnames) ) == 0 :
+        if sum( [os.path.exists(os.path.join(lapack_lib,x)) for x in libnames] ) == 0 :
           import openalea.sconsx.errormsg as em
           em.error("LAPACK lib not found. LAPACK disabled ...")
           env['WITH_LAPACK'] = False
@@ -130,7 +130,7 @@ class LAPACK:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('lapack.h'):
-        print "Error: LAPACK headers not found."
+        print("Error: LAPACK headers not found.")
         exit()
 
 
@@ -148,6 +148,6 @@ def create(config):
 
         return tool
    except:
-       print "Error creating LAPACK Tool"
+       print("Error creating LAPACK Tool")
        raise Exception("Error in Tool Creation")
 
