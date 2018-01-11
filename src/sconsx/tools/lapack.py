@@ -21,6 +21,7 @@ __license__ = "Cecill-C"
 __revision__ = "$Id: lapack.py 8407 2010-03-08 07:53:28Z pradal $"
 
 import os, sys
+from os.path import join
 from openalea.sconsx.config import *
 
 
@@ -60,15 +61,16 @@ class LAPACK:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                self._default['include'] = 'C:' + os.sep
                self._default['libpath'] = 'C:' + os.sep
 
             self._default['libs'] = 'lapack'
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('include/lapacke.h')
+         self._default['include'] = join(defdir,'include')
+         self._default['libpath'] = join(defdir,'lib')
          self._default['libs'] = ['lapack','blas']
          self._default['flags'] = ''
          self._default['defines'] = ['LAPACK_USE_F2C','CGAL_USE_F2C','BLAS_USE_F2C']
@@ -111,9 +113,9 @@ class LAPACK:
           lapack_lib = lapack_lib.split()
         lapack_lib = lapack_lib[0]
         libnames = ['liblapack.so','liblapack.a', 'lapack.lib', 'liblapack.lib', 'liblapack.dylib']
-        if sum( map(lambda x: os.path.exists(os.path.join(lapack_lib,x)),libnames) ) == 0 :
-          import warnings
-          warnings.warn("Error: LAPACK lib not found. LAPACK disabled ...")
+        if sum( [os.path.exists(os.path.join(lapack_lib,x)) for x in libnames] ) == 0 :
+          import openalea.sconsx.errormsg as em
+          em.error("LAPACK lib not found. LAPACK disabled ...")
           env['WITH_LAPACK'] = False
       if env['WITH_LAPACK']:
         env.AppendUnique(CPPPATH=[env['lapack_includes']])
@@ -128,7 +130,7 @@ class LAPACK:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('lapack.h'):
-        print "Error: LAPACK headers not found."
+        print("Error: LAPACK headers not found.")
         exit()
 
 
@@ -146,6 +148,6 @@ def create(config):
 
         return tool
    except:
-       print "Error creating LAPACK Tool"
+       print("Error creating LAPACK Tool")
        raise Exception("Error in Tool Creation")
 

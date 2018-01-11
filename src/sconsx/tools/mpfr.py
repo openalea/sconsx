@@ -22,7 +22,7 @@ __revision__ = "$Id: mpfr.py 12233 2012-06-19 04:54:14Z pradal $"
 
 import os, sys
 from openalea.sconsx.config import *
-
+from os.path import join
 
 class MPFR:
    def __init__(self, config):
@@ -47,7 +47,6 @@ class MPFR:
 
       elif isinstance(platform, Win32):
 
-
          try:
             cgalroot = os.environ['CGALROOT']
             self._default['include'] = pj(cgalroot,'auxiliary','gmp','include')
@@ -58,22 +57,23 @@ class MPFR:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                try:
                   import pkg_resources as pkg
                   egg_env = pkg.Environment()
                   mingw_base = egg_env["mingw"][0].location
                   self._default['include'] = pj(mingw_base, "include")
                   self._default['libpath'] = pj(mingw_base, "lib")
-               except Exception, e:
+               except Exception as e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
 
             self._default['libs'] = 'mpfr'
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('include/mpfr.h')
+         self._default['include'] = join(defdir,'include')
+         self._default['libpath'] = join(defdir,'lib')
          self._default['libs'] = 'mpfr'
          self._default['flags'] = ''
          self._default['defines'] = ''
@@ -116,7 +116,8 @@ class MPFR:
           # mpfr_inc = mpfr_inc.split()
         # mpfr_inc = mpfr_inc[0]
         if not os.path.exists(os.path.join(mpfr_inc,'mpfr.h')):
-          print("Error: MPFR headers not found. MPFR disabled ...")
+          import openalea.sconsx.errormsg as em
+          em.error("MPFR headers not found. MPFR disabled ...")
           env['WITH_MPFR'] = False
       if env['WITH_MPFR']:
         env.AppendUnique(CPPPATH=[env['mpfr_includes']])
@@ -130,7 +131,7 @@ class MPFR:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('mpfr.h'):
-        print "Error: MPFR headers not found."
+        print("Error: MPFR headers not found.")
         exit()
 
 
@@ -148,6 +149,6 @@ def create(config):
 
         return tool
    except:
-       print "Error creating MPFR Tool"
+       print("Error creating MPFR Tool")
        raise Exception("Error in Tool Creation")
 

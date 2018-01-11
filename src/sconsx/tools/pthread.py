@@ -37,10 +37,10 @@ class Pthread:
       if CONDA_ENV:
          prefix = CONDA_PREFIX
       else:
-         prefix = '/usr'
+         prefix = detect_posix_project_installpath('include/pthread.h')
 
       self._default['include'] = pj(prefix, 'include')
-      self._default['lib'] = pj(prefix, 'lib')
+      self._default['libpath'] = pj(prefix, 'lib')
 
 
 
@@ -51,8 +51,8 @@ class Pthread:
       opts.AddVariables(
          PathVariable('pthread_includes', 'pthread include files',
                      self._default['include']),
-         PathVariable('pthread_lib', 'pthread libraries path',
-                     self._default['lib'])
+         PathVariable(('pthread_libpath','pthread_lib'), 'pthread libraries path',
+                     self._default['libpath'])
      )
 
 
@@ -61,15 +61,15 @@ class Pthread:
       """ Update the environment with specific flags """
 
       env.AppendUnique(CPPPATH=[env['pthread_includes']])
-      env.AppendUnique(LIBPATH=[env['pthread_lib']])
+      env.AppendUnique(LIBPATH=[env['pthread_libpath']])
       env.AppendUnique(LIBS=['pthread'])
 
 
 
    def configure(self, config):
       if not config.conf.CheckCHeader('pthread.h'):
-         print """Error: pthread.h not found !!!
-         Please install pthread and start again."""
+         print("""Error: pthread.h not found !!!
+         Please install pthread and start again.""")
          sys.exit(-1)
 
 

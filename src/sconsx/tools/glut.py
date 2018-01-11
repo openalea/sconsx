@@ -24,6 +24,7 @@ __revision__ = "$Id$"
 import os
 import sys
 from openalea.sconsx.config import *
+from os.path import join
 
 exists = os.path.exists
 
@@ -39,23 +40,25 @@ class GLUT:
        if isinstance(platform, Win32):
            #MVSdir = r'C:\Program Files\Microsoft Visual Studio\VC98'
            MVSdir = r'C:\Program Files\Microsoft Platform SDK'
-           self._default['msvc_include'] = pj(MVSdir, 'Include')
-           self._default['msvc_lib'] = pj(MVSdir, 'Lib')
+           self._default['msvc_include'] = join(MVSdir, 'Include')
+           self._default['msvc_lib'] = join(MVSdir, 'Lib')
 
            mgw_dir = find_executable_path_from_env("mingw32-make.exe", strip_bin=True)
            mgw_dir = mgw_dir or r'C:\MinGW'
-           self._default['mgw_include'] = pj(mgw_dir, 'include', 'GL')
-           self._default['mgw_lib'] = pj(mgw_dir, 'lib')
+           self._default['mgw_include'] = join(mgw_dir, 'include', 'GL')
+           self._default['mgw_lib'] = join(mgw_dir, 'lib')
 
            self._default['include'] = self._default['msvc_include']
-           self._default['lib'] = self._default['msvc_lib']
+           self._default['libpath'] = self._default['msvc_lib']
+           self._default['libs'] = ['glut32']
        elif isinstance(platform, Posix):
-           if exists ('/usr/include/GL/glut.h'):
-               self._default['include'] = '/usr/include'
-               self._default['lib'] = '/usr/lib'
+           defdir = detect_posix_project_installpath('include/glut.h',['/usr/X11R6'])
+           self._default['include'] = join(defdir,'include')
+           self._default['libpath']     = join(defdir,'lib')           
+           if isinstance(platform, Cygwin): 
+              self._default['libs'] = ['glut32']
            else:
-               self._default['include'] = '/usr/X11R6/include'
-               self._default['lib'] = '/usr/X11R6/lib'
+              self._default['libs'] = ['glut']
 
 
    def option( self, opts):
@@ -70,7 +73,8 @@ class GLUT:
        else:
            opts.AddVariables(
                             ('glut_includes', 'GLUT include files',  self._default['include']),
-                            ('glut_lib', 'GLUT library path', self._default['lib'])
+                            (('glut_libpath','glut_lib'), 'GLUT library path', self._default['libpath'])
+                            ('glut_libs', 'GLUT library names', self._default['libs'])
                             )
 
 
@@ -85,23 +89,17 @@ class GLUT:
       if env.get('compiler', 'mingw') == 'mingw':
           if env['glut_includes'] == self._default['msvc_include']:
               env['glut_includes'] = self._default['mgw_include']
-          if env['glut_lib'] == self._default['msvc_lib']:
-              env['glut_lib'] = self._default['mgw_lib']
+          if env['glut_libpath'] == self._default['msvc_lib']:
+              env['glut_libpath'] = self._default['mgw_lib']
 
       env.AppendUnique(CPPPATH=[env['glut_includes']])
-      env.AppendUnique(LIBPATH=[env['glut_lib']])
-
-      if isinstance(platform, Cygwin):
-          env.AppendUnique(LIBS=['glut32'])
-      elif isinstance(platform, Posix):
-          env.AppendUnique(LIBS=['glut'])
-      elif isinstance(platform, Win32):
-          env.AppendUnique(LIBS=['glut32'])
+      env.AppendUnique(LIBPATH=[env['glut_libpath']])
+      env.AppendUnique(LIBS=[env['glut_libs']])
 
 
    def configure(self, config):
       if not config.conf.CheckLibWithHeader('GL',['GL/glut.h'], 'c++', autoadd = 0):
-         print "Error: glut.h not found, probably failure in automatic opengl detection"
+         print("Error: glut.h not found, probably failure in automatic opengl detection")
          sys.exit(-1)
 
 

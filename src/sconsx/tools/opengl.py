@@ -36,29 +36,34 @@ class OpenGL:
    def default(self):
        if CONDA_ENV:
            self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
-           self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
+           self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
+           if isinstance(platform, Win32):
+             self._default['libs'] = ['glu32']
+           else:
+             self._default['libs'] = ['GLU']
 
        elif isinstance(platform, Win32):
            #MVSdir = r'C:\Program Files\Microsoft Visual Studio\VC98'
            MVSdir = r'C:\Program Files\Microsoft Platform SDK'
            self._default['msvc_include'] = pj(MVSdir, 'Include')
-           self._default['msvc_lib'] = pj(MVSdir, 'Lib')
+           self._default['msvc_libpath'] = pj(MVSdir, 'Lib')
 
            mgw_dir = find_executable_path_from_env("mingw32-make.exe", strip_bin=True)
            mgw_dir = mgw_dir or r'C:\MinGW'
            self._default['mgw_include'] = pj(mgw_dir, 'include', 'GL')
-           self._default['mgw_lib'] = pj(mgw_dir, 'lib')
+           self._default['mgw_libpath'] = pj(mgw_dir, 'lib')
 
            self._default['include'] = self._default['msvc_include']
-           self._default['lib'] = self._default['msvc_lib']
-       elif isinstance(platform, Posix):
-           if exists ('/usr/include/GL/gl.h'):
+           self._default['libpath'] = self._default['msvc_lib']
+           self._default['libs'] = ['opengl32','glu32']
 
-               self._default['include'] = '/usr/include'
-               self._default['lib'] = '/usr/lib'
-           else:
-               self._default['include'] = '/usr/X11R6/include'
-               self._default['lib'] = '/usr/X11R6/lib'
+       elif isinstance(platform, Posix):
+           defdir = detect_posix_project_installpath('include/gl.h',['/usr/X11R6','/opt/X11'])
+           self._default['include'] = join(defdir,'include')
+           self._default['libpath']     = join(defdir,'lib') 
+           self._default['libs'] = ['GLU']
+           if isinstance(platform, Cygwin):
+              self._default['libs'] = ['opengl32','glu32']
 
 
    def option( self, opts):
@@ -78,8 +83,12 @@ class OpenGL:
                            ('gl_includes', 'GL include files',
                             self._default['include']),
 
-                            ('gl_lib', 'GL library path',
-                             self._default['lib'])
+                            (('gl_libpath','gl_lib'), 'GL library path',
+                             self._default['libpath']),
+
+                            ('gl_libs', 'GL library names',
+                             self._default['libs'])
+
                             )
 
 
@@ -94,23 +103,18 @@ class OpenGL:
       if env.get('compiler', 'mingw') == 'mingw' and not CONDA_ENV:
           if env['gl_includes'] == self._default['msvc_include']:
               env['gl_includes'] = self._default['mgw_include']
-          if env['gl_lib'] == self._default['msvc_lib']:
-              env['gl_lib'] = self._default['mgw_lib']
+          if env['gl_libpath'] == self._default['msvc_libpath']:
+              env['gl_libpath'] = self._default['mgw_libpath']
 
       env.AppendUnique(CPPPATH=[env['gl_includes']])
-      env.AppendUnique(LIBPATH=[env['gl_lib']])
+      env.AppendUnique(LIBPATH=[env['gl_libpath']])
+      env.AppendUnique(LIBS=env['gl_libs'])
 
-      if isinstance(platform, Cygwin):
-          env.AppendUnique(LIBS=['opengl32','glu32'])
-      elif isinstance(platform, Posix):
-          env.AppendUnique(LIBS=['GLU'])
-      elif isinstance(platform, Win32):
-          env.AppendUnique(LIBS=['opengl32','glu32'])
 
 
    def configure(self, config):
       if not config.conf.CheckLibWithHeader('GL',['GL/gl.h', 'GL/glu.h'], 'c++', autoadd = 0):
-         print "Error: gl.h not found, probably failure in automatic opengl detection"
+         print("Error: gl.h not found, probably failure in automatic opengl detection")
          sys.exit(-1)
 
 

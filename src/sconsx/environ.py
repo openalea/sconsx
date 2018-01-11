@@ -49,7 +49,7 @@ def ALEALibrary(env, target, source, *args, **kwds):
     if env.get("static"):
         lib = env.StaticLibrary(_target, source, *args, **kwds)
     else:
-        if (env['compiler'] == 'msvc') and ('8.0' in env['MSVS_VERSION']):
+        if (env['compiler'] == 'msvc') and ('8.0' in env['MSVC_VERSION']):
             kwds['SHLINKCOM'] = [env['SHLINKCOM'],
             'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
         lib = env.SharedLibrary(_target, source, *args, **kwds)
@@ -57,13 +57,23 @@ def ALEALibrary(env, target, source, *args, **kwds):
     Alias("build_lib", lib)
     Alias("build", lib)
 
-    if os.name == 'posix':
+    if env.subst("$build_libdir") == env.subst("$libdir"):
+        inst_lib =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", lib)
+        Alias("install", lib)
+    elif os.name == 'posix':
         inst_lib = env.Install("$libdir",lib)
         Alias("install_lib", inst_lib)
         Alias("install", inst_lib)
     else:
         # On windows, dll should be installed in the bin dir.
-        dll, lib, exp = lib
+        try:
+            # Visual style
+            dll, lib, exp = lib
+        except:
+            # mingw style
+            dll, lib = lib
         inst_dll = env.Install("$bindir", dll)
         inst_lib = env.Install("$libdir", lib)
         Alias("install_lib", inst_lib)
@@ -81,9 +91,15 @@ def ALEAIncludes(env, target, includes, *args, **kwds):
     inc = env.Install("$build_includedir/%s" % (target,), includes, *args, **kwds)
     env.Alias("build_lib", inc)
     env.Alias("build", inc)
-    inst_inc = env.Install("$includedir/%s" % (target,), includes, *args, **kwds)
-    Alias("install_lib", inst_inc)
-    Alias("install", inst_inc)
+    if env.subst("$build_includedir") == env.subst("$includedir"):
+        inst_inc =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", inc)
+        Alias("install", inc)
+    else:
+        inst_inc = env.Install("$includedir/%s" % (target,), includes, *args, **kwds)
+        Alias("install_lib", inst_inc)
+        Alias("install", inst_inc)
     return (inc, inst_inc)
 
 # def ALEAIncludes(env, target, includes, *args, **kwds):
@@ -113,9 +129,15 @@ def ALEAProgram(env, target, source, *args, **kwds):
     bin = env.Program("$build_bindir/%s" % (target,), source, *args, **kwds)
     Alias("build", bin)
     Alias("build_lib", bin)
-    inst_bin = env.Install("$bindir", bin)
-    Alias("install_lib", inst_bin)
-    Alias("install", inst_bin)
+    if env.subst("$build_bindir") == env.subst("$bindir"):
+        inst_bin =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", bin)
+        Alias("install", bin)
+    else:
+        inst_bin = env.Install("$bindir", bin)
+        Alias("install_lib", inst_bin)
+        Alias("install", inst_bin)
     return (bin, inst_bin)
 
 def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
@@ -129,7 +151,7 @@ def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
     else:
         kwds['SHLIBSUFFIX'] = '.so'
 
-    if (env['compiler'] == 'msvc') and ('8.0' in env['MSVS_VERSION']):
+    if (env['compiler'] == 'msvc') and ('8.0' in env['MSVC_VERSION']):
         kwds['SHLINKCOM'] = [env['SHLINKCOM'],
         'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
 
@@ -151,6 +173,8 @@ def ALEAWrapper(env, python_dir, target, source, *args, **kwds):
                            *args, **kwds)
     Alias("build_wrapper", wrap)
     Alias("build", wrap)
+    # This target should simply be build for install mode
+    Alias("install", wrap)
     return wrap
 
 ## def ALEAPython(env, python_dir, depends = [], *args, **kwds):
@@ -177,7 +201,7 @@ def ALEAGlob(env, pattern, dir = '.'):
     if '*' in dir:
         here = env.Dir('.').srcnode().abspath
         d = os.path.join(here, dir)
-        dirs = filter(os.path.isdir, glob.glob(d))
+        dirs = list(filter(os.path.isdir, glob.glob(d)))
         is_multidirs = True
     else:
         here = env.Dir(dir).srcnode().abspath
@@ -197,8 +221,8 @@ def ALEAGlobDir(env, pattern, dir='.'):
 
     here = env.Dir(dir).srcnode().abspath
     d = os.path.join(here, pattern)
-    dirs = filter(os.path.isdir, glob.glob(d))
-    dirs = map(lambda d: d.replace(here, dir), dirs)
+    dirs = list(filter(os.path.isdir, glob.glob(d)))
+    dirs = [d.replace(here, dir) for d in dirs]
 
     return dirs
 

@@ -63,7 +63,7 @@ class Gnuplot:
         Warning !!! Gnuplot not found !
         Please, install Gnuplot and try again.
         """
-        print s
+        print(s)
         sys.exit(-1)
 
 

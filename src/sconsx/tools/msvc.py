@@ -33,11 +33,10 @@ class Msvc:
 
    def option(self, opts):
       pass
-
+      
    def update(self, env):
       """ Update the environment with specific flags """
 
-      #env['MSVS_VERSION'] = '6.0'
       t = Tool('msvc')
       t(env)
 
@@ -83,7 +82,7 @@ class Msvc:
       env.AppendUnique(CPPDEFINES=CPPDEFINES)
       #env.AppendUnique(LIBS=LIBS)
       
-      if 8 <= env['MSVS_VERSION'] < 10:
+      if 8 <= env['MSVC_VERSION'] < 10:
         # Bug fix with scons msvc manifest. Manifest will be included into the dll.
         env['LINKCOM'] = [env['LINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;1']
         env['SHLINKCOM'] = [env['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']

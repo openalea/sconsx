@@ -95,6 +95,13 @@ class Install:
 
     def update(self, env):
         """ Update the environment with specific flags """
+        import openalea.sconsx.errormsg as em
+        if env.subst("$build_libdir") == env.subst("$libdir"):
+            em.error("build_libdir and libdir have similar values : %s. Ignore lib in install_lib step." % repr(env.subst("$build_libdir")))
+        if env.subst("$build_includedir") == env.subst("$includedir"):
+            em.error("build_includedir and includedir have similar values : %s. Ignore includes in install_lib step." % repr(env.subst("$build_includedir")))
+        if env.subst("$build_bindir") == env.subst("$bindir"):
+            em.error("build_bindir and bindir have similar values : %s. Ignore bin in install_lib step." % repr(env.subst("$build_bindir")))
         pass
 
 

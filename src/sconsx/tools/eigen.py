@@ -4,7 +4,7 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2011 INRIA - CIRAD - INRA
+#       Copyright 2006-2017 INRIA - CIRAD - INRA
 #
 #       File author(s): Daniel Barbeau <daniel.barbeau@inria.fr>
 #
@@ -24,6 +24,7 @@ __revision__ = "$Id$"
 import os
 import sys
 from openalea.sconsx.config import *
+import openalea.sconsx.errormsg as em
 
 
 class Eigen:
@@ -70,20 +71,23 @@ class Eigen:
         """ Update the environment with specific flags """
         if env['WITH_EIGEN']:
             eigen_includes = env['eigen_includes']
+            
             if isinstance(eigen_includes, str):
                 eigen_includes = eigen_includes.split()
             eigen_includes = eigen_includes[0]
+            
             if not os.path.exists(os.path.join(eigen_includes, 'Eigen')):
-                print("Error: EIGEN lib not found. EIGEN disabled ...")
+                em.error("EIGEN lib not found. EIGEN disabled ...")
                 env['WITH_EIGEN'] = False
+        
         if env['WITH_EIGEN']:
             env.AppendUnique(CPPPATH=[env['eigen_includes']])
             env.Append(CPPDEFINES='WITH_EIGEN')
 
     def configure(self, config):
         if not config.conf.CheckCHeader('Eigen/Core'):
-            print """Error: Eigen headers not found !!!
-         Please install eigen and start again."""
+            print("""Error: Eigen headers not found !!!
+         Please install eigen and start again.""")
             sys.exit(-1)
 
 

@@ -22,15 +22,15 @@
 import os
 import sys
 
-from os.path import exists
+from os.path import exists, join
 pj = os.path.join
 
-from SCons.Script import SConsignFile, Help
+from SCons.Script import SConsignFile, Help, GetOption
 try:
     from SCons.Script import VariantDir
 except ImportError:
     from SCons.Script import BuildDir as VariantDir
-from SCons.Options import  Options
+from SCons.Options import  Options 
 from SCons.Options import  PathOption, BoolOption, EnumOption
 from SCons.Variables import PathVariable
 from SCons.Variables import BoolVariable
@@ -74,7 +74,7 @@ def import_tool(name, import_dir):
 
     try:
         mod = __import__('sconsx_ext.'+name)
-        print "import local definition of tool '"+name+"'", "at", mod.__path__
+        print("import local definition of tool '"+name+"'", "at", mod.__path__)
         mod = getattr(mod, name)
     except ImportError:
         try:
@@ -154,12 +154,14 @@ class Platform(object):
 
     def __init__(self):
         self.name = ""
+        self.sharedlibextension = ''
 
 
 class Posix(Platform):
 
     def __init__(self):
         self.name = "posix"
+        self.sharedlibextension = 'so'
 
 
 class Linux(Posix):
@@ -182,18 +184,21 @@ class Cygwin(Posix):
 
     def __init__(self):
         self.name = "cygwin"
+        self.sharedlibextension = 'dll'
 
 
 class Darwin(Posix):
 
     def __init__(self):
         self.name = "darwin"
+        self.sharedlibextension = 'dylib'
 
 
 class Win32(Platform):
 
     def __init__(self):
         self.name = "win32"
+        self.sharedlibextension = 'dll'
 
 
 def GetPlatform():
@@ -262,9 +267,9 @@ class Config(object):
         try:
             mod = import_tool(tool, self.dir)
             t = mod.create(self)
-        except Exception, e:
+        except Exception as e:
             # Try to import EGG LIB
-            print "trying egglib import", e
+            print("trying egglib import", e)
             mod = import_tool("egglib", self.dir)
             t = mod.create(tool, self)
 
@@ -359,14 +364,38 @@ def ALEAEnvironment(conf, *args, **kwds):
 
 
 def ALEASolution(options, tools=[], dir=[]):
+    from copy import deepcopy
     SConsignFile()
+    
+    env_compiler_options = {}
+    if isinstance(platform, Win32):
+        # Checking for compiler info first
+        compileroptions = deepcopy(options)
+        compilerconf = Config(default_tools,dir)
+        compilerconf.UpdateOptions(compileroptions)
+        compilerenv = Environment()
+        compileroptions.Update(compilerenv)
+        compilerconf.Update(compilerenv)
+        if compilerenv['compiler'] == 'msvc':
+            if compilerenv['MSVC_VERSION'] != '':
+                env_compiler_options['MSVC_VERSION'] = compilerenv['MSVC_VERSION']
+                env_compiler_options['TARGET_ARCH'] = compilerenv['TARGET_ARCH']
+        elif compilerenv['compiler'] == 'mingw':
+            env_compiler_options['tools'] = ['mingw']
+    
     conf = Config(tools, dir)
     conf.UpdateOptions(options)
-
-    env = Environment(options=options)
+    
+    if len(env_compiler_options) > 0:
+        print(('Force environment with compiler options : '+str(env_compiler_options)))
+        env = Environment(options=options, **env_compiler_options)
+    else:
+        env = Environment(options=options)
+    
     options.Update(env)
     conf.Update(env)
-
+    
+    
     Help(options.GenerateHelpText(env))
 
     prefix = env['build_prefix']
@@ -400,6 +429,25 @@ def find_executable_path_from_env(exe, strip_bin=True):
     else:
         return okPath
 
+
+def detect_posix_project_installpath(filepattern, potentialdirs = []):
+    """ Detect the installation of include of lib in the system.
+        Potential dirs can be added to test on the system.
+        By default, '/usr','/usr/local','/opt/local' are tested.
+        If nothing is found, it return the default value /usr
+        Exemple of use will be:
+        detect_posix_project_installpath('GL', ['/usr/X11R6'])
+    """
+    from os.path import join, exists
+    mpotentialdirs = potentialdirs+['/opt/local','/usr/local','/usr']
+    if is_conda():
+        mpotentialdirs.prepend(conda_library_prefix())
+    for potentialdir in mpotentialdirs:
+        if exists(join(potentialdir,filepattern)) :
+            return potentialdir
+    return '/usr'
+
+
 #------------------------------------------------------------------------------
 # Conda detection
 
@@ -428,3 +476,13 @@ def conda_library_prefix():
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
 CONDA_LIBRARY_PREFIX = conda_library_prefix()
+
+#------------------------------------------------------------------------------
+# system detection
+
+def is_32bit_environment():
+    return not is_64bit_environment()
+
+def is_64bit_environment():
+    import sys
+    return sys.maxsize.bit_length() == 63

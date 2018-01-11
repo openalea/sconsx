@@ -36,14 +36,12 @@ class Readline:
    def default(self):
       if CONDA_ENV:
          self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
-         self._default['lib'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
+         self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
 
       elif isinstance(platform, Posix):
-
-         self._default['include'] = '/usr/include'
-         self._default['lib'] = '/usr/lib'
-         if isinstance(platform, Cygwin):
-            self._default['include'] = '/usr/include/readline'
+           defdir = detect_posix_project_installpath('include/readline/')
+           self._default['include'] = join(defdir,'include')
+           self._default['libpath']     = join(defdir,'lib') 
 
 
    def option( self, opts):
@@ -56,16 +54,16 @@ class Readline:
                         'readline include files',
                         self._default['include']),
 
-            PathVariable('readline_lib',
+            PathVariable(('readline_libpath','readline_lib'),
                         'readline libraries path',
-                        self._default['lib'])
+                        self._default['libpath'])
            )
 
 
    def update(self, env):
       if isinstance(platform, Posix):
          env.AppendUnique(CPPPATH=[env['readline_includes']])
-         env.AppendUnique(LIBPATH=[env['readline_lib']])
+         env.AppendUnique(LIBPATH=[env['readline_libpath']])
          env.AppendUnique(LIBS=['readline'])
 
 
@@ -74,8 +72,8 @@ class Readline:
          if not config.conf.CheckCHeader(['stdio.h',
                                             'string.h',
                                             'readline/readline.h']):
-            print """Error: readline.h not found !!!
-            Please install readline and start again."""
+            print("""Error: readline.h not found !!!
+            Please install readline and start again.""")
             sys.exit(-1)
 
 

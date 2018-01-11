@@ -24,6 +24,7 @@ import os, sys
 import warnings
 
 from openalea.sconsx.config import *
+from os.path import join
 
 
 class ANN:
@@ -61,22 +62,23 @@ class ANN:
                import openalea.config as conf
                self._default['include'] = conf.include_dir
                self._default['libpath'] = conf.lib_dir
-            except ImportError, e:
+            except ImportError as e:
                try:
                   import pkg_resources as pkg
                   egg_env = pkg.Environment()
                   ann_base = egg_env["ann"][0].location
                   self._default['include'] = pj(ann_base, "include")
                   self._default['libpath'] = pj(ann_base, "lib")
-               except Exception, e:
+               except Exception as e:
                   self._default['include'] = 'C:' + os.sep
                   self._default['libpath'] = 'C:' + os.sep
 
             self._default['libs'] = 'ANN'
 
       elif isinstance(platform, Posix):
-         self._default['include'] = '/usr/include'
-         self._default['libpath'] = '/usr/lib'
+         defdir = detect_posix_project_installpath('include/ANN')
+         self._default['include'] = join(defdir,'include')
+         self._default['libpath'] = join(defdir,'lib')
          self._default['libs'] = 'ann'
          self._default['flags'] = ''
          self._default['defines'] = ''
@@ -117,8 +119,9 @@ class ANN:
         ann_inc = env['ann_includes']
         ann_header = os.path.join(ann_inc,'ANN','ANN.h')
         if not os.path.exists(ann_header):
-          print("Error: ANN headers not found. ANN disabled ...")
-          env['WITH_ANN'] = False
+            import openalea.sconsx.errormsg as em
+            em.error("ANN headers not found. ANN disabled ...")
+            env['WITH_ANN'] = False
       if env['WITH_ANN']:
         env.AppendUnique(CPPPATH=[env['ann_includes']])
         env.AppendUnique(LIBPATH=[env['ann_libpath']])
@@ -131,7 +134,7 @@ class ANN:
 
    def configure(self, config):
       if not config.conf.CheckCXXHeader('ANN/ANN.h'):
-        print "Error: ANN headers not found."
+        print("Error: ANN headers not found.")
         exit()
 
 
@@ -149,6 +152,6 @@ def create(config):
 
         return tool
    except:
-       print "Error creating ANN Tool"
+       print("Error creating ANN Tool")
        raise Exception("Error in Tool Creation")
 

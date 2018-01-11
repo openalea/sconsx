@@ -116,7 +116,7 @@ def f2py_cmd_exec(cmd):
     p = subprocess.Popen(" ".join(f2py_cmd), shell = True, stdout =
                          subprocess.PIPE)
     for i in p.stdout.readlines():
-        print i.rstrip('\n')
+        print(i.rstrip('\n'))
     return p.wait()
 
 def pyf2c(target, source, env):
@@ -141,7 +141,7 @@ def pyf2c(target, source, env):
     try:
         cpi = mangle_fortranobject(target_file_names[0], FOBJECT_FILE)
         shutil.copy(source_c, pjoin(build_dir, cpi))
-    except IOError, e:
+    except IOError as e:
         msg = "Error while copying fortran source files (error was %s)" % str(e)
         raise IOError(msg)
 
@@ -188,10 +188,10 @@ def generate(env):
     env['F2PYBUILDDIR']     = ''
     env['F2PYINCLUDEDIR']   = pjoin(d, 'src')
 
-    if not (env.has_key("F2PY_NOT_ADD_INCLUDEDIR") and env["F2PY_NOT_ADD_INCLUDEDIR"]):
+    if not ("F2PY_NOT_ADD_INCLUDEDIR" in env and env["F2PY_NOT_ADD_INCLUDEDIR"]):
         env.Prepend(CPPPATH = env["F2PYINCLUDEDIR"])
 
-    if not env.has_key('F2PYCOMSTR'):
+    if 'F2PYCOMSTR' not in env:
         env['F2PYCOMSTR']       = "f2py: generating $TARGET from $SOURCE"
 
     # XXX: adding a scanner using c_file.add_scanner does not work...
@@ -206,7 +206,7 @@ def exists(env):
     try:
         import numpy.f2py
         st = 1
-    except Exception, e:
+    except Exception as e:
         #print "Warning : f2py tool not found, error was %s" % e
         st = 0
 
