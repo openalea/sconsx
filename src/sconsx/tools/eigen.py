@@ -4,7 +4,7 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2011 INRIA - CIRAD - INRA
+#       Copyright 2006-2017 INRIA - CIRAD - INRA
 #
 #       File author(s): Daniel Barbeau <daniel.barbeau@inria.fr>
 #
@@ -24,6 +24,7 @@ __revision__ = "$Id$"
 import os
 import sys
 from openalea.sconsx.config import *
+import openalea.sconsx.errormsg as em
 
 
 class Eigen:
@@ -70,13 +71,15 @@ class Eigen:
         """ Update the environment with specific flags """
         if env['WITH_EIGEN']:
             eigen_includes = env['eigen_includes']
+            
             if isinstance(eigen_includes, str):
                 eigen_includes = eigen_includes.split()
             eigen_includes = eigen_includes[0]
+            
             if not os.path.exists(os.path.join(eigen_includes, 'Eigen')):
-                import openalea.sconsx.errormsg as em
                 em.error("EIGEN lib not found. EIGEN disabled ...")
                 env['WITH_EIGEN'] = False
+        
         if env['WITH_EIGEN']:
             env.AppendUnique(CPPPATH=[env['eigen_includes']])
             env.Append(CPPDEFINES='WITH_EIGEN')
