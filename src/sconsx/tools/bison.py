@@ -21,8 +21,10 @@ __license__ = "Cecill-C"
 __revision__ = "$Id$"
 
 import os, sys, re
-from openalea.sconsx.config import *
 from os.path import join
+
+from openalea.sconsx.config import *
+import openalea.sconsx.errormsg as em
 
 
 def get_bison_version(bisonpath):
@@ -78,7 +80,7 @@ class Bison:
 
    def update(self, env):
       """ Update the environment with specific flags """
-      import openalea.sconsx.errormsg as em
+
       if env['WITH_BISON']:
         bison = env.WhereIs('bison', env['bison_bin'])
 

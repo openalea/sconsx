@@ -4,7 +4,7 @@ from SCons.Builder import Builder
 from SCons.Action import Action
 
 def cython_action(target, source, env):
-    from .Cython.Compiler.Main import compile as cython_compile
+    from Cython.Compiler.Main import compile as cython_compile
     res = cython_compile(str(source[0]))
 
 cythonAction = Action(cython_action, "$CYTHONCOMSTR")
@@ -42,7 +42,7 @@ def generate(env):
 
 def exists(env):
     try:
-        from . import Cython
+        import Cython
         return True
     except ImportError:
         return False
