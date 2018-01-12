@@ -22,6 +22,7 @@ __revision__ = "$Id$"
 
 import os, sys
 from openalea.sconsx.config import *
+from openalea.sconsx.util.env_check import is_continuous_integration
 import SCons.Script
 
 
@@ -34,8 +35,11 @@ class MultiCPU:
 
     def option( self, opts):
         """ Add Options to opts """
+        default_num_jobs = 1
+        if is_continuous_integration() and 'CPU_COUNT' in os.environ:
+                default_num_jobs = os.environ['CPU_COUNT']
 
-        opts.AddVariables(('num_jobs', 'Number of jobs', 1),)
+        opts.AddVariables(('num_jobs', 'Number of jobs', default_num_jobs),)
 
 
     def update(self, env):

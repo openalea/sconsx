@@ -412,77 +412,10 @@ def ALEASolution(options, tools=[], dir=[]):
 
     return env
 
-
-# -- locate executables in the path, use with caution --
-def find_executable_path_from_env(exe, strip_bin=True):
-    paths = os.environ["PATH"].split(os.pathsep)
-    okPath = None
-    for p in paths:
-        if exists(pj(p,exe)):
-            okPath = p
-            break
-
-    if okPath is None : return None
-    bin = okPath[-4:]
-    if strip_bin and okPath and "bin" in bin and os.sep in bin:
-        return okPath[:-4]
-    else:
-        return okPath
-
-
-def detect_posix_project_installpath(filepattern, potentialdirs = []):
-    """ Detect the installation of include of lib in the system.
-        Potential dirs can be added to test on the system.
-        By default, '/usr','/usr/local','/opt/local' are tested.
-        If nothing is found, it return the default value /usr
-        Exemple of use will be:
-        detect_posix_project_installpath('GL', ['/usr/X11R6'])
-    """
-    from os.path import join, exists
-    mpotentialdirs = potentialdirs+['/opt/local','/usr/local','/usr']
-    if is_conda():
-        mpotentialdirs.prepend(conda_library_prefix())
-    for potentialdir in mpotentialdirs:
-        if exists(join(potentialdir,filepattern)) :
-            return potentialdir
-    return '/usr'
-
-
-#------------------------------------------------------------------------------
-# Conda detection
-
-def is_conda():
-    """ Check if sconsx is run in a conda environment. """
-    return ("CONDA_PREFIX" in os.environ)
-
-def conda_prefix():
-    """ Returns the PREFIX where lib, include are installed. """
-    if is_conda():
-        if 'CONDA_BUILD' in os.environ:
-            return os.environ.get('PREFIX', os.environ.get('CONDA_PREFIX'))
-        else:
-            return os.environ['CONDA_PREFIX']
-
-def conda_library_prefix():
-    if os.name == 'posix' : 
-        return conda_prefix()
-    elif is_conda():
-    	library_prefix= pj(os.environ.get('CONDA_PREFIX'),'Library')
-        if 'CONDA_BUILD' in os.environ:
-            return os.environ.get('LIBRARY_PREFIX', library_prefix)
-        else:
-            return library_prefix
+from .util.lib_check import *
+from .util.env_check import *
 
 CONDA_ENV = is_conda()
 CONDA_PREFIX = conda_prefix()
 CONDA_LIBRARY_PREFIX = conda_library_prefix()
 
-#------------------------------------------------------------------------------
-# system detection
-
-def is_32bit_environment():
-    return not is_64bit_environment()
-
-def is_64bit_environment():
-    import sys
-    return sys.maxsize.bit_length() == 63
