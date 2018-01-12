@@ -47,4 +47,5 @@ def is_on_travis():
 
 def is_on_appveyor():
     import os
-    return 'APPVEYOR' in os.environ    
+    return 'APPVEYOR' in os.environ
+

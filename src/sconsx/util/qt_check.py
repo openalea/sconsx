@@ -38,3 +38,4 @@ def detect_installed_qt_version(default = 4):
             QT_VERSION = default
 
     return QT_VERSION
+

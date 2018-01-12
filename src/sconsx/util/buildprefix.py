@@ -22,3 +22,4 @@ def fix_custom_buildprefix(env, standardprefix = 'build-scons'):
                 else: 
                     os.remove(standardprefix)
             os.symlink(prefix, standardprefix)
+
