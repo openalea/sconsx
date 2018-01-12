@@ -37,7 +37,7 @@ setup(name = name,
       create_namespaces = True,
       zip_safe = False,
 
-      packages = ["openalea.sconsx", "openalea.sconsx.tools"],
+      packages = ["openalea.sconsx", "openalea.sconsx.tools", "openalea.sconsx.util"],
       package_dir = { pkg_name : pj('src','sconsx'),
                       '' : 'src'},
 
