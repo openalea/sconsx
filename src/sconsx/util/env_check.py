@@ -33,3 +33,18 @@ def is_32bit_environment():
 def is_64bit_environment():
     import sys
     return sys.maxsize.bit_length() == 63
+
+#------------------------------------------------------------------------------
+# CI detection
+
+def is_continuous_integration():
+    import os
+    return 'CI' in os.environ
+
+def is_on_travis():
+    import os
+    return 'TRAVIS' in os.environ
+
+def is_on_appveyor():
+    import os
+    return 'APPVEYOR' in os.environ    
