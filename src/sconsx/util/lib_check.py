@@ -27,7 +27,7 @@ def detect_posix_project_installpath(filepattern, potentialdirs = []):
         detect_posix_project_installpath('GL', ['/usr/X11R6'])
     """
     from os.path import join, exists
-    from .env_check import is_conda
+    from .env_check import is_conda,conda_library_prefix
 
     mpotentialdirs = potentialdirs+['/opt/local','/usr/local','/usr']
     if is_conda():
