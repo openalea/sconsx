@@ -36,6 +36,8 @@ def detect_installed_qt_version(default = 4):
         if QT_VERSION is None:
             print ('Autodetect qt error in',repr(library_inc))
             QT_VERSION = default
+        else:
+            QT_VERSION = QT_VERSION >> 16
 
     return QT_VERSION
 
