@@ -31,7 +31,7 @@ def detect_posix_project_installpath(filepattern, potentialdirs = []):
 
     mpotentialdirs = potentialdirs+['/opt/local','/usr/local','/usr']
     if is_conda():
-        mpotentialdirs.prepend(conda_library_prefix())
+        mpotentialdirs.insert(0,conda_library_prefix())
     for potentialdir in mpotentialdirs:
         if exists(join(potentialdir,filepattern)) :
             return potentialdir
