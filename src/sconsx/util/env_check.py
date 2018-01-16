@@ -1,29 +1,41 @@
+
+import os
+import sys
+
 #------------------------------------------------------------------------------
 # Conda detection
-import os
-
 
 def is_conda():
     """ Check if sconsx is run in a conda environment. """
     return ("CONDA_PREFIX" in os.environ)
 
+def is_conda_build():
+    """ Check if sconsx is run in a conda environment. """
+    return ("CONDA_BULD" in os.environ)
+
 def conda_prefix():
-    """ Returns the PREFIX where lib, include are installed. """
+    """ Returns the PREFIX where conda environement is installed. """
     if is_conda():
-        if 'CONDA_BUILD' in os.environ:
-            return os.environ.get('PREFIX', os.environ.get('CONDA_PREFIX'))
-        else:
-            return os.environ['CONDA_PREFIX']
+        
+        prefix= os.environ.get('CONDA_PREFIX')
+        if is_conda_build():
+            prefix = os.environ.get('PREFIX', prefix)
+
+        return prefix
 
 def conda_library_prefix():
-    if os.name == 'posix' : 
-        return conda_prefix()
-    elif is_conda():
-        library_prefix= os.path.join(os.environ.get('CONDA_PREFIX'),'Library')
-        if 'CONDA_BUILD' in os.environ:
-            return os.environ.get('LIBRARY_PREFIX', library_prefix)
-        else:
-            return library_prefix
+    """ Returns the PREFIX where lib, include are installed. """
+    if is_conda():
+        
+        library_prefix = conda_prefix()
+        if os.name == 'nt' : 
+            library_prefix = os.path.join(library_prefix(),'Library')
+
+        if is_conda_build():
+            library_prefix = os.environ.get('LIBRARY_PREFIX', library_prefix)
+
+        return library_prefix
+
 #------------------------------------------------------------------------------
 # system detection
 
@@ -31,21 +43,17 @@ def is_32bit_environment():
     return not is_64bit_environment()
 
 def is_64bit_environment():
-    import sys
     return sys.maxsize.bit_length() == 63
 
 #------------------------------------------------------------------------------
 # CI detection
 
 def is_continuous_integration():
-    import os
     return 'CI' in os.environ
 
 def is_on_travis():
-    import os
     return 'TRAVIS' in os.environ
 
 def is_on_appveyor():
-    import os
     return 'APPVEYOR' in os.environ
 
