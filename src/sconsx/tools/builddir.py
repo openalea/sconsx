@@ -22,7 +22,6 @@ __license__ = "Cecill-C"
 import os
 from openalea.sconsx.config import *
 
-
 class BuildDir:
     """Define Variant Dir options for putting build files outside the source tree."""
 
@@ -42,14 +41,18 @@ class BuildDir:
         #    self._conda_build = False
         #    prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
 
-        self._conda_build = ('CONDA_BUILD' in os.environ)
+        self._conda_build = is_conda_build()
         prefix = pj(self.config.dir[0],"build-scons")
-
-
         self._default['build_prefix'] = prefix
-        self._default['build_bindir'] = pj(prefix,"bin")
-        self._default['build_libdir'] = pj(prefix,"lib")
-        self._default['build_includedir'] = pj(prefix,"include")
+
+        if self._conda_build:
+            self._default['build_bindir'] = pj(CONDA_LIBRARY_PREFIX,"bin")
+            self._default['build_libdir'] = pj(CONDA_LIBRARY_PREFIX,"lib")
+            self._default['build_includedir'] = pj(CONDA_LIBRARY_PREFIX,"include")
+        else:
+            self._default['build_bindir'] = pj(prefix,"bin")
+            self._default['build_libdir'] = pj(prefix,"lib")
+            self._default['build_includedir'] = pj(prefix,"include")
 
     def option(self, opts):
         """Define user options to redefine the default values."""
