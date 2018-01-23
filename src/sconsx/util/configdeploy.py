@@ -67,10 +67,10 @@ def is_similar(vars1, vars2, debug = False):
     return True
 
 condapattern = '{{% set version = "{}" %}}'
+condaregpattern = condapattern.format("(?P<version>[0-9]+.[0-9]+.[0-9]+)").replace(' ','[ \t]+')
 
 def get_version_from_conda(fname):
-    pattern = condapattern.format("(?P<version>[0-9]+.[0-9]+.[0-9]+)")
-    result = re.search(pattern, file(fname,'r').read())
+    result = re.search(condaregpattern, file(fname,'r').read())
     if not result is None:
         version_str = result.group("version")
         return HexVersion.from_string(version_str)
@@ -78,7 +78,8 @@ def get_version_from_conda(fname):
 
 def generate_conda_version(version, fname):
     print('Update conda config in',repr(fname))
-    result = re.sub(condapattern, condapattern.format(version.to_string()),file(fname,'r').read(),1)
+    result = re.sub(condaregpattern, condapattern.format(version.to_string()),file(fname,'r').read(),1)
+    print (result)
     file(fname,'w').write(result)
 
 def generate_config(project,
@@ -90,19 +91,21 @@ def generate_config(project,
     if not pyconfigfname is None:
         pyconfig = get_var_from_py_config(pyconfigfname)
         if not is_similar(config,pyconfig,debug):
-            generate_py_config(config, pyconfigfname)
+            generate_py_config(config, pyconfigfname, project)
 
     if not cppconfigfname is None:
         cppconfig = get_var_from_cpp_config(cppconfigfname)
         if not is_similar(config,cppconfig,debug):
-            generate_cpp_config(config, cppconfigfname)
+            generate_cpp_config(config, cppconfigfname, project)
 
 
 def generate_conda_config(version,
-                          condaconfigfname = os.path.join('conda','meta.yaml')):
+                          condaconfigfname = os.path.join('conda','meta.yaml'),
+                          debug = False):
     if not condaconfigfname is None:
         condaversion = get_version_from_conda(condaconfigfname)
         if version != condaversion:
+            if debug : print ('Detect difference of version in code and conda meta.yaml :', version, condaversion)
             generate_conda_version(version, condaconfigfname)
 
 def get_config_from_env(env, config, prefix = None):

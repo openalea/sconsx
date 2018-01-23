@@ -88,10 +88,9 @@ class HexVersion (object):
 
     @staticmethod
     def from_py_variable(variable, fname):
-        result = {}
-        mglobals = {}
-        execfile(fname, mglobals, result)
-        return HexVersion(result[variable])
+        namespace = {}
+        execfile(fname, namespace, namespace)
+        return HexVersion(namespace[variable])
 
     @staticmethod
     def from_string(strvalue):
