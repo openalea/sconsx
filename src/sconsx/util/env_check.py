@@ -29,7 +29,7 @@ def conda_library_prefix():
         
         library_prefix = conda_prefix()
         if os.name == 'nt' : 
-            library_prefix = os.path.join(library_prefix(),'Library')
+            library_prefix = os.path.join(library_prefix,'Library')
 
         if is_conda_build():
             library_prefix = os.environ.get('LIBRARY_PREFIX', library_prefix)
