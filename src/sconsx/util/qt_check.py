@@ -19,7 +19,7 @@ def detect_qt_includepath():
 
 def detect_installed_qt_version(default = 4):
     import os
-    from .versionreader import read_variable, version_from_hex
+    from .hexversion import read_variable, version_from_hex
 
     QT_VERSION = None
     library_inc = detect_qt_includepath()
