@@ -18,6 +18,7 @@
 #
 #------------------------------------------------------------------------------
 """ See OpenAlea WebSite / Packages / SConsX """
+from __future__ import print_function
 
 import os
 import sys
@@ -74,7 +75,7 @@ def import_tool(name, import_dir):
 
     try:
         mod = __import__('sconsx_ext.'+name)
-        print("import local definition of tool '"+name+"'", "at", mod.__path__)
+        print("import local definition of tool '"+name+"' at "+ repr(mod.__path__))
         mod = getattr(mod, name)
     except ImportError:
         try:
@@ -371,7 +372,7 @@ def ALEASolution(options, tools=[], dir=[]):
     if isinstance(platform, Win32):
         # Checking for compiler info first
         compileroptions = deepcopy(options)
-        compilerconf = Config(default_tools,dir)
+        compilerconf = Config([],dir)
         compilerconf.UpdateOptions(compileroptions)
         compilerenv = Environment()
         compileroptions.Update(compilerenv)
