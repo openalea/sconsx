@@ -79,7 +79,6 @@ def get_version_from_conda(fname):
 def generate_conda_version(version, fname):
     print('Update conda config in',repr(fname))
     result = re.sub(condaregpattern, condapattern.format(version.to_string()),file(fname,'r').read(),1)
-    print (result)
     file(fname,'w').write(result)
 
 def generate_config(project,

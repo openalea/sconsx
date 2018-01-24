@@ -11,7 +11,7 @@ def is_conda():
 
 def is_conda_build():
     """ Check if sconsx is run in a conda environment. """
-    return ("CONDA_BULD" in os.environ)
+    return ("CONDA_BUILD" in os.environ)
 
 def conda_prefix():
     """ Returns the PREFIX where conda environement is installed. """
