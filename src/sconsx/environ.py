@@ -58,16 +58,7 @@ def ALEALibrary(env, target, source, *args, **kwds):
     Alias("build_lib", lib)
     Alias("build", lib)
 
-    if env.subst("$build_libdir") == env.subst("$libdir"):
-        inst_lib =  []
-        # In this case, this target should simply be build for install mode
-        Alias("install_lib", lib)
-        Alias("install", lib)
-    elif os.name == 'posix':
-        inst_lib = env.Install("$libdir",lib)
-        Alias("install_lib", inst_lib)
-        Alias("install", inst_lib)
-    else:
+    def install_dll(lib):
         # On windows, dll should be installed in the bin dir.
         try:
             # Visual style
@@ -77,6 +68,27 @@ def ALEALibrary(env, target, source, *args, **kwds):
             dll, lib = lib
         inst_dll = env.Install("$bindir", dll)
         inst_lib = env.Install("$libdir", lib)
+        return inst_dll, inst_lib
+
+    if env.subst("$build_libdir") == env.subst("$libdir"):
+        inst_lib =  []
+        # In this case, this target should simply be build for install mode
+        Alias("install_lib", lib)
+        Alias("install", lib)
+
+        if os.name != 'posix':
+            # For windows, we should still move the dll in bindir, even on build mode.
+            inst_dll, inst_lib = install_dll(lib)
+            Alias("build_lib", inst_dll)
+            Alias("build", inst_dll)
+
+    elif os.name == 'posix':
+        inst_lib = env.Install("$libdir",lib)
+        Alias("install_lib", inst_lib)
+        Alias("install", inst_lib)
+    else:
+        # For windows, we should still move the dll and lib in separate directory.
+        inst_dll, inst_lib = install_dll(lib)
         Alias("install_lib", inst_lib)
         Alias("install_lib", inst_dll)
         Alias("install", inst_lib)
