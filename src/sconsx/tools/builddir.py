@@ -98,7 +98,7 @@ class BuildDir:
             _path = build[udir]
             env[udir] = os.path.abspath(_path)
             if _path and not os.path.exists(_path):
-                print('Create', repr(_path))
+                print('Create '+repr(_path))
                 os.makedirs(_path)
 
         if not env['with_build_dir']:
