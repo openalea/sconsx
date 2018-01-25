@@ -71,8 +71,6 @@ def ALEALibrary(env, target, source, *args, **kwds):
     if env.subst("$build_libdir") == env.subst("$libdir"):
         inst_lib =  []
         # In this case, this target should simply be build for install mode
-        Alias("install_lib", lib)
-        Alias("install", lib)
 
         if os.name != 'posix':
             # For windows, we should still move the dll in bindir, even on build mode.
@@ -80,6 +78,9 @@ def ALEALibrary(env, target, source, *args, **kwds):
             inst_dll = env.Install("$bindir", dll)
             Alias("build_lib", inst_dll)
             Alias("build", inst_dll)
+
+        Alias("install_lib", lib)
+        Alias("install", lib)
 
     elif os.name == 'posix':
         inst_lib = env.Install("$libdir",lib)
