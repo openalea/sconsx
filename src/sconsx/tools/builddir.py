@@ -33,19 +33,13 @@ class BuildDir:
 
     def default(self):
         """Set the default directory values for build_prefix."""
-        # self._default['build_prefix']= pj(self.config.dir[0], "build-" + platform.name)
-        #if 'CONDA_BUILD' in os.environ:
-        #    self._conda_build = True
-        #    prefix = self._default['build_prefix'] = CONDA_LIBRARY_PREFIX
-        #else:
-        #    self._conda_build = False
-        #    prefix = self._default['build_prefix'] = pj(self.config.dir[0],"build-scons")
 
         self._conda_build = is_conda_build()
         prefix = pj(self.config.dir[0],"build-scons")
         self._default['build_prefix'] = prefix
 
-        if self._conda_build:
+        if self._conda_build and os.name == 'posix':
+            # For linux and mac, we should position the build lib directly in the conda library path
             self._default['build_bindir'] = pj(CONDA_LIBRARY_PREFIX,"bin")
             self._default['build_libdir'] = pj(CONDA_LIBRARY_PREFIX,"lib")
             self._default['build_includedir'] = pj(CONDA_LIBRARY_PREFIX,"include")
