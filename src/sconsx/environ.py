@@ -56,7 +56,7 @@ def ALEALibrary(env, target, source, *args, **kwds):
         lib = env.SharedLibrary(_target, source, *args, **kwds)
 
     def select_dll(lib):
-        # On windows, dll should be installed in the bin dir.
+        # On windows, we need to separate dll and lib
         try:
             # Visual style
             dll, lib, exp = lib
@@ -65,8 +65,8 @@ def ALEALibrary(env, target, source, *args, **kwds):
             dll, lib = lib
         return dll, lib
 
-    bld_lib = lib
     # Building 
+    bld_lib = lib
     if os.name != 'posix':
         # For windows, we should still move the dll and lib in separate directory.
         dll, lib = select_dll(lib)
