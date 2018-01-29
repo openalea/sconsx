@@ -11,7 +11,7 @@ def is_conda():
 
 def is_conda_build():
     """ Check if sconsx is run in a conda environment. """
-    return ("CONDA_BULD" in os.environ)
+    return ("CONDA_BUILD" in os.environ)
 
 def conda_prefix():
     """ Returns the PREFIX where conda environement is installed. """
@@ -29,7 +29,7 @@ def conda_library_prefix():
         
         library_prefix = conda_prefix()
         if os.name == 'nt' : 
-            library_prefix = os.path.join(library_prefix(),'Library')
+            library_prefix = os.path.join(library_prefix,'Library')
 
         if is_conda_build():
             library_prefix = os.environ.get('LIBRARY_PREFIX', library_prefix)

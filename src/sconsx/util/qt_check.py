@@ -19,7 +19,7 @@ def detect_qt_includepath():
 
 def detect_installed_qt_version(default = 4):
     import os
-    from .versionreader import read_variable, version_from_hex
+    from .hexversion import read_variable, version_from_hex
 
     QT_VERSION = None
     library_inc = detect_qt_includepath()
@@ -37,6 +37,7 @@ def detect_installed_qt_version(default = 4):
             print ('Autodetect qt error in',repr(library_inc))
             QT_VERSION = default
         else:
+            if type(QT_VERSION) != int : print(QT_VERSION)
             QT_VERSION = QT_VERSION >> 16
 
     return QT_VERSION
