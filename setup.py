@@ -2,7 +2,7 @@
 __revision__ = "$Id$"
 
 import os, sys
-from setuptools import setup
+from setuptools import setup, find_packages
 
 pj= os.path.join
 
@@ -25,6 +25,9 @@ This package extends scons with:
     * Support for different compilers on Linux and Windows (e.g. gcc, msvc, mingw)
 """
 
+packages=find_packages('src')
+package_dir={'': 'src'}
+
 setup(name = name,
       version = version,
       description = description,
@@ -37,9 +40,8 @@ setup(name = name,
       create_namespaces = True,
       zip_safe = False,
 
-      packages = ["openalea.sconsx", "openalea.sconsx.tools", "openalea.sconsx.util"],
-      package_dir = { pkg_name : pj('src','sconsx'),
-                      '' : 'src'},
+      packages=packages,
+      package_dir= package_dir,
 
       # Dependencies
       setup_requires = ['openalea.deploy'],
