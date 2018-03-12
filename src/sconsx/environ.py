@@ -55,34 +55,51 @@ def ALEALibrary(env, target, source, *args, **kwds):
             'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
         lib = env.SharedLibrary(_target, source, *args, **kwds)
 
-    Alias("build_lib", lib)
-    Alias("build", lib)
-
-    if env.subst("$build_libdir") == env.subst("$libdir"):
-        inst_lib =  []
-        # In this case, this target should simply be build for install mode
-        Alias("install_lib", lib)
-        Alias("install", lib)
-    elif os.name == 'posix':
-        inst_lib = env.Install("$libdir",lib)
-        Alias("install_lib", inst_lib)
-        Alias("install", inst_lib)
-    else:
-        # On windows, dll should be installed in the bin dir.
+    def select_dll(lib):
+        # On windows, we need to separate dll and lib
         try:
             # Visual style
             dll, lib, exp = lib
         except:
             # mingw style
             dll, lib = lib
-        inst_dll = env.Install("$bindir", dll)
-        inst_lib = env.Install("$libdir", lib)
-        Alias("install_lib", inst_lib)
-        Alias("install_lib", inst_dll)
-        Alias("install", inst_lib)
-        Alias("install", inst_dll)
-        inst_lib += inst_dll
-    return (lib, inst_lib)
+        return dll, lib
+
+    # Building 
+    bld_lib = lib
+    if os.name != 'posix':
+        # For windows, we should still move the dll and lib in separate directory.
+        dll, lib = select_dll(lib)
+        dll = env.Install("$build_bindir", dll)
+        Alias("build_lib", dll)
+        Alias("build", dll)
+        bld_lib = dll + [lib]
+
+    Alias("build_lib", lib)
+    Alias("build", lib)
+
+    # Installing
+    inst_lib =  []
+    if os.name != 'posix':
+        # On windows, we need to install the dll.
+        if env.subst("$build_bindir") != env.subst("$bindir"):
+            dll = env.Install("$bindir", dll)
+            inst_lib += dll
+        # else we reuse the already installed dll
+
+        Alias("install_lib", dll)
+        Alias("install", dll)
+
+    if env.subst("$build_libdir") != env.subst("$libdir"):
+        # We should install the lib in libdir
+        lib = env.Install("$libdir", lib)
+        inst_lib += lib
+    # else we reuse the already installed lib
+
+    Alias("install_lib", lib)
+    Alias("install", lib)
+
+    return (bld_lib, inst_lib)
 
 def ALEAIncludes(env, target, includes, *args, **kwds):
     """
