@@ -40,14 +40,14 @@ Alias = DefaultEnvironmentCall("Alias")
 
 
 def ALEALibrary(env, target, source, *args, **kwds):
-    
+
     """
     Build static or dynamic library depending on user flags.
     Install the build library and associated files in specific directories.
     Define 'build' and 'install' target.
     """
     _target = env.subst("$build_libdir/%s"%target)
-    if env.get("static"):
+    if env.get("static", False):
         lib = env.StaticLibrary(_target, source, *args, **kwds)
     else:
         if (env['compiler'] == 'msvc') and ('8.0' in env['MSVC_VERSION']):
@@ -65,9 +65,9 @@ def ALEALibrary(env, target, source, *args, **kwds):
             dll, lib = lib
         return dll, lib
 
-    # Building 
+    # Building
     bld_lib = lib
-    if os.name != 'posix':
+    if os.name != 'posix' and not env.get("static", False) :
         # For windows, we should still move the dll and lib in separate directory.
         dll, lib = select_dll(lib)
         dll = env.Install("$build_bindir", dll)
@@ -80,7 +80,7 @@ def ALEALibrary(env, target, source, *args, **kwds):
 
     # Installing
     inst_lib =  []
-    if os.name != 'posix':
+    if os.name != 'posix' and not env.get("static", False):
         # On windows, we need to install the dll.
         if env.subst("$build_bindir") != env.subst("$bindir"):
             dll = env.Install("$bindir", dll)
