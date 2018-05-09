@@ -39,7 +39,7 @@ class Termcap:
       elif isinstance(platform, Posix):
             defdir = detect_posix_project_installpath('include/termcap.h')
             self._default['include'] = join(defdir,'include')
-            self._default['libpath']     = join(defdir,'lib') 
+            self._default['libpath']     = join(defdir,'lib')
             self._default['ncurses'] = False
 
 
@@ -51,7 +51,7 @@ class Termcap:
             PathVariable('termcap_includes', 'termcap include files',
                         self._default['include']),
             PathVariable(('termcap_libpath','termcap_lib'), 'termcap libraries path',
-                        self._default['lib'])
+                        self._default['libpath'])
 
            )
          opts.Add(BoolVariable('WITH_NCURSES', 'Use ncurses instead of termcap',
