@@ -4,7 +4,7 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2016 INRIA - CIRAD - INRA
+#       Copyright 2006-2018 INRIA - CIRAD - INRA
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #
@@ -32,15 +32,15 @@ class Termcap:
 
 
    def default(self):
-      self._default['ncurses'] = False
+      self._default['ncurses'] = True
       if CONDA_ENV:
          self._default['include'] = pj(CONDA_LIBRARY_PREFIX, 'include')
          self._default['libpath'] = pj(CONDA_LIBRARY_PREFIX, 'lib')
       elif isinstance(platform, Posix):
             defdir = detect_posix_project_installpath('include/termcap.h')
             self._default['include'] = join(defdir,'include')
-            self._default['libpath']     = join(defdir,'lib') 
-            self._default['ncurses'] = False
+            self._default['libpath']     = join(defdir,'lib')
+            #self._default['ncurses'] = False
 
 
    def option( self, opts):
@@ -51,7 +51,7 @@ class Termcap:
             PathVariable('termcap_includes', 'termcap include files',
                         self._default['include']),
             PathVariable(('termcap_libpath','termcap_lib'), 'termcap libraries path',
-                        self._default['lib'])
+                        self._default['libpath'])
 
            )
          opts.Add(BoolVariable('WITH_NCURSES', 'Use ncurses instead of termcap',
