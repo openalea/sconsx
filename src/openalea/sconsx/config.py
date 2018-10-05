@@ -383,6 +383,7 @@ def ALEASolution(options, tools=[], dir=[]):
                 env_compiler_options['TARGET_ARCH'] = compilerenv['TARGET_ARCH']
         elif compilerenv['compiler'] == 'mingw':
             env_compiler_options['tools'] = ['mingw']
+            env_compiler_options['ENV'] = {'PATH': [find_executable_path_from_env('gcc.exe', strip_bin=False)],'TMP': os.environ['TMP']}
     
     conf = Config(tools, dir)
     conf.UpdateOptions(options)
