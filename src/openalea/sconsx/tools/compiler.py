@@ -24,7 +24,6 @@ __revision__ = "$Id$"
 from SCons.Variables import PathVariable 
 from SCons.Variables import BoolVariable 
 from SCons.Variables import EnumVariable 
-from SCons.Options import Options
 from SCons.Variables import Variables
 from SCons.Util import Split, WhereIs
 
