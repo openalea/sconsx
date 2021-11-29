@@ -63,7 +63,7 @@ MsvcVersion = {
 def get_default_msvc():
     import platform
     version = platform.python_compiler().split()[1][2:]
-    return MsvcVersion[int(version)]
+    return MsvcVersion.get(int(version), '17.0')
 
 
 
