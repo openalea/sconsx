@@ -4,7 +4,7 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006 INRIA - CIRAD - INRA
+#       Copyright 2006-2021 INRIA - CIRAD - INRAE
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #                       Pierre Barbier de Reuille <pierre.barbier@sophia.inria.fr>
@@ -31,11 +31,7 @@ try:
     from SCons.Script import VariantDir
 except ImportError:
     from SCons.Script import BuildDir as VariantDir
-try:
-    from SCons.Options import  Options 
-    from SCons.Options import  PathOption, BoolOption, EnumOption
-except ImportError:
-    pass
+
 from SCons.Variables import PathVariable
 from SCons.Variables import BoolVariable
 from SCons.Variables import EnumVariable
@@ -87,7 +83,6 @@ def import_tool(name, import_dir):
         except ImportError:
             sys.path = old_syspath
             raise ToolNotFound(name)
-
     sys.path = old_syspath
     return mod
 
@@ -258,6 +253,8 @@ class Config(object):
         Add a specific tool and its dependencies recursively in the tool set.
         Check the circular dependencies.
         """
+        if not tool:
+            return 
 
         if tool in self.tools:
             return
@@ -267,7 +264,6 @@ class Config(object):
 
         self._walk.append(tool)
 
-        # Try to import SConsX tool
         try:
             mod = import_tool(tool, self.dir)
             t = mod.create(self)
@@ -276,7 +272,6 @@ class Config(object):
             print("trying egglib import", e)
             mod = import_tool("egglib", self.dir)
             t = mod.create(tool, self)
-
 
         self._walk.pop()
         self.tools.append(t)
@@ -392,7 +387,7 @@ def ALEASolution(options, tools=[], dir=[]):
     conf.UpdateOptions(options)
     
     if len(env_compiler_options) > 0:
-        print(('Force environment with compiler options : '+str(env_compiler_options)))
+        print('Force environment with compiler options : '+str(env_compiler_options))
         env = Environment(options=options, **env_compiler_options)
     else:
         env = Environment(options=options)

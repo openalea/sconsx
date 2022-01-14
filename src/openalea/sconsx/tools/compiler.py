@@ -24,7 +24,6 @@ __revision__ = "$Id$"
 from SCons.Variables import PathVariable 
 from SCons.Variables import BoolVariable 
 from SCons.Variables import EnumVariable 
-from SCons.Options import Options
 from SCons.Variables import Variables
 from SCons.Util import Split, WhereIs
 
@@ -32,7 +31,23 @@ import os, sys
 from openalea.sconsx.config import *
 
 MsvcVersion = {
-    1910 : '14.1', 
+    1929 : '16.10', 
+    1928 : '16.8', 
+    1927 : '16.7', 
+    1926 : '16.6', 
+    1925 : '16.5', 
+    1924 : '16.4', 
+    1923 : '16.3', 
+    1922 : '16.2', 
+    1921 : '16.1', 
+    1920 : '16.0', 
+    1916 : '15.9', 
+    1915 : '15.8', 
+    1914 : '15.7', 
+    1913 : '15.6', 
+    1912 : '15.5', 
+    1911 : '15.3', 
+    1910 : '15.0', 
     1900 : '14.0', 
     1800 : '12.0', 
     1700 : '11.0', 
@@ -48,7 +63,7 @@ MsvcVersion = {
 def get_default_msvc():
     import platform
     version = platform.python_compiler().split()[1][2:]
-    return MsvcVersion[int(version)]
+    return MsvcVersion.get(int(version), '17.0')
 
 
 
