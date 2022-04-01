@@ -1,8 +1,8 @@
-{% set version = "2.2.6" %}
+{% set data = load_setup_py_data() %}
 
 package:
   name: openalea.sconsx
-  version: {{ version }}
+  version: {{ data.get('version') }}
 
 source:
   path: ..
@@ -10,14 +10,14 @@ source:
 build:
   preserve_egg_dir: True
   number: 0
-  script: python setup.py install --prefix=$PREFIX
+  script: python setup.py install
 
 requirements:
   build:
-    - python
-    - openalea.deploy #==2.0.0
+    - python {{PY_VER}}
+    - openalea.deploy
   run:
-    - python
+    - python {{PY_VER}}
     - scons
     - openalea.deploy
 
@@ -27,7 +27,7 @@ test:
     - openalea.sconsx
 
 about:
-  home: http://openalea.gforge.inria.fr/
+  home: {{ data.get('url') }}
   license: Cecill-c License
   summary: 'SConsX is an extension package of the SCons build tool. SConsX aims to simplify the build of complex multi-platform packages.'
 

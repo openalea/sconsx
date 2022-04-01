@@ -67,5 +67,6 @@ nosetests.xml
 # temporary files
 *._icon.png
 
+
 # Mac dirs
 .DS_Store
