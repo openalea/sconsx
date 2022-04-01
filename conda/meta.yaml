@@ -14,12 +14,10 @@ build:
 
 requirements:
   build:
-    - python {{PY_VER}}
     - openalea.deploy
-  run:
+  host:
     - python {{PY_VER}}
     - scons
-    - openalea.deploy
 
 test:
   imports:
