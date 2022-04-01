@@ -14,6 +14,7 @@ build:
 
 requirements:
   build:
+    - python {{PY_VER}}
     - openalea.deploy
   host:
     - python {{PY_VER}}
