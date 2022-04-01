@@ -4,7 +4,7 @@
 #       OpenAlea.SConsX: SCons extension package for building platform
 #                        independant packages.
 #
-#       Copyright 2006-2021 INRIA - CIRAD - INRAE
+#       Copyright 2006-2022 INRIA - CIRAD - INRAE
 #
 #       File author(s): Christophe Pradal <christophe.prada@cirad.fr>
 #                       Pierre Barbier de Reuille <pierre.barbier@sophia.inria.fr>

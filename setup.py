@@ -37,7 +37,6 @@ setup(name = name,
       license = license,
 
       namespace_packages = ['openalea'],
-      create_namespaces = True,
       zip_safe = False,
 
       packages=packages,
@@ -45,7 +44,4 @@ setup(name = name,
 
       # Dependencies
       setup_requires = ['openalea.deploy'],
-      install_requires = [],
-      dependency_links = ['http://openalea.gforge.inria.fr/pi'],
-
       )
