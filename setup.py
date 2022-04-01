@@ -5,15 +5,21 @@ import os, sys
 from setuptools import setup, find_packages
 
 pj= os.path.join
+version ='2.3.1'
+release = '2.3'
 
+name = 'OpenAlea.SConsX'
+project = 'openalea'
+namespace = 'openalea'
+pkg_name = 'openalea.sconsx'
+package = 'sconsx'
+description = 'Scons Extension to build multi-platform packages for OpenAlea and others.'
+authors = 'Christophe Pradal'
+authors_email = 'christophe.pradal@cirad.fr'
+url = 'http://github.com/openalea/sconsx'
+license = 'Cecill-C'
 
-from openalea.deploy.metainfo import read_metainfo
-metadata = read_metainfo('metainfo.ini', verbose=True)
-for key,value in metadata.items():
-    exec("%s = '%s'" % (key, value))
-
-long_description = \
-"""
+long_description = """
 Scons Configuration Utilities for OpenAlea.
 
 SConsX is a set of tools to enhance multi platform configuration,
