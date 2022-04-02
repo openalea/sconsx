@@ -16,7 +16,7 @@ requirements:
   build:
     - python {{PY_VER}}
     - openalea.deploy
-  host:
+  run:
     - python {{PY_VER}}
     - scons
 
