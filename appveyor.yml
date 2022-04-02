@@ -1,11 +1,8 @@
 platform:
-  - x86
   - x64
 
 environment:
   matrix:
-    - CONDA_RECIPE: conda
-      CONDA_VERSION: 2
     - CONDA_RECIPE: conda
       CONDA_VERSION: 3
       
