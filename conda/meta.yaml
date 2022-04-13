@@ -14,8 +14,6 @@ build:
   script: {{ PYTHON }} setup.py install --single-version-externally-managed --record=record.txt
 
 requirements:
-  host:
-    - python >=3.6
   build:
     - python {{PY_VER}}
     - openalea.deploy
