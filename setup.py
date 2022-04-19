@@ -5,7 +5,7 @@ import os, sys
 from setuptools import setup, find_packages
 
 pj= os.path.join
-version ='2.3.1'
+version ='2.3.2'
 release = '2.3'
 
 name = 'OpenAlea.SConsX'
@@ -42,7 +42,7 @@ setup(name = name,
       author_email = authors_email,
       license = license,
 
-      namespace_packages = ['openalea'],
+      #namespace_packages = ['openalea'],
       zip_safe = False,
 
       packages=packages,
