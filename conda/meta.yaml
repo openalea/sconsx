@@ -10,8 +10,8 @@ source:
 build:
   noarch: python
   preserve_egg_dir: True
-  number: 0
-  script: {{ PYTHON }} setup.py install #--single-version-externally-managed --record=record.txt
+  number: 1
+  script: python setup.py install #--single-version-externally-managed --record=record.txt
 
 requirements:
   build:
