@@ -1,8 +1,10 @@
 .. image:: https://img.shields.io/badge/License-GPL-blue.svg
    :target: https://opensource.org/licenses/GPL-3.0
 
-.. image:: https://travis-ci.org/openalea/sconsx.svg?branch=master
-    :target: https://travis-ci.org/openalea/sconsx
+.. image:: https://github.com/openalea/sconsx/actions/workflows/conda-package-build.yml/badge.svg
+    :alt: CI status
+    :target: https://github.com/openalea/sconsx/actions/workflows/conda-package-build.yml
+
 
 .. image:: https://ci.appveyor.com/api/projects/status/loch8jmjco4aagk5/branch/master?svg=true
    :target: https://ci.appveyor.com/project/fredboudon/sconsx
