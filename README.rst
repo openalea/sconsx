@@ -6,10 +6,6 @@
     :target: https://github.com/openalea/sconsx/actions/workflows/conda-package-build.yml
 
 
-.. image:: https://ci.appveyor.com/api/projects/status/loch8jmjco4aagk5/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/fredboudon/sconsx
-
-
 SConsX
 ======
 
