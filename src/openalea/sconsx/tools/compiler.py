@@ -133,7 +133,7 @@ class Compiler:
 
         if isinstance(platform, Win32):
             opts.Add(EnumVariable('TARGET_ARCH', 'Target Architecture','amd64' if is_64bit_environment() else 'x86', allowed_values=('x86','amd64','i386','emt64','x86_64','ia64')))
-            opts.Add(EnumVariable('MSVC_VERSION', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=sorted(MsvcVersion.values())+['']))
+            opts.Add(EnumVariable('MSVC_VERSION', 'Version ','' if not is_conda() else get_default_msvc(), allowed_values=sorted(MsvcVersion.values())+['17.0','']))
 
     def update(self, env):
         """ Update the environment with specific flags """
