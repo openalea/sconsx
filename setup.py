@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-__revision__ = "$Id$"
 
 import os, sys
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 pj= os.path.join
-version ='2.3.2'
-release = '2.3'
+version ='2.4.0'
+release = '2.4'
 
 name = 'OpenAlea.SConsX'
 project = 'openalea'
@@ -31,7 +30,7 @@ This package extends scons with:
     * Support for different compilers on Linux and Windows (e.g. gcc, msvc, mingw)
 """
 
-packages=find_packages('src')
+packages=find_namespace_packages(where='src', include=['openalea', 'openalea.*'])
 package_dir={'': 'src'}
 
 setup(name = name,
@@ -42,7 +41,6 @@ setup(name = name,
       author_email = authors_email,
       license = license,
 
-      #namespace_packages = ['openalea'],
       zip_safe = False,
 
       packages=packages,
