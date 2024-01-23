@@ -30,7 +30,7 @@ This package extends scons with:
     * Support for different compilers on Linux and Windows (e.g. gcc, msvc, mingw)
 """
 
-packages=find_namespace_packages(where='src', include=['openalea', 'openalea.*'])
+packages=find_namespace_packages(where='src', include=['openalea.*'])
 package_dir={'': 'src'}
 
 setup(name = name,
