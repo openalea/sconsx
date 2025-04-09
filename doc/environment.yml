@@ -14,7 +14,7 @@ dependencies:
   - nbsphinx
   - myst-parser
   - pydata-sphinx-theme
+  - sphinx-autodoc-typehints
   - pip
   - pip:
-    - sphinx-autodoc-typehints
     - -e ..
