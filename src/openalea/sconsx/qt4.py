@@ -43,7 +43,7 @@ import SCons.Defaults
 import SCons.Scanner
 import SCons.Tool
 import SCons.Util
-from SCons.Script.SConscript import SConsEnvironment
+from SCons.Script import SConsEnvironment
 
 #NO_FRAMEWORK = False
 class ToolQtWarning(SCons.Warnings.Warning):
