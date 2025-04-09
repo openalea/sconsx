@@ -58,7 +58,7 @@ exclude_patterns = [
     ".venv",
 ]
 
-root_doc = 'index.rst'
+root_doc = 'index'
 
 autodoc_member_order = 'bysource'
 
