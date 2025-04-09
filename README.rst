@@ -5,6 +5,10 @@
     :alt: CI status
     :target: https://github.com/openalea/sconsx/actions/workflows/conda-package-build.yml
 
+.. image:: https://readthedocs.org/projects/sconsx/badge/?version=latest
+    :target: https://sconsx.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 
 SConsX
 ======
