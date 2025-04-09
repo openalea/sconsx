@@ -97,3 +97,7 @@ nitpick_ignore = [
 ]
 
 always_document_param_types = True
+
+rst_prolog = """
+.. |sconsx| replace:: SConsX
+"""
