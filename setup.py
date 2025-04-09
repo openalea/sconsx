@@ -4,8 +4,12 @@ import os, sys
 from setuptools import setup, find_namespace_packages
 
 pj= os.path.join
-version ='2.4.0'
-release = '2.4'
+
+_version = {}
+with open("src/openalea/sconsx/version.py") as fp:
+    exec(fp.read(), _version)
+
+version = _version['__version__']
 
 name = 'OpenAlea.SConsX'
 project = 'openalea'
