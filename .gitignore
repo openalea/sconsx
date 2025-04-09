@@ -18,6 +18,7 @@
 *.egg
 *.egg-info
 dist
+_build
 build
 build-scons
 eggs

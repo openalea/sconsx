@@ -1,11 +1,12 @@
 .. _sconsx_reference:
 
 Reference guide
-###############
+===============
+
 .. contents::
 
 Class Inheritance diagram
-=========================
+-------------------------
 .. .. inheritance-diagram:: openalea.sconsx.config
 .. .. inheritance-diagram:: openalea.sconsx.environ
 .. .. inheritance-diagram:: openalea.sconsx.lex
@@ -38,9 +39,9 @@ Class Inheritance diagram
 .. currentmodule:: openalea.sconsx.config
 
 :mod:`openalea.sconsx.config` module
-====================================
+------------------------------------
 
-Download the source file :download:`../../src/sconsx/config.py`.
+Download the source file :download:`../src/openalea/sconsx/config.py`.
 
 
 .. automodule:: openalea.sconsx.config
@@ -48,15 +49,15 @@ Download the source file :download:`../../src/sconsx/config.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  See OpenAlea WebSite / Packages / SConsX 
+    :synopsis:  See OpenAlea WebSite / Packages / SConsX
 
 
 .. currentmodule:: openalea.sconsx.environ
 
 :mod:`openalea.sconsx.environ` module
-=====================================
+-------------------------------------
 
-Download the source file :download:`../../src/sconsx/environ.py`.
+Download the source file :download:`../src/openalea/sconsx/environ.py`.
 
 
 .. automodule:: openalea.sconsx.environ
@@ -64,15 +65,15 @@ Download the source file :download:`../../src/sconsx/environ.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis: This module add some facilities to simplify the SConscript fi...
+    :synopsis: This module add some facilities to simplify the SConscript files
 
 
 .. currentmodule:: openalea.sconsx.lex
 
 :mod:`openalea.sconsx.lex` module
-=================================
+---------------------------------
 
-Download the source file :download:`../../src/sconsx/lex.py`.
+Download the source file :download:`../src/openalea/sconsx/lex.py`.
 
 
 .. automodule:: openalea.sconsx.lex
@@ -86,9 +87,9 @@ Download the source file :download:`../../src/sconsx/lex.py`.
 .. currentmodule:: openalea.sconsx.qt4
 
 :mod:`openalea.sconsx.qt4` module
-=================================
+---------------------------------
 
-Download the source file :download:`../../src/sconsx/qt4.py`.
+Download the source file :download:`../src/openalea/sconsx/qt4.py`.
 
 
 .. automodule:: openalea.sconsx.qt4
@@ -102,9 +103,9 @@ Download the source file :download:`../../src/sconsx/qt4.py`.
 .. currentmodule:: openalea.sconsx.tools.alea
 
 :mod:`openalea.sconsx.tools.alea` module
-========================================
+----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/alea.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/alea.py`.
 
 
 .. automodule:: openalea.sconsx.tools.alea
@@ -112,15 +113,15 @@ Download the source file :download:`../../src/sconsx/tools/alea.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  OpenAlea configure environment. 
+    :synopsis:  OpenAlea configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.bison
 
 :mod:`openalea.sconsx.tools.bison` module
-=========================================
+-----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/bison.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/bison.py`.
 
 
 .. automodule:: openalea.sconsx.tools.bison
@@ -128,15 +129,15 @@ Download the source file :download:`../../src/sconsx/tools/bison.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Bison configure environment. 
+    :synopsis:  Bison configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.boost_python
 
 :mod:`openalea.sconsx.tools.boost_python` module
-================================================
+------------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/boost_python.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/boost_python.py`.
 
 
 .. automodule:: openalea.sconsx.tools.boost_python
@@ -144,15 +145,15 @@ Download the source file :download:`../../src/sconsx/tools/boost_python.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Boost.Python configure environment. 
+    :synopsis:  Boost.Python configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.builddir
 
 :mod:`openalea.sconsx.tools.builddir` module
-============================================
+--------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/builddir.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/builddir.py`.
 
 
 .. automodule:: openalea.sconsx.tools.builddir
@@ -160,15 +161,15 @@ Download the source file :download:`../../src/sconsx/tools/builddir.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Build directory configure environment. 
+    :synopsis:  Build directory configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.cgal
 
 :mod:`openalea.sconsx.tools.cgal` module
-========================================
+----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/cgal.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/cgal.py`.
 
 
 .. automodule:: openalea.sconsx.tools.cgal
@@ -176,15 +177,15 @@ Download the source file :download:`../../src/sconsx/tools/cgal.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  CGAL configure environment. 
+    :synopsis:  CGAL configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.compiler
 
 :mod:`openalea.sconsx.tools.compiler` module
-============================================
+--------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/compiler.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/compiler.py`.
 
 
 .. automodule:: openalea.sconsx.tools.compiler
@@ -192,15 +193,15 @@ Download the source file :download:`../../src/sconsx/tools/compiler.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Build directory configure environment. 
+    :synopsis:  Build directory configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.egglib
 
 :mod:`openalea.sconsx.tools.egglib` module
-==========================================
+------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/egglib.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/egglib.py`.
 
 
 .. automodule:: openalea.sconsx.tools.egglib
@@ -208,15 +209,15 @@ Download the source file :download:`../../src/sconsx/tools/egglib.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  OpenAlea configure environment. 
+    :synopsis:  OpenAlea configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.flex
 
 :mod:`openalea.sconsx.tools.flex` module
-========================================
+----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/flex.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/flex.py`.
 
 
 .. automodule:: openalea.sconsx.tools.flex
@@ -224,15 +225,15 @@ Download the source file :download:`../../src/sconsx/tools/flex.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Flex configure environment. 
+    :synopsis:  Flex configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.gcc
 
 :mod:`openalea.sconsx.tools.gcc` module
-=======================================
+---------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/gcc.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/gcc.py`.
 
 
 .. automodule:: openalea.sconsx.tools.gcc
@@ -240,15 +241,15 @@ Download the source file :download:`../../src/sconsx/tools/gcc.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Gcc configure environment. 
+    :synopsis:  Gcc configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.gmp
 
 :mod:`openalea.sconsx.tools.gmp` module
-=======================================
+---------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/gmp.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/gmp.py`.
 
 
 .. automodule:: openalea.sconsx.tools.gmp
@@ -256,15 +257,15 @@ Download the source file :download:`../../src/sconsx/tools/gmp.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  GMP configure environment. 
+    :synopsis:  GMP configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.gnuplot
 
 :mod:`openalea.sconsx.tools.gnuplot` module
-===========================================
+-------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/gnuplot.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/gnuplot.py`.
 
 
 .. automodule:: openalea.sconsx.tools.gnuplot
@@ -272,15 +273,15 @@ Download the source file :download:`../../src/sconsx/tools/gnuplot.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Gnuplot configure environment. 
+    :synopsis:  Gnuplot configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.install
 
 :mod:`openalea.sconsx.tools.install` module
-===========================================
+-------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/install.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/install.py`.
 
 
 .. automodule:: openalea.sconsx.tools.install
@@ -288,15 +289,15 @@ Download the source file :download:`../../src/sconsx/tools/install.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Install configure environment. 
+    :synopsis:  Install configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.mingw
 
 :mod:`openalea.sconsx.tools.mingw` module
-=========================================
+-----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/mingw.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/mingw.py`.
 
 
 .. automodule:: openalea.sconsx.tools.mingw
@@ -304,15 +305,15 @@ Download the source file :download:`../../src/sconsx/tools/mingw.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  MinGW configure environment. 
+    :synopsis:  MinGW configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.msvc
 
 :mod:`openalea.sconsx.tools.msvc` module
-========================================
+----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/msvc.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/msvc.py`.
 
 
 .. automodule:: openalea.sconsx.tools.msvc
@@ -320,15 +321,15 @@ Download the source file :download:`../../src/sconsx/tools/msvc.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Visual Studio C++ configure environment. 
+    :synopsis:  Visual Studio C++ configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.multicpu
 
 :mod:`openalea.sconsx.tools.multicpu` module
-============================================
+--------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/multicpu.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/multicpu.py`.
 
 
 .. automodule:: openalea.sconsx.tools.multicpu
@@ -336,15 +337,15 @@ Download the source file :download:`../../src/sconsx/tools/multicpu.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  QHull configure environment. 
+    :synopsis:  QHull configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.opengl
 
 :mod:`openalea.sconsx.tools.opengl` module
-==========================================
+------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/opengl.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/opengl.py`.
 
 
 .. automodule:: openalea.sconsx.tools.opengl
@@ -352,15 +353,15 @@ Download the source file :download:`../../src/sconsx/tools/opengl.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  OpenGL configure environment. 
+    :synopsis:  OpenGL configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.pthread
 
 :mod:`openalea.sconsx.tools.pthread` module
-===========================================
+-------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/pthread.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/pthread.py`.
 
 
 .. automodule:: openalea.sconsx.tools.pthread
@@ -368,15 +369,15 @@ Download the source file :download:`../../src/sconsx/tools/pthread.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Pthread configure environment. 
+    :synopsis:  Pthread configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.python
 
 :mod:`openalea.sconsx.tools.python` module
-==========================================
+------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/python.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/python.py`.
 
 
 .. automodule:: openalea.sconsx.tools.python
@@ -384,15 +385,15 @@ Download the source file :download:`../../src/sconsx/tools/python.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Python configure environment. 
+    :synopsis:  Python configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.qhull
 
 :mod:`openalea.sconsx.tools.qhull` module
-=========================================
+-----------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/qhull.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/qhull.py`.
 
 
 .. automodule:: openalea.sconsx.tools.qhull
@@ -400,15 +401,15 @@ Download the source file :download:`../../src/sconsx/tools/qhull.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  QHull configure environment. 
+    :synopsis:  QHull configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.qt
 
 :mod:`openalea.sconsx.tools.qt` module
-======================================
+--------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/qt.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/qt.py`.
 
 
 .. automodule:: openalea.sconsx.tools.qt
@@ -416,15 +417,15 @@ Download the source file :download:`../../src/sconsx/tools/qt.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  QT configure environment. 
+    :synopsis:  QT configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.qt4
 
 :mod:`openalea.sconsx.tools.qt4` module
-=======================================
+---------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/qt4.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/qt4.py`.
 
 
 .. automodule:: openalea.sconsx.tools.qt4
@@ -432,15 +433,15 @@ Download the source file :download:`../../src/sconsx/tools/qt4.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  QT4 configure environment. 
+    :synopsis:  QT4 configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.readline
 
 :mod:`openalea.sconsx.tools.readline` module
-============================================
+--------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/readline.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/readline.py`.
 
 
 .. automodule:: openalea.sconsx.tools.readline
@@ -448,15 +449,15 @@ Download the source file :download:`../../src/sconsx/tools/readline.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Readline configure environment. 
+    :synopsis:  Readline configure environment.
 
 
 .. currentmodule:: openalea.sconsx.tools.termcap
 
 :mod:`openalea.sconsx.tools.termcap` module
-===========================================
+-------------------------------------------
 
-Download the source file :download:`../../src/sconsx/tools/termcap.py`.
+Download the source file :download:`../src/openalea/sconsx/tools/termcap.py`.
 
 
 .. automodule:: openalea.sconsx.tools.termcap
@@ -464,15 +465,15 @@ Download the source file :download:`../../src/sconsx/tools/termcap.py`.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :synopsis:  Termcap configure environment. 
+    :synopsis:  Termcap configure environment.
 
 
 .. currentmodule:: openalea.sconsx.yacc
 
 :mod:`openalea.sconsx.yacc` module
-==================================
+----------------------------------
 
-Download the source file :download:`../../src/sconsx/yacc.py`.
+Download the source file :download:`../src/openalea/sconsx/yacc.py`.
 
 
 .. automodule:: openalea.sconsx.yacc

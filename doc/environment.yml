@@ -1,0 +1,16 @@
+name: sconsx
+channels:
+  - openalea3
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - sphinx
+  - sphinx_rtd_theme
+  - sphinx-copybutton
+  - myst_parser
+  - scons
+  - pip
+  - pip:
+    - sphinx-autodoc-typehints
+    - pydata_sphinx_theme
