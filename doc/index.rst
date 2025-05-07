@@ -44,7 +44,7 @@ Documentation
     :hidden:
     :caption: Reference
 
-    Reference Guide <autosum.rst>
+    Reference Guide <_autosummary/openalea.sconsx>
 
 .. toctree::
     :maxdepth: 2
