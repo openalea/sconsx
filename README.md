@@ -3,7 +3,7 @@
 [![Documentation Status](https://readthedocs.org/projects/sconsx/badge/?version=latest)](https://sconsx.readthedocs.io/en/latest/?badge=latest)
 
 
-# SConsX
+# OpenAlea.SConsX
 
 SConsX is a package of the OpenAlea project.
 
@@ -52,8 +52,8 @@ This is a `SConstruct` file.
 See the [SCons documentation](http://www.scons.org) for more information.
 
 ```python
-import sconsx
-from sconsx import config
+import openalea.sconsx
+from openalea.sconsx import config
 
 # Creation of a SCons object
 # Set an option file as well as command line args.
@@ -96,6 +96,8 @@ For developers
 
 ```bash
 git clone https://github.com/openalea/sconsx
+mamba create -n sconsx scons
+mamba activate sconsx
 cd sconsx
 pip install -e .
 ```
