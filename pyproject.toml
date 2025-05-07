@@ -25,7 +25,6 @@ classifiers = [
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Build Tools",
   "Framework :: OpenAlea",
-  "License :: CeCILL-C Free Software License Agreement (CECILL-C)",
 ]
 license = "CECILL-C"
 license-files = ["LICENCE*"]
