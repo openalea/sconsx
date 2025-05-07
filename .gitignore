@@ -68,6 +68,9 @@ nosetests.xml
 # temporary files
 *._icon.png
 
+# Sphinx
+doc/_autosummary
+doc/_build
 
 # Mac dirs
 .DS_Store
