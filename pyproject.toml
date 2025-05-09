@@ -1,0 +1,61 @@
+[build-system]
+requires = [
+    "setuptools",
+    "setuptools-scm",
+]
+build-backend = "setuptools.build_meta"
+
+# allow openalea to be a namespace package
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# enable dynamic version based on git tags
+[tool.setuptools_scm]
+
+[project]
+name = "openalea.sconsx"
+authors = [
+  { name = "Christophe Pradal", email="christophe.pradal@cirad.fr"}
+]
+description = 'Scons Extension to build multi-platform packages for OpenAlea and others.'
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Build Tools",
+  "Framework :: OpenAlea",
+]
+license = "CECILL-C"
+license-files = ["LICENCE*"]
+keywords = ["openalea", "scons", "build", "packaging"]
+requires-python = ">=3.8"
+dynamic = ["version"]
+dependencies = ["scons"]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+]
+doc = [
+  "pydata-sphinx-theme",
+  "myst-parser",
+  "sphinx-favicon",
+  "ipykernel",
+  "sphinx-copybutton",
+  "ipython_genutils",
+  "nbsphinx",
+]
+
+[project.urls]
+Repository= "https://github.com/openalea/sconsx"
+Homepage = "https://sconsx.readthedocs.io/"
+"Bug Tracker" = "https://github.com/openalea/sconsx/issues"
+Discussions = "https://github.com/orgs/openalea/discussions"
+
+# not used yet
+[tool.conda.environment]
+channels = [
+  "openalea3",
+  "conda-forge"
+]

@@ -46,7 +46,7 @@ import SCons.Util
 from SCons.Script.SConscript import SConsEnvironment
 
 #NO_FRAMEWORK = False
-class ToolQtWarning(SCons.Warnings.Warning):
+class ToolQtWarning(SCons.Warnings.SConsWarning):
     pass
 
 class GeneratedMocFileNotIncluded(ToolQtWarning):

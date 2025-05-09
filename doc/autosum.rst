@@ -11,6 +11,7 @@ Class Inheritance diagram
 .. .. inheritance-diagram:: openalea.sconsx.environ
 .. .. inheritance-diagram:: openalea.sconsx.lex
 .. .. inheritance-diagram:: openalea.sconsx.qt4
+.. .. inheritance-diagram:: openalea.sconsx.qt5
 .. .. inheritance-diagram:: openalea.sconsx.tools.alea
 .. .. inheritance-diagram:: openalea.sconsx.tools.bison
 .. .. inheritance-diagram:: openalea.sconsx.tools.boost_python
@@ -99,6 +100,20 @@ Download the source file :download:`../src/openalea/sconsx/qt4.py`.
     :show-inheritance:
     :synopsis: SCons.Tool.qt
 
+.. currentmodule:: openalea.sconsx.qt5
+
+:mod:`openalea.sconsx.qt5` module
+---------------------------------
+
+Download the source file :download:`../src/openalea/sconsx/qt5.py`.
+
+
+.. automodule:: openalea.sconsx.qt5
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:
+    :synopsis: SCons.Tool.qt
 
 .. currentmodule:: openalea.sconsx.tools.alea
 
