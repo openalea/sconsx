@@ -1,4 +1,4 @@
-[![License: GPL](https://img.shields.io/badge/License-GPL-blue.svg)](https://opensource.org/licenses/GPL-3.0)
+[![Licence](https://anaconda.org/openalea/openalea.sconsx/badges/license.svg)](https://cecill.info/licences/Licence_CeCILL_V1.1-US.txt)
 [![CI status](https://github.com/openalea/sconsx/actions/workflows/conda-package-build.yml/badge.svg)](https://github.com/openalea/sconsx/actions/workflows/conda-package-build.yml)
 [![Documentation Status](https://readthedocs.org/projects/sconsx/badge/?version=latest)](https://sconsx.readthedocs.io/en/latest/?badge=latest)
 
